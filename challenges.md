@@ -25,7 +25,8 @@ In this chapter you will get a basic experience in working with containers. For 
     - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
-## 3. Release to ACI manually
+## 3. Release to ACI manually`
+> Need help? Check hints [here](ManualReleaseToACI.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
 
