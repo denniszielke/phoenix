@@ -79,10 +79,20 @@ Let's configure it for self-healing.
 
 
 # Fully automated VSTS YAML deployment
-**TODO**
-1. Create a deployment file to decribe the desired state of your application including replicas of your backend and frontend service.
-1. Apply the deployment file manually.
-1. Check the number of pods 
+1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
+    - **TODO Sample?**
+    - Modify the deployment file manually so that 
+        - the backend service can be found
+        - the backend service is available internally only
+        - the correct image is being used
+    - Apply the deployment file manually.
+2. Check the number of backend pods. K8s will take care to keep the number of available pods as specified.
+    - Give it a try and kill some pods. They will be recreated.
+3. Add a VSTS release definition. Make sure it
+    - triggers when the build has finished
+    - deploy your latest image created by the build definition with help of the deployment.yaml file. You can use the Azure CLI task to do this.
+    - Use $(Build.BuildNumber) to apply the correct image.
+    
 
 
 # Other
