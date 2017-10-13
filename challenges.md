@@ -31,6 +31,7 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 4. Relase to ACI via VSTS
+> Need help? Check hints [here](TeamServicesToACI.md)!
 - Use VSTS to create a release definition which is triggered by your build definition. This release definition should
     - deploy the latest image created by your build definition to ACI. Use the Azure CLI 
     task.
