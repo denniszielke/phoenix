@@ -18,7 +18,7 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
 
 ## 2. Automate your build 
-> Need help? Check hints [here](TeamServicesContainerBuild.md)!
+> Need help? Check hints [here](hints/TeamServicesContainerBuild.md)!
 - Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
@@ -26,12 +26,12 @@ In this chapter you will get a basic experience in working with containers. For 
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
 ## 3. Release to ACI manually`
-> Need help? Check hints [here](ManualReleaseToACI.md)!
+> Need help? Check hints [here](hints/ManualReleaseToACI.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
 
 ## 4. Relase to ACI via VSTS
-> Need help? Check hints [here](TeamServicesToACI.md)!
+> Need help? Check hints [here](hints/TeamServicesToACI.md)!
 - Use VSTS to create a release definition which is triggered by your build definition. This release definition should
     - deploy the latest image created by your build definition to ACI. Use the Azure CLI 
     task.
@@ -41,12 +41,13 @@ In this chapter you will get a basic experience in working with containers. For 
 
 # Kubernetes 101 
 In this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
-**TODO Install Kubectl **
+**TODO HOW to  Install Kubectl**
 ## 1. Create a Kubernetes cluster on Azure Container Services 
 - Follow the instructions found here to set up your cluster **TODO LINK MISSING**
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
+> Need help? Check hints [here](hints/k8Single.md)!
 - Run a public available application in a single container on your cluster. The image name is "nginx".
 **TODO: run befehl mit angeben** 
 - Add a service to make your application accessible from the internet
