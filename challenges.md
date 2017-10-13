@@ -1,21 +1,27 @@
-# Single Container Loop 
-In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally or in Azure Container Instances.
-
 **TODOS**
 - Snippet für Container Registry -> Credentials, Anlegen, Screenshot
 - Snippet Docker auf Ubuntu installieren
 
+# Single Container Loop 
+In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
+
 
 ## 1. Containerize your app 
-- Get the sample code of our hello world application **here**. **TODO LINK MISSING**
+- Get the code of the hello world application locally.
 - Create a container image locally
-- Run the image in a container locally on your machine. Remember to open up a port in your command (-p).
+    ```
+    docker build -t helloworld .
+    ```
+- Run the image in a container locally on your machine. Remember to open up the correct port in your command (-p).
+    ```
+    docker run -p 8080:80 helloworld
+    ```
 
 ## 2. Automate your build 
-- Import the sample code from to your VSTS Team Project. You can do this via UI. **TODO**
+> Need help? Check hints [here](TeamServicesContainerBuild.md)!
+- Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
-    - create a new container image 
-    - **TODO NPM**
+    - create a new container image     
     - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
@@ -31,7 +37,6 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 
-
 # Kubernetes 101 
 In this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
 **TODO Install Kubectl **
@@ -43,7 +48,7 @@ The deployment will take some time (~20 min).
 - Run a public available application in a single container on your cluster. The image name is "nginx".
 **TODO: run befehl mit angeben** 
 - Add a service to make your application accessible from the internet
-**TODO: beschreibung & commands service anlegen**
+**TODO: beschreibung & commands für servicecreation**
 **Beschreibung LB**
 - Start your webbrowser to view your application running in your cluster.
 
@@ -73,6 +78,7 @@ Let's see what happens if one of your pods fails.
 - Delete the frontend pod using the commandline and call the website again. 
 - You'll recognize that it will no longer work.
 Let's configure it for self-healing.
+**TODO rc file bauen, link für yaml**
 - Apply the replication controller yaml file
     - frontend-rc.yml
 - This will take care of starting new instances whenever one of your pods fails. Try to kill the application again by deleting frontend pods and see if your website stays responsive.
@@ -81,8 +87,9 @@ Let's configure it for self-healing.
 
 # Fully automated VSTS YAML deployment
 In this chapter you will leverage self-healing capabilites of K8s and extend your VSTS pipeline to trigger a deployment to your K8s cluster. Your application will have no downtime during a rolling upgrade.
+
 1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
-    - **TODO Sample?**
+**TODO  file bauen, link für yaml**
     - Modify the deployment file manually so that 
         - the backend service can be found
         - the backend service is available internally only
