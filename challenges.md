@@ -1,6 +1,10 @@
-**TODOS**
-- Snippet für Container Registry -> Credentials, Anlegen, Screenshot
-- Snippet Docker auf Ubuntu installieren
+## 0. Create Resources
+Creating resources on Azure:
+- Service Principal
+- Resource Group
+- Ubuntu VM for building and tagging
+
+ Check hints [here](hints/creatingresources.md)!
 
 # Single Container Loop 
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
@@ -38,12 +42,11 @@ In this chapter you will get a basic experience in working with containers. For 
 - Now you have a full end to end flow for single container applications.
 
 
-
 # Kubernetes 101 
 In this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
-**TODO HOW to  Install Kubectl**
+
 ## 1. Create a Kubernetes cluster on Azure Container Services 
-- Follow the instructions found here to set up your cluster **TODO LINK MISSING**
+- Follow the instructions found here to set up your cluster Check hints [here](hints/createk8scluster.md)!
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
