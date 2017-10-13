@@ -60,11 +60,12 @@ The deployment will take some time (~20 min).
 - 
 
 # Kubernetes Multicontainer 
+> Need help? Check hints [here](hints/k8Multi.md)!
 In this chapter you will create a multi-container appliation in Kubernetes. 
 1. Kubernetes multi container app deployment 
-- Get the sample code for a multi container application here **TODO LINK**
-- Build the container images for frontend and backend services 
-- Push the images to your ACR **TODO PUSH to ACR**
+- Get the sample code for a multi container application. (Multi-Calc)
+- Build the container images for frontend and backend services locally.
+- Push the images to your ACR 
 - Apply the container images in your Kubernetes cluster using the *.yml files provided 
     - calcbackend-pod.yml
     - calcbackend-svc.yml
