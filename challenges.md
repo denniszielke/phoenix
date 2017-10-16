@@ -4,7 +4,7 @@ Creating resources on Azure:
 - Resource Group
 - Ubuntu VM for building and tagging
 
- Check hints [here](hints/creatingresources.md)!
+ > Need help? Check hints [here :blue_book:](hints/creatingresources.md)! 
 
 # Single Container Loop 
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
@@ -22,20 +22,20 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
 
 ## 2. Automate your build 
-> Need help? Check hints [here](hints/TeamServicesContainerBuild.md)!
+> Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
 - Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
     - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
-## 3. Release to ACI manually`
-> Need help? Check hints [here](hints/ManualReleaseToACI.md)!
+## 3. Release to ACI manually
+> Need help? Check hints [here :blue_book:](hints/ManualReleaseToACI.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
 
 ## 4. Relase to ACI via VSTS
-> Need help? Check hints [here](hints/TeamServicesToACI.md)!
+> Need help? Check hints [here :blue_book:](hints/TeamServicesToACI.md)!
 - Use VSTS to create a release definition which is triggered by your build definition. This release definition should
     - deploy the latest image created by your build definition to ACI. Use the Azure CLI 
     task.
@@ -50,7 +50,7 @@ In this chapter you will set up a Kubernetes cluster in Azure Container Services
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
-> Need help? Check hints [here](hints/k8sSingle.md)!
+> Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
 - Run a public available application in a single container on your cluster. The image name is "nginx".
     - Use the "kubectl run" command
 - Add a service to make your application accessible from the internet
@@ -58,11 +58,20 @@ The deployment will take some time (~20 min).
 - Start your webbrowser to view your application running in your cluster.
 
 ## 1. Kubernetes discovery
-- Open the K8s portal
-- 
+- Open the K8s portal for a graphical interface
+> kubectl proxy
+
+- Familiarize yourself with the following commands on commandline, eg.
+```
+kubectl get pods    // to display all pods
+kubectl get svc     // to display all services
+kubectl get deployments     // to display all deployments
+kubectl delete pods/<podid> // to delete a specific pod
+
+```
 
 # Kubernetes Multicontainer 
-> Need help? Check hints [here](hints/k8sMulti.md)!
+> Need help? Check hints [here :blue_book:](hints/k8sMulti.md)!
 In this chapter you will create a multi-container appliation in Kubernetes. 
 1. Kubernetes multi container app deployment 
 - Get the sample code for a multi container application. (Multi-Calc)
@@ -80,22 +89,23 @@ In this chapter you will create a multi-container appliation in Kubernetes.
 **TODO AI**
 
 2. Manual deployment via ReplicationController 
+
 Let's see what happens if one of your pods fails.
 - Delete the frontend pod using the commandline and call the website again. 
 - You'll recognize that it will no longer work.
 Let's configure it for self-healing.
-**TODO rc file bauen, link für yaml**
-- Apply the replication controller yaml file
-    - frontend-rc.yml
+> Need help? Check hints [here :blue_book:](hints/AddReplicationController.md)!
+- Create a new yaml file **replicator.yml** and configure it to take care of replication of your application frontend pods. Set the number of replicas to 2.
+    You can find a sample of an replication controller [here](https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/). Try to find the correct values to run your frontend replicated.
+- Apply the replication controller yaml file *replicator.yml*.
 - This will take care of starting new instances whenever one of your pods fails. Try to kill the application again by deleting frontend pods and see if your website stays responsive.
 
 
 
 # Fully automated VSTS YAML deployment
 In this chapter you will leverage self-healing capabilites of K8s and extend your VSTS pipeline to trigger a deployment to your K8s cluster. Your application will have no downtime during a rolling upgrade.
-
+> Need help? Check hints [here :blue_book:](hints/TeamServicesToK8s.md)!
 1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
-**TODO  file bauen, link für yaml**
     - Modify the deployment file manually so that 
         - the backend service can be found
         - the backend service is available internally only
@@ -115,8 +125,7 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - Kubernetes toolchain ​
 - Helm (30) with Ingress Controller (30)​
 - Monitorng with OMS for Infrastructure (30)​
-​
-​
-​
-​
+
+
+
 ​
