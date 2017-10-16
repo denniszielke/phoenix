@@ -4,7 +4,7 @@
 
 1. Run single container app in your K8s cluster
 ```
-kubectl create nginx --image=nginx
+kubectl run nginx --image=nginx
 ```
 2. See what you got
 ```
@@ -25,6 +25,6 @@ kubectl edit service/nginx
 6. This opens up an editor. Exchange ClusterIp to LoadBalancer. Close and save the file.
 7. Check the state of your service
 ```
-kubectl get service
+kubectl get service -w
 ```
 8. Wait until your Service got a public address. Then type this address into your webbrowser.
