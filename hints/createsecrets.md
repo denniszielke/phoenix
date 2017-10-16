@@ -35,3 +35,24 @@ Deploy secret to cluster
 ```
 kubectl create -f secrets.yml
 ```
+
+# Referencing a secret from an environment variable
+
+Assuming you have deployed your secret to your cluster you can now reference your secret during deployments and set the value of a secret to an environment variable like this:
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-env-pod
+spec:
+  containers:
+  - name: mycontainer
+    image: redis
+    env:
+      - name: SECRET_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: mySecretName
+            key: mySecretLookUpKey
+```
