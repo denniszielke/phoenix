@@ -50,12 +50,11 @@ In this chapter you will set up a Kubernetes cluster in Azure Container Services
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
-> Need help? Check hints [here](hints/k8Single.md)!
+> Need help? Check hints [here](hints/k8sSingle.md)!
 - Run a public available application in a single container on your cluster. The image name is "nginx".
-**TODO: run befehl mit angeben** 
+    - Use the "kubectl run" command
 - Add a service to make your application accessible from the internet
-**TODO: beschreibung & commands für servicecreation**
-**Beschreibung LB**
+    - Use the "kubectl expose" command and "kubectl edit YOURSERVICE" command.
 - Start your webbrowser to view your application running in your cluster.
 
 ## 1. Kubernetes discovery
@@ -63,11 +62,12 @@ The deployment will take some time (~20 min).
 - 
 
 # Kubernetes Multicontainer 
+> Need help? Check hints [here](hints/k8sMulti.md)!
 In this chapter you will create a multi-container appliation in Kubernetes. 
 1. Kubernetes multi container app deployment 
-- Get the sample code for a multi container application here **TODO LINK**
-- Build the container images for frontend and backend services 
-- Push the images to your ACR **TODO PUSH to ACR**
+- Get the sample code for a multi container application. (Multi-Calc)
+- Build the container images for frontend and backend services locally.
+- Push the images to your ACR 
 - Apply the container images in your Kubernetes cluster using the *.yml files provided 
     - calcbackend-pod.yml
     - calcbackend-svc.yml
