@@ -4,7 +4,7 @@ Creating resources on Azure:
 - Resource Group
 - Ubuntu VM for building and tagging
 
- Check hints [here](hints/creatingresources.md)!
+ > Need help? Check hints [here](hints/creatingresources.md)!
 
 # Single Container Loop 
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
@@ -29,7 +29,7 @@ In this chapter you will get a basic experience in working with containers. For 
     - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
-## 3. Release to ACI manually`
+## 3. Release to ACI manually
 > Need help? Check hints [here](hints/ManualReleaseToACI.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
@@ -58,8 +58,17 @@ The deployment will take some time (~20 min).
 - Start your webbrowser to view your application running in your cluster.
 
 ## 1. Kubernetes discovery
-- Open the K8s portal
-- 
+- Open the K8s portal for a graphical interface
+> kubectl proxy
+
+- Familiarize yourself with the following commands on commandline, eg.
+```
+kubectl get pods    // to display all pods
+kubectl get svc     // to display all services
+kubectl get deployments     // to display all deployments
+kubectl delete pods/<podid> // to delete a specific pod
+
+```
 
 # Kubernetes Multicontainer 
 > Need help? Check hints [here](hints/k8sMulti.md)!
@@ -85,8 +94,8 @@ Let's see what happens if one of your pods fails.
 - Delete the frontend pod using the commandline and call the website again. 
 - You'll recognize that it will no longer work.
 Let's configure it for self-healing.
-> Need help? Check hints [here](hints/rcYaml.md)!
-- Create a new yaml file **replicator.yml** and configure it to take care of replication of your application frontend pods.
+> Need help? Check hints [here](hints/AddReplicationController.md)!
+- Create a new yaml file **replicator.yml** and configure it to take care of replication of your application frontend pods. Set the number of replicas to 2.
     You can find a sample of an replication controller [here](https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/). Try to find the correct values to run your frontend replicated.
 - Apply the replication controller yaml file *replicator.yml*.
 - This will take care of starting new instances whenever one of your pods fails. Try to kill the application again by deleting frontend pods and see if your website stays responsive.
