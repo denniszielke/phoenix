@@ -7,7 +7,7 @@ In this chapter you will set up a Kubernetes cluster in Azure Container Services
 
 The deployment will take some time (~20 min). 
 
-## 1. Run single container app in your K8s cluster
+## 2. Run single container app in your K8s cluster
 > Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
 - Run a public available application in a single container on your cluster. The image name is "nginx".
     - Use the "kubectl run" command
@@ -15,7 +15,7 @@ The deployment will take some time (~20 min).
     - Use the "kubectl expose" command and "kubectl edit YOURSERVICE" command.
 - Start your webbrowser to view your application running in your cluster.
 
-## 1. Kubernetes discovery
+## 3. Kubernetes discovery
 - Open the K8s portal for a graphical interface. Run `kubectl proxy`then open up a browser an navigate to http://localhost:8001/ui.
 
 - Familiarize yourself with the following commands on commandline, eg.
@@ -27,3 +27,8 @@ kubectl delete pods/<podid> // to delete a specific pod
 
 ```
 
+## 4. Execute deployments via yaml
+> Need help? Check hints [here :blue_book:](hints/yamlfiles.md)!
+
+- Launch the nginx deployment via yaml file (see if you can download it somewhere?)
+- Launch a custom image from your registry (learn about secrets)
