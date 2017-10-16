@@ -22,7 +22,7 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
 
 ## 2. Automate your build 
-> Need help? Check hints [here :blue_book: (hints/TeamServicesContainerBuild.md)!
+> Need help? Check hints [here :blue_book:] (hints/TeamServicesContainerBuild.md)!
 - Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
