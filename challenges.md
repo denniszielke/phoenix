@@ -80,13 +80,15 @@ In this chapter you will create a multi-container appliation in Kubernetes.
 **TODO AI**
 
 2. Manual deployment via ReplicationController 
+
 Let's see what happens if one of your pods fails.
 - Delete the frontend pod using the commandline and call the website again. 
 - You'll recognize that it will no longer work.
 Let's configure it for self-healing.
-**TODO rc file bauen, link für yaml**
-- Apply the replication controller yaml file
-    - frontend-rc.yml
+> Need help? Check hints [here](hints/rcYaml.md)!
+- Create a new yaml file **replicator.yml** and configure it to take care of replication of your application frontend pods.
+    You can find a sample of an replication controller [here](https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/). Try to find the correct values to run your frontend replicated.
+- Apply the replication controller yaml file *replicator.yml*.
 - This will take care of starting new instances whenever one of your pods fails. Try to kill the application again by deleting frontend pods and see if your website stays responsive.
 
 
