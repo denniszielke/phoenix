@@ -50,7 +50,7 @@ In this chapter you will set up a Kubernetes cluster in Azure Container Services
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
-> Need help? Check hints [here](hints/k8Single.md)!
+> Need help? Check hints [here](hints/k8sSingle.md)!
 - Run a public available application in a single container on your cluster. The image name is "nginx".
 **TODO: run befehl mit angeben** 
 - Add a service to make your application accessible from the internet
