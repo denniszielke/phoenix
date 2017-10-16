@@ -4,7 +4,7 @@ Creating resources on Azure:
 - Resource Group
 - Ubuntu VM for building and tagging
 
- > Need help? Check hints [here](hints/creatingresources.md)! 
+ > Need help? Check hints [here](hints/creatingresources.md)! :blue_book:
 
 # Single Container Loop 
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
@@ -106,7 +106,6 @@ Let's configure it for self-healing.
 In this chapter you will leverage self-healing capabilites of K8s and extend your VSTS pipeline to trigger a deployment to your K8s cluster. Your application will have no downtime during a rolling upgrade.
 > Need help? Check hints [here](hints/TeamServicesToK8s.md)!
 1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
-**TODO  file bauen, link für yaml**
     - Modify the deployment file manually so that 
         - the backend service can be found
         - the backend service is available internally only
