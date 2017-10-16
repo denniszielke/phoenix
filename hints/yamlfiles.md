@@ -20,7 +20,7 @@ spec:
 
 ## Referencing images from your own registry
 
-To reference an image from your own registry you need to reference a credential for the cluster to login. Check the hint about secrets: [here :blue_book:](hints/createsecrets.md)
+To reference an image from your own registry you need to reference a credential for the cluster to login. Check the hint about secrets: [here :blue_book:](createsecrets.md)
 
 ```
 apiVersion: "v1"
