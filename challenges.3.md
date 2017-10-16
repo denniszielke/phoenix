@@ -14,6 +14,7 @@ In this chapter you will create a multi-container appliation in Kubernetes.
 
 ## 2. AI
 > Need help? Check hints [here :blue_book:](hints/applicationinsights.md)!
+
 In this chapter you will create an application insights resource for monitoring your application performance and health status.
 - Create application insights in azure
 - Configure your apps to inject the application insights key via environment variables
