@@ -75,7 +75,7 @@ kubectl delete pods/<podid> // to delete a specific pod
 # Kubernetes Multicontainer 
 > Need help? Check hints [here :blue_book:](hints/k8sMulti.md)!
 In this chapter you will create a multi-container appliation in Kubernetes. 
-1. Kubernetes multi container app deployment 
+## 1. Kubernetes multi container app deployment 
 - Get the sample code for a multi container application. (Multi-Calc)
 - Build the container images for frontend and backend services locally.
 - Push the images to your ACR 
@@ -84,13 +84,13 @@ In this chapter you will create a multi-container appliation in Kubernetes.
     - calcbackend-svc.yml
     - calcfrontend-pod.yml
     - calcfrontend-svc.yml
-- Configure your application to be accessible from the internet and call the page. Use the square calculation.
+- Configure your application to be accessible from the internet and call the page. Use the calculation.
 
-2. AI **TODO**
+## 2. AI **TODO**
 
 **TODO AI**
 
-2. Manual deployment via ReplicationController 
+## 3. Manual deployment via ReplicationController 
 
 Let's see what happens if one of your pods fails.
 - Delete the frontend pod using the commandline and call the website again. 
@@ -107,15 +107,15 @@ Let's configure it for self-healing.
 # Fully automated VSTS YAML deployment
 In this chapter you will leverage self-healing capabilites of K8s and extend your VSTS pipeline to trigger a deployment to your K8s cluster. Your application will have no downtime during a rolling upgrade.
 > Need help? Check hints [here :blue_book:](hints/TeamServicesToK8s.md)!
-1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
+## 1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
     - Modify the deployment file manually so that 
         - the backend service can be found
         - the backend service is available internally only
         - the correct image is being used
     - Apply the deployment file manually.
-2. Check the number of backend pods. K8s will take care to keep the number of available pods as specified.
+## 2. Check the number of backend pods. K8s will take care to keep the number of available pods as specified.
     - Give it a try and kill some pods. They will be recreated.
-3. Now let's automate all of this. Create a VSTS release definition. Make sure it
+## 3. Now let's automate all of this. Create a VSTS release definition. Make sure it
     - triggers when the build has finished
     - deploy your latest image created by the build definition with help of the deployment.yaml file. You can use the Azure CLI task to do this.
     - Use $(Build.BuildNumber) to apply the correct image.
