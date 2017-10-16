@@ -11,8 +11,8 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 1. Containerize your app 
-- Get the code of the hello world application locally.
-- Create a container image locally
+- Get the code of the hello world application locally and navigate to the folder (phoenix\apps\aci-helloworld).
+- Create a container image locally (you need docker running on your machine).
     ```
     docker build -t helloworld .
     ```
@@ -20,6 +20,7 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
     docker run -p 8080:80 helloworld
     ```
+- Open the browser and navigate to the application you just started with your browser (http://localhost:8080). 
 
 ## 2. Automate your build 
 > Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
@@ -46,7 +47,9 @@ In this chapter you will get a basic experience in working with containers. For 
 In this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
 
 ## 1. Create a Kubernetes cluster on Azure Container Services 
-- Follow the instructions found here to set up your cluster Check hints [here](hints/createk8scluster.md)!
+- Set up your Kuberenetes cluster using Azure Container Services.
+> Need help? Check hints [here :blue_book:](hints/createk8scluster.md)!
+
 The deployment will take some time (~20 min). 
 
 ## 1. Run single container app in your K8s cluster
@@ -58,8 +61,7 @@ The deployment will take some time (~20 min).
 - Start your webbrowser to view your application running in your cluster.
 
 ## 1. Kubernetes discovery
-- Open the K8s portal for a graphical interface
-> kubectl proxy
+- Open the K8s portal for a graphical interface. Run `kubectl proxy`then open up a browser an navigate to http://localhost:8001/ui.
 
 - Familiarize yourself with the following commands on commandline, eg.
 ```
@@ -120,11 +122,6 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
     
 
 
-# Other
-- Rollback
-- Kubernetes toolchain ​
-- Helm (30) with Ingress Controller (30)​
-- Monitorng with OMS for Infrastructure (30)​
 
 
 
