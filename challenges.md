@@ -4,7 +4,7 @@ Creating resources on Azure:
 - Resource Group
 - Ubuntu VM for building and tagging
 
- > Need help? Check hints [here](hints/creatingresources.md)!
+ > Need help? Check hints [here](hints/creatingresources.md)! 
 
 # Single Container Loop 
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
@@ -126,8 +126,7 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - Kubernetes toolchain ​
 - Helm (30) with Ingress Controller (30)​
 - Monitorng with OMS for Infrastructure (30)​
-​
-​
-​
-​
+
+
+
 ​
