@@ -104,7 +104,7 @@ Let's configure it for self-healing.
 
 # Fully automated VSTS YAML deployment
 In this chapter you will leverage self-healing capabilites of K8s and extend your VSTS pipeline to trigger a deployment to your K8s cluster. Your application will have no downtime during a rolling upgrade.
-
+> Need help? Check hints [here](hints/TeamServicesToK8s.md)!
 1. Create a deployment file to decribe the desired state of your application including replicas of your backend service.
 **TODO  file bauen, link für yaml**
     - Modify the deployment file manually so that 
