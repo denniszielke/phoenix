@@ -25,7 +25,7 @@ Define secret in yaml file
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysecret
+  name: mySecretName
 type: Opaque
 data:
   username: MWYyZDFlMmU2N2Rm
