@@ -28,7 +28,7 @@ metadata:
   name: mysecret
 type: Opaque
 data:
-  username: 1f2d1e2e67df
+  username: MWYyZDFlMmU2N2Rm
 ```
 
 Deploy secret to cluster
