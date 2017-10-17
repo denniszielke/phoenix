@@ -17,7 +17,7 @@ https://kubernetes.io/docs/concepts/configuration/secret/
 
 Secrets must be base64 encoded.
 ~~~
-echo -n "1f2d1e2e67df" | base64
+echo -n "someRandomSecretValue" | base64
 ~~~
 
 Define secret in yaml file
@@ -28,7 +28,7 @@ metadata:
   name: mySecretName
 type: Opaque
 data:
-  username: MWYyZDFlMmU2N2Rm
+  username: c29tZVJhbmRvbVNlY3JldFZhbHVl
 ```
 
 Deploy secret to cluster
