@@ -7,11 +7,13 @@ const request = require('request');
 
 const config = require('./config');
 
-const appInsights = require("applicationinsights");
+var appInsights = require("applicationinsights");
 
 if (config.instrumentationKey){ 
-    appInsights.setup(config.instrumentationKey).setAutoCollectRequests(true).start();
+    appInsights.setup(config.instrumentationKey);
+    appInsights.start();
 }
+var client = appInsights.defaultClient;
 
 var publicDir = require('path').join(__dirname, '/public');
 
@@ -21,9 +23,19 @@ app.use(express.static(publicDir));
 
 // Routes
 app.get('/ping', function(req, res) {
-    appInsights.defaultClient.trackEvent('ping-frontend-received');
+    client.trackEvent({ name: 'ping-js-frontend-received' });
     console.log('received ping');
     res.send('Pong');
+});
+
+app.get('/api/getappinsightskey', function(req, res) {
+    console.log('returned app insights key');
+    if (config.instrumentationKey){ 
+        res.send(config.instrumentationKey);
+    }
+    else{
+        res.send('');
+    }
 });
 
 app.post('/api/calculation', function(req, res) {
@@ -31,7 +43,7 @@ app.post('/api/calculation', function(req, res) {
     console.log(req.headers);
     if (config.instrumentationKey){ 
         var startDate = new Date();
-        appInsights.defaultClient.trackEvent("calculation-frontend-call", { value: req.headers.number });
+        client.trackEvent( { name: "calculation-jsfrontend-call", properties: { number: req.headers.number } });
     }
     var formData = {
         received: new Date().toLocaleString(), 
@@ -49,13 +61,18 @@ app.post('/api/calculation', function(req, res) {
             console.log("error:");
             console.log(innererr);
             if (config.instrumentationKey){ 
-                appInsights.defaultClient.trackException(innererr);
+                client.trackException(innererr);
             }
         }
         if (config.instrumentationKey){ 
-            appInsights.defaultClient.trackEvent("calculation-frontend-call-received", { value: body });
-            appInsights.defaultClient.trackMetric("calculation-frontend-call-duration", duration);
+            client.trackDependency(
+                { target: options.url, name:"calculation-backend", 
+                data:"calculate number " + req.headers.number, 
+                duration: duration, resultCode:0, success: true});
+            client.trackEvent({ name: "calculation-jsfrontend-result", properties: { result: body } });
+            client.trackMetric({ name:"calculation-jsfrontend-duration", value: duration });
         }
+        
         console.log(body);
         res.send(body);
     });
@@ -66,14 +83,14 @@ app.post('/api/dummy', function(req, res) {
     console.log("received dummy request:");
     console.log(req.headers);
     if (config.instrumentationKey){ 
-        appInsights.defaultClient.trackEvent("dummy-data-call");
+        client.trackEvent({ name: "dummy-jsfrontend-call"});
     }
     res.send('42');
 });
 
 // Listen
 if (config.instrumentationKey){ 
-    appInsights.defaultClient.trackEvent('frontend-initializing');
+    client.trackEvent({ name: "jsfrontend-initializing"});
 }
 app.listen(config.port);
 console.log('Listening on localhost:'+ config.port);
