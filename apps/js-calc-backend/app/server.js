@@ -48,7 +48,7 @@ app.post('/api/calculation', function(req, res) {
     console.log(req.headers.number);
     if (config.instrumentationKey){ 
         var startDate = new Date();
-        client.trackEvent( { name: "calculation-jsbackend-call", properties: { number: req.headers.number } });
+        client.trackEvent( { name: "calculation-jsbackend-call"});
     }
     var resultValue = [0];
     try{
@@ -65,7 +65,7 @@ app.post('/api/calculation', function(req, res) {
     if (config.instrumentationKey){ 
         var endDate = new Date();
         var duration = endDate - startDate;
-        client.trackEvent({ name: "calculation-jsbackend-result", properties: { result: resultValue } });
+        client.trackEvent({ name: "calculation-jsbackend-result"});
         client.trackMetric({ name:"calculation-jsbackend-duration", value: duration });
     }
     var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue } );

@@ -9,7 +9,7 @@
 ![](/img/kubernetes_on_azure.png)
 
 ## How should the sample application look like?
-![](/img/multicalculator.png)
+![](/img/multicalculatorarch.png)
 
 ## Your path to there
 1. [Set up](challenges.0.md) your system.

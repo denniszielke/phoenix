@@ -47,7 +47,7 @@ angular.module('CalculatorApp', [])
                             window.appInsights.trackEvent("calculation-client-call-end", { value: $scope.result});
                         }
                         if ($scope.loop){
-                            var randomNumber = Math.floor((Math.random() * 100000) + 1);
+                            var randomNumber = Math.floor((Math.random() * 10000000) + 1);
                             console.log(randomNumber);
                             $scope.id = randomNumber;
                             if (!$scope.frequency){

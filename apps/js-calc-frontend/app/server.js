@@ -43,7 +43,7 @@ app.post('/api/calculation', function(req, res) {
     console.log(req.headers);
     if (config.instrumentationKey){ 
         var startDate = new Date();
-        client.trackEvent( { name: "calculation-jsfrontend-call", properties: { number: req.headers.number } });
+        client.trackEvent( { name: "calculation-jsfrontend-call"});
     }
     var formData = {
         received: new Date().toLocaleString(), 
@@ -69,7 +69,7 @@ app.post('/api/calculation', function(req, res) {
                 { target: options.url, name:"calculation-backend", 
                 data:"calculate number " + req.headers.number, 
                 duration: duration, resultCode:0, success: true});
-            client.trackEvent({ name: "calculation-jsfrontend-result", properties: { result: body } });
+            client.trackEvent({ name: "calculation-jsfrontend-result" });
             client.trackMetric({ name:"calculation-jsfrontend-duration", value: duration });
         }
         
