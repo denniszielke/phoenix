@@ -1,5 +1,25 @@
 # Single Container Loop Challenge
+##Why##
+Containers can make certain aspects of a developer's or admin's life very easy by hiding complexity and by providing reliability.
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
+
+##Here's what you'll learn:##
+- Container basics
+    - Get a feeling for work with containers and understand their purpose
+    - Understand what a Dockerfile is
+    - How to create a container image
+    - How to run a container image locally
+    - Get a sense for container networking and ports
+    - How to create new versions of images
+    - Learn about tagging
+    - How to use VSTS automation to set up an automated workflow
+- Deployment
+    - How to provide a container image in a registry 
+    - How to set up a container registry
+    - How to run a container in the cloud
+
+-
+
 
 
 ## 1. Containerize your app 
