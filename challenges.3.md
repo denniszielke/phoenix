@@ -69,6 +69,7 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - triggers when the build has finished
 - deploy your latest image created by the build definition with help of the deployment.yaml file. You can use the Azure CLI task to do this.
 - Use $(Build.BuildNumber) to apply the correct image.
+<<<<<<< HEAD
     
 
 # Bonus Challenge - Technology Shootout
@@ -83,3 +84,6 @@ Implement the solution and upgrade your application to the Go-backend without do
 
 
 ​
+=======
+    
+>>>>>>> 14c2a911080b1a066f2a5d124209d74dc90fc4cb

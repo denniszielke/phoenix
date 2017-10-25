@@ -3,7 +3,7 @@
 Containers can make certain aspects of a developer's or admin's life very easy by hiding complexity and by providing reliability.
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
 
-##Here's what you'll learn:##
+## Here's what you'll learn:##
 - Container basics
     - Get a feeling for work with containers and understand their purpose
     - Understand what a Dockerfile is
@@ -17,9 +17,6 @@ In this chapter you will get a basic experience in working with containers. For 
     - How to provide a container image in a registry 
     - How to set up a container registry
     - How to run a container in the cloud
-
--
-
 
 
 ## 1. Containerize your app 
