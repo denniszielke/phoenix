@@ -57,7 +57,7 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - Modify the deployment file manually so that 
     - the backend service can be found
     - the backend service is available internally only
-    - the correct image is being used
+    - the correct image is being used. 
 - Apply the deployment file manually.
 
 ## 2. Fake a failed pod
@@ -71,7 +71,14 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - Use $(Build.BuildNumber) to apply the correct image.
     
 
-
+# Bonus Challenge - Technology Shootout
+Let's say a co-worker of you recommends writing the backend app with in "Go" for performance reasons. How could you try the Go-Backend and run it without downtime? Where could you find performance data? 
+Implement the solution and upgrade your application to the Go-backend without downtime. (The Go backend app can be found in /apps/go-calc-backend .)
+- Build the Go backend image 
+- Publish the image in your registry
+- Modify your backend-service Yaml to target the new image
+- Deploy
+- Check monitoring data for performance impact
 
 
 
