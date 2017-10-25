@@ -70,9 +70,3 @@ In this chapter you will leverage self-healing capabilites of K8s and extend you
 - deploy your latest image created by the build definition with help of the deployment.yaml file. You can use the Azure CLI task to do this.
 - Use $(Build.BuildNumber) to apply the correct image.
     
-
-
-
-
-
-​
