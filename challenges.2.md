@@ -1,5 +1,12 @@
 # Kubernetes 101 Challenge
-In this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
+> For scheduling applications consisting of multiple containers you typically use an orchestrator. Kubernetes is an orchestrator and in this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
+>## Here's what you'll learn:
+> - How to set up a Kubernetes Cluster with Azure Container Services
+> - How to access the cluster with the commandline command "kubectl"
+> - Get to know the basic command set of "kubectl"
+> - Understand the concept of pods and services and how they come together
+> - Get in touch with Yaml files to specify a desired state for a Kubernetes object
+
 
 ## 1. Create a Kubernetes cluster on Azure Container Services 
 - Set up your Kuberenetes cluster using Azure Container Services.
