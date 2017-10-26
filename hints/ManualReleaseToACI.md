@@ -9,5 +9,5 @@ fully qualified image name and ACR credentials.
  
 Sample: 
 ```
-az container create --name mycontainer --image IMAGENAME --resource-group myResourceGroup --ip-address public
+az container create --name mycontainer --image IMAGENAME --resource-group myResourceGroup --ip-address public --port 8080
 ```
