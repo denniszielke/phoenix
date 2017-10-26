@@ -30,7 +30,7 @@ scp azureuser@$KUBE_NAMEmgmt.westeurope.cloudapp.azure.com:.kube/config $HOME/.k
 4. Check that everything is running ok
 ```
 kubectl version
-kubectl config current-contex
+kubectl config current-context
 ```
 
 Use flag to use context if multiple clusters are in use
