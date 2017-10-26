@@ -10,10 +10,11 @@ az group create -n $KUBE_GROUP -l $LOCATION
 ```
 az acs create --name $KUBE_NAME --resource-group $KUBE_GROUP --orchestrator-type Kubernetes --dns-prefix $KUBE_NAME --generate-ssh-keys
 ```
-
+Additional parameters can be found here https://docs.microsoft.com/en-us/cli/azure/acs?view=azure-cli-latest#az_acs_create
 if you have to use the given service principal (because you are not allowed to create services principals in azure ad) add the following parameters
+```
 --client-secret HEREBESECRET --service-principal HEREBEAPPID
-
+```
 3. Export the kubectrl credentials files
 ```
 az acs kubernetes get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
