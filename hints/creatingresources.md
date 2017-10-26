@@ -20,7 +20,7 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get
 Via Azure CLI:
 https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli
 
-## Install docker on Ubuntu in Azure
+## Install docker on Ubuntu 16.04 LTS (do not use the docker ubuntu vm from marketplace) in Azure
 
 Install docker via package
 ~~~
