@@ -15,6 +15,8 @@
 
 If you do not want to build the go backend you can use the already built image from docker hub:
 https://hub.docker.com/r/denniszielke/go-calc-backend/
+https://hub.docker.com/r/denniszielke/js-calc-frontend/
+https://hub.docker.com/r/denniszielke/js-calc-backend/
 
 ## 2. Deploy an ingress controller
 - Learn about ingress controller (https://kubernetes.io/docs/concepts/services-networking/ingress/)
