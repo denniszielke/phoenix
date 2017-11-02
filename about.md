@@ -13,9 +13,9 @@ The event is designed to give you an overview and hands on experience with Conta
 ## Times, dates and registration
 
 The next iterations of this one-day event are scheduled for:
-- 06. december 2017 in Bad Homburg
-- 11. december 2017 in Berlin
-- 14. december 2017 in München
+06. december 2017 in Bad Homburg
+11. december 2017 in Berlin
+14. december 2017 in München
 
 Events are delivered in small groups, invite only and require a registration by your MSFTE CSA, ATS, PSS or SSP.
 
