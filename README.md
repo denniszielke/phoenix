@@ -1,10 +1,15 @@
 
 # Project Phoenix - Containerize your enterprize
-
-## What are we using?
-![](/img/kubernetes.png)
+Welcome to project Phoenix - a hands on workshop to practice container technology in the enterprise.
 
 ## What do we want to achieve?
+
+After the workshop you should have hands on experience with:
+1. Defining Application and system architectures for containers.
+2. Defining, configuring up and maintaining runtime environments for containers in Azure.
+3. Configuration options for CI/CD pipeline for containers in Azure.
+4. Unterstaning of Kubernetes objects (Pods, Services, Deployments, Secrets) and their usage for multi container applications.
+5. Logging, scaling and monitoring of container runtimes.
 
 ![](/img/kubernetes_on_azure.png)
 

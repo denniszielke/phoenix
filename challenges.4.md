@@ -1,8 +1,9 @@
 # Kubernetes Operational InsightsChallenge
 > Need help? Check hints [here :blue_book:](hints/k8sMulti.md)!
+
 > In this chapter you will upgrade your application to use another implementation of the calculator backend written in Go. You have heard that Go is so much faster and better and want to try this out without interrupting your users. Therefore you have to do a blue green deployment with your old frontend and backend along with your new go-calc-backend. All containers are sending telemetry to Application Insights (assuming you have configured the configuration of the insights key correctly) - so you should be able to evaluate the performance of your new container relative to the old one. If it does not improve your service you should perform a rollback - all without impacting your users.
 
->## Here's what you'll learn:
+## Here's what you'll learn:
 > - How to set up and configure ingress
 > - Learn how Helm facilitates the deployment of complex container dependencies
 > - How to gain insights into your application performance using Application Insights

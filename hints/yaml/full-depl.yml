@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: calcfrontendsvc
+  labels:
+    name: calcfrontendsvc
+    app: calculator
+spec:
+  selector:
+    name: jscalcfrontend 
+  type: LoadBalancer
+  ports:
+   - port: 80
+     name: http
+     targetPort: 3000
+     protocol: TCP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jscalcfrontend
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: jscalcfrontend
+        app: calculator
+    spec:
+      containers:
+      - name: jscalcfrontend
+        image: denniszielke/js-calc-frontend:latest
+        ports:
+          - containerPort: 3000
+            name: http         
+            protocol: TCP
+        env: 
+          - name: "ENDPOINT"
+            value: "calcbackendsvc"
+          - name: "INSTRUMENTATIONKEY"
+            valueFrom:
+              secretKeyRef:
+                name: appinsightsecret
+                key: appinsightskey
+          - name: "PORT"
+            value: "3000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: calcbackendsvc
+  labels:
+    name: calcbackendsvc
+    app: calculator 
+spec:
+  ports:
+  - port: 80
+    name: calcbackend
+    targetPort: 3001
+  selector:
+    role: calcbackend
+    app: calculator
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jscalcbackend
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: jscalcbackend
+        role: calcbackend
+        app: calculator
+    spec:
+      containers:
+      - name: calcbackend
+        image: denniszielke/js-calc-backend:latest
+        ports:
+          - containerPort: 3001
+            name: http         
+            protocol: TCP
+        env: 
+          - name: "INSTRUMENTATIONKEY"
+            valueFrom:
+              secretKeyRef:
+                name: appinsightsecret
+                key: appinsightskey
+          - name: "PORT"
+            value: "3001"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gocalcbackend
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: gocalcbackend
+        role: calcbackend
+        app: calculator
+    spec:
+      containers:
+      - name: gocalcbackend
+        image: denniszielke/go-calc-backend:latest
+        ports:
+          - containerPort: 3001
+            name: http         
+            protocol: TCP
+        env: 
+          - name: "INSTRUMENTATIONKEY"
+            valueFrom:
+              secretKeyRef:
+                name: appinsightsecret
+                key: appinsightskey
+          - name: "PORT"
+            value: "3001"
