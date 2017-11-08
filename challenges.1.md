@@ -3,7 +3,7 @@
 Containers can make certain aspects of a developer's or admin's life very easy by hiding complexity and by providing reliability.
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
 
-## Here's what you'll learn:##
+## Here's what you'll learn: ##
 - Container basics
     - Get a feeling for work with containers and understand their purpose
     - Understand what a Dockerfile is
@@ -20,23 +20,37 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 1. Containerize your app 
-- Get the code of the hello world application locally and navigate to the folder (phoenix\apps\aci-helloworld).
-- Create a container image locally (you need docker running on your machine).
+- Get the code of the hello world application (git clone https://github.com/denniszielke/phoenix) locally and navigate to the folder (phoenix\apps\aci-helloworld).
+- Create a container image locally (you need docker running on your machine). Don't forget the trailing "." in the following line!
     ```
     docker build -t helloworld .
     ```
+- Check if the image has been built.
+    ```
+    docker images
+    ```
 - Run the image in a container locally on your machine. Remember to open up the correct port in your command (-p).
     ```
-    docker run -p 8080:8080 helloworld
+    docker run -d -p 8080:8080 helloworld
     ```
-- Open the browser and navigate to the application you just started with your browser (http://localhost:8080). 
+- Open the browser and navigate to the application you just started with your browser (http://localhost:8080). If you're running on a Linux VM in Azure, just run this command to avoid working with a graphical browser:
+    ```
+    wget http://localhost:8080
+    ```
+    Then check the content with:
+    ```
+    cat index.html
+    ```
+
+
+
 
 ## 2. Automate your build 
 > Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
 - Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
-    - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
+    - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
 
 ## 3. Release to ACI manually

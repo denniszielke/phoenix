@@ -21,6 +21,8 @@ Via Azure CLI:
 https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli
 
 ## Install docker on Ubuntu 16.04 LTS (do not use the docker ubuntu vm from marketplace) in Azure
+* To install the VM, log into the Azure portal, click "Create new Resource", search for "Ubuntu 16.04 LTS" and follow the wizard. It is recommended to enable auto-shut down.
+* After deployment, log into the new VM. To access it either log into it via  ssh from your client (e.g from Bash on Windows).
 
 Install docker via package
 ~~~

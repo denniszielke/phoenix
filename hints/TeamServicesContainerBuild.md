@@ -12,10 +12,14 @@ Team Services Configuration to build & push a docker image to your Azure Contain
 1. Choose "Hosted Linux Preview" as build agent queue.
 
 1. Add the following tasks for your build phase (if you don't find them you can search or install from the marketplace)
+**Hint:** Use BuildId (instead of Buildnumber) 
+**Hint:** Make sure you reference your Dockerfile correctly
+
     - "Docker" task to create a container image
     ![](images/vstshelloworldbuildimage.jpg)
     - "Docker" task to push the image
     ![](images/vstshelloworldpushimage.jpg)
 
 1. Later you will need an additional step to move a "*.yaml" file to an artifacts folder. Use the "Publish Build Artifacts" Task. This will look like shown below.
+**Hint:** Make sure you reference your yaml file from the correct location! 
 ![](images/vstsdropyaml.jpg)
