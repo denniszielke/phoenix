@@ -1,9 +1,9 @@
- # Create container cluster
+# Create container cluster
 https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-walkthrough
 
 **Hint:** The "set KEY value" values commands work in Powershell. In Bash use KEY=value.
 
-1. Create the resource group (Powershell)
+1a. Create the resource group (Powershell)
 ```
 set LOCATION westus
 set KUBE_GROUP myKubeRG
@@ -11,7 +11,7 @@ az group create -n $KUBE_GROUP -l $LOCATION
 ```
 
 
-1. OR use bash to create the resource group 
+1b. OR use bash to create the resource group 
 ```
 LOCATION=westus
 KUBE_GROUP=myKubeRG
