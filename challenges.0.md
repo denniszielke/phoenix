@@ -3,7 +3,6 @@ In this challenge you will set up all it takes to complete this hackathon.
 Here's a list of things we need to set up:
 
 Creating resources on Azure:
-- *Service Principal* - we need the Service Prinicpal to be able to access and modify Azure
 - *Resource Group* - this will be the place where we create all our Azure resources 
 - *Ubuntu VM for building and tagging* - we need somme machine to work with Docker. If your local machine isn't set up for Docker, just start up an instance in Azure
 - *Azure Container Registry* - here we are going to store our Docker container images
