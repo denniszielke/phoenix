@@ -39,8 +39,10 @@ sudo az acs kubernetes install-cli
 
 scp azureuser@$KUBE_NAMEmgmt.westeurope.cloudapp.azure.com:.kube/config $HOME/.kube/config
 ```
+4. Download kubectl for your plattform
+https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
 
-4. Check that everything is running ok
+5. Check that everything is running ok
 ```
 kubectl version
 kubectl config current-context
