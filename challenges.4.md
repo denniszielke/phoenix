@@ -33,5 +33,6 @@ https://hub.docker.com/r/denniszielke/js-calc-backend/
 ## 4. Analyze and Improve the performance of your new backend
 - Trigger a continuous look and generate sufficient telemetry data
 - Use Application Insights to compare the performance
+- Use OMS to check for performance and health of the containers and your cluster
 - If the performance is not good enough perform a rollback
 
