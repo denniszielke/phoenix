@@ -5,12 +5,15 @@ const app = express();
 const morgan = require('morgan');
 
 const config = require('./config');
-
+const OS = require('os');
 var appInsights = require("applicationinsights");
 
 if (config.instrumentationKey){ 
-    appInsights.setup(config.instrumentationKey);
-    appInsights.start();
+    appInsights.setup(config.instrumentationKey)
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectDependencies(true)
+    .start();
+    appInsights.defaultClient.context.keys.cloudRole = "jscalcbackend";
 }
 var client = appInsights.defaultClient;
 
@@ -68,7 +71,7 @@ app.post('/api/calculation', function(req, res) {
         client.trackEvent({ name: "calculation-jsbackend-result"});
         client.trackMetric({ name:"calculation-jsbackend-duration", value: duration });
     }
-    var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue } );
+    var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname() } );
     console.log(serverResult);
     res.send(serverResult.toString());
 });
@@ -82,6 +85,8 @@ app.post('/api/dummy', function(req, res) {
     res.send('42');
 });
 
+console.log(config);
+console.log(OS.hostname());
 // Listen
 if (config.instrumentationKey){ 
     client.trackEvent({ name: "jsbackend-initializing"});
