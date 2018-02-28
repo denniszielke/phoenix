@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-calc-frontend-svc
+  labels:
+    name: calc-frontend-svc
+    app: {{ template "multicalchart.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.frontendType }}
+  selector:
+    name: js-calc-frontend 
+    release: {{ .Release.Name }}
+  ports:
+   - port: 80
+     name: {{ .Release.Name }}-calc-frontend
+     targetPort: 3000
+     protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-calc-backend-svc
+  labels:
+    name: calc-backend-svc
+    app: {{ template "multicalchart.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.backendType }}
+  selector:
+    name: js-calc-backend
+    release: {{ .Release.Name }}
+  ports:
+  - port: 80
+    protocol: TCP
+    name: {{ .Release.Name }}-calc-backend
+    targetPort: 3001
