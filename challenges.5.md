@@ -1,5 +1,5 @@
 # Kubernetes integration challenge
-> Need help? Check hints [here :blue_book:](hints/osba.md)!
+> Need help? Check hints [here :blue_book:](hints/osba.md)! (hints/helm.md)!
 
 > In this challenge you will extend your application plattform capabilities with the vast set of services of native Azure PaaS Services - by using SQL, Redis Cache, MySQL, Service Bus, Cosmos DB from your apps. You will make sure that the management of these services will be done by the service catalog in Kubernetes and minimize the impact of your operational teams to use Azure PaaS.
 
