@@ -17,19 +17,31 @@ import (
 type Calculation struct {
 	Timestamp time.Time `json:"timestamp"`
 	Value      string	`json:"value"`
+	Host		string 	`json:"host"`
 }
 
 func main() {
 	var appInsightsKey = os.Getenv("INSTRUMENTATIONKEY")
 	var port = os.Getenv("PORT")
-	client := appinsights.NewTelemetryClient(appInsightsKey)
-	client.TrackEvent("gobackend-initializing")
+
+	if (len(appInsightsKey) > 0) {
+		client := appinsights.NewTelemetryClient(appInsightsKey)
+		client.TrackEvent("gobackend-initializing")
+	}
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", GetPing).Methods("GET")
 	router.HandleFunc("/api/dummy", GetPing).Methods("GET")
 	router.HandleFunc("/api/calculation", GetCalculation).Methods("POST")
+	hostname, err := os.Hostname()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("hostname:", hostname)
 	fmt.Println("Listening on " + port)
-	http.ListenAndServe(":" + port, router)
+	if (len(port) > 0 ) {
+		port = "80"
+		http.ListenAndServe(":" + port, router)
+	}
 }
 
 func GetPing(res http.ResponseWriter, req *http.Request) {
@@ -88,11 +100,15 @@ func GetCalculation(res http.ResponseWriter, req *http.Request) {
 	var primestr string
 	primestr = Factors(input);
 	fmt.Println(primestr)
-	var calcResult = Calculation{Value: "[" + primestr + "]",  Timestamp: time.Now()}
+	hostname, err := os.Hostname()
+	if err != nil {
+		panic(err)
+	}
+	var calcResult = Calculation{Value: "[" + primestr + "]", Timestamp: time.Now(), Host: hostname}
 	elapsed := time.Since(start)
 	var milliseconds =  int64(elapsed / time.Millisecond)
 	client.TrackEvent("calculation-gobackend-result")
-	client.TrackMetric("calculation-gobackend-duration", float32(milliseconds));
+	client.TrackMetric("calculation-gobackend-duration", float64(milliseconds));
 	fmt.Println("Responded with [" + primestr + "] in " + strconv.FormatInt(milliseconds, 10) +"ms")
 	outgoingJSON, error := json.Marshal(calcResult)
 	if error != nil {
