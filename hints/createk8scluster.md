@@ -20,7 +20,10 @@ az group create -n $KUBE_GROUP -l $LOCATION
 
 2. Create the acs cluster
 ```
+with powershell
 set KUBE_NAME myFirstKube
+or for cloud shell
+KUBE_NAME=myFirstKube
 az aks create --name $KUBE_NAME --resource-group $KUBE_GROUP --node-count 3 --generate-ssh-keys --kubernetes-version 1.8.7
 ```
 Additional parameters can be found here https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create
@@ -44,11 +47,8 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 5. Check that everything is running ok
 ```
-kubectl version
-kubectl config current-context
+kubectl cluster-info
 ```
 
-Use flag to use context if multiple clusters are in use
-```
-kubectl config use-context
-```
+Go to kubernetes dashoard
+http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/pod?namespace=default 
