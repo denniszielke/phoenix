@@ -43,11 +43,4 @@ Log in and out to re-evaluate your group membership
 sudo docker run hello-world
 ~~~
 
-## Creating a service principal for Kubernetes
-
-Azure Portal
-https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/azure-resource-manager/resource-group-create-service-principal-portal.md#create-an-azure-active-directory-application
-
-Azure cli
-https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/container-service/kubernetes/container-service-kubernetes-service-principal.md#option-1-create-a-service-principal-in-azure-ad 
 
