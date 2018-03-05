@@ -30,6 +30,8 @@ az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
 cat ~/.kube/config
 ```
 
+![Copy kubeconfig to your local system](images/kubeconfig.png)
+
 5. Download the config file from ~/.kube/config to your local disk.
 If you are running windows do the following
 - Open a cmd.exe windows
