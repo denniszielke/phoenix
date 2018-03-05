@@ -41,8 +41,16 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
     cat index.html
     ```
-
-
+- Check the running processes
+```
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+bc4b6b155c2c        helloworld          "/bin/sh -c 'node /u…"   12 seconds ago      Up 9 seconds        0.0.0.0:8080->8080/tcp   peaceful_mccarthy
+```
+- Kill the process to clean up
+```
+docker kill bc4b6b155c2c
+```
 
 
 ## 2. Automate your build 
