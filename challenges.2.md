@@ -24,6 +24,14 @@ The deployment will take some time (~20 min).
 
 ## 3. Kubernetes discovery
 - Open the K8s portal for a graphical interface. Run `kubectl proxy`then open up a browser an navigate to http://localhost:8001/ui.
+- If you want to work with namespaces. Create your own namespace 'dennisspace' with 
+```
+kubectl create ns dennisspace
+```
+and apply this postfix to your  kubectl commands like 
+```
+kubectl get pods -n dennisspace
+```
 
 - Familiarize yourself with the following commands on commandline, eg.
 ```
@@ -39,3 +47,4 @@ kubectl delete pods/<podid> // to delete a specific pod
 
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)
 - Launch a custom image from your registry (learn about secrets)
+- You can declare a namespace inside your yaml file

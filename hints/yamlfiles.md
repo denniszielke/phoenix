@@ -18,7 +18,7 @@ spec:
     - containerPort: 80
 ```
 
-## liveness probes and 
+## liveness probes and variables
 https://kubernetes-v1-4.github.io/docs/user-guide/liveness/
 
 Ensure that health checks are performed against your instance
@@ -28,6 +28,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: nginx
+  #namespace: default
 spec:
   containers:
   - name: nginx
