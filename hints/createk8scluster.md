@@ -3,7 +3,7 @@ https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 
 **Hint:** The "set KEY value" values commands work in Powershell. In Bash use KEY=value.
 
-1. Use bash to create the resource group 
+1. Use bash to create the resource group by using azure cloud shell (https://shell.azure.com/ )
 ```
 LOCATION=eastus
 KUBE_GROUP=myKubeRG
@@ -25,9 +25,12 @@ if you have to use the given service principal (because you are not allowed to c
 az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
 ```
 
+4. Now you can look at the cluster config file under
+```
+cat ~/.kube/config
+```
 
-
-Download the config file from ~/.kube/config to your local disk.
+5. Download the config file from ~/.kube/config to your local disk.
 If you are running windows do the following
 - Open a cmd.exe windows
 - Enter  to move to your user profile directory
@@ -38,18 +41,18 @@ cd %HOMEPATH%
 ``` 
 mkdir .kube
 ```
-- Copy the file named "config" (no extension) to your .kube folder
+- Copy the file named "config" (no extension) to your .kube folder or create the file and copy its contents (look out for line breaks).
 
 If you are running linux create create a folder named ".kube" in your home directory and move the config file there
 
-4. Download kubectl for your plattform
+6. Download kubectl for your plattform
 https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
 
-5. Check that everything is running ok
+7. Check that everything is running ok
 ```
 kubectl cluster-info
 ```
-6. Launch the dashboard
+8. Launch the dashboard
 ```
 kubectl proxy
 ```
