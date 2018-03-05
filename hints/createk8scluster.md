@@ -3,27 +3,16 @@ https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 
 **Hint:** The "set KEY value" values commands work in Powershell. In Bash use KEY=value.
 
-1a. Create the resource group (Powershell)
-```
-set LOCATION westus
-set KUBE_GROUP myKubeRG
-az group create -n $KUBE_GROUP -l $LOCATION
-```
-
-
-1b. OR use bash to create the resource group 
+1. Use bash to create the resource group 
 ```
 LOCATION=eastus
 KUBE_GROUP=myKubeRG
+KUBE_NAME=myFirstKube
 az group create -n $KUBE_GROUP -l $LOCATION
 ```
 
-2. Create the acs cluster
+2. Create the aks cluster
 ```
-with powershell
-set KUBE_NAME myFirstKube
-or for cloud shell
-KUBE_NAME=myFirstKube
 az aks create --name $KUBE_NAME --resource-group $KUBE_GROUP --node-count 3 --generate-ssh-keys --kubernetes-version 1.8.7
 ```
 Additional parameters can be found here https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create
@@ -36,12 +25,19 @@ if you have to use the given service principal (because you are not allowed to c
 az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
 ```
 
-or If you are not using the Azure Cloud Shell and don’t have the Kubernetes client kubectl, run 
-```
-sudo az aks install-cli
 
-scp azureuser@$KUBE_NAMEmgmt.eastus.cloudapp.azure.com:.kube/config $HOME/.kube/config
-```
+
+Download the config file from ~/.kube/config to your local disk.
+If you are running windows do the following
+- Open a cmd.exe windows
+- Enter  to move to your user profile directory
+~cd %HOMEPATH%~
+- Create a folder named .kube 
+~ mkdir .kube~
+- Copy the file named "config" (no extension) to your .kube folder
+
+If you are running linux create create a folder named ".kube" in your home directory and move the config file there
+
 4. Download kubectl for your plattform
 https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
 
