@@ -17,10 +17,10 @@
 - Build the container images for frontend and backend services locally.
 - Push the images to your ACR 
 - Apply the container images in your Kubernetes cluster using the *.yml files provided 
-    - calcbackend-pod.yml
-    - calcbackend-svc.yml
-    - calcfrontend-pod.yml
-    - calcfrontend-svc.yml
+    - backend-pod.yml
+    - backend-svc.yml
+    - frontend-pod.yml
+    - frontend-svc.yml
 - Configure your application to be accessible from the internet and call the page. Use the calculation.
 
 ## 2. AI
