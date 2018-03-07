@@ -24,6 +24,9 @@ OR do it via yaml files  - here secrets must be base64 encoded.
 echo -n "someRandomSecretValue" | base64
 ~~~
 
+To create an application insights secret required for the calculator enter the following with the correct key
+kubectl create secret generic appinsightsecret --from-literal=appinsightskey=12345678
+
 Define secret in yaml file
 ```
 apiVersion: v1
