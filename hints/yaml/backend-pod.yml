@@ -10,7 +10,7 @@ spec:
     - name: calcbackend
       image: dzregistry.azurecr.io/calc/calc-backend:latest
       ports:
-        - containerPort: 3001
+        - containerPort: 80
           name: http         
           protocol: TCP
       env: 
@@ -20,6 +20,6 @@ spec:
               name: appinsightsecret
               key: appinsightskey
         - name: "PORT"
-          value: "3001"
+          value: "80"
   imagePullSecrets:
     - name: kuberegistry

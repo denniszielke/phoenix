@@ -1,21 +1,22 @@
 require('dotenv-extended').load();
-
-const express = require('express');
-const app = express();
-const morgan = require('morgan');
-
 const config = require('./config');
-const OS = require('os');
 var appInsights = require("applicationinsights");
 
 if (config.instrumentationKey){ 
     appInsights.setup(config.instrumentationKey)
     .setAutoDependencyCorrelation(true)
     .setAutoCollectDependencies(true)
-    .start();
-    appInsights.defaultClient.context.keys.cloudRole = "jscalcbackend";
+    .setAutoCollectPerformance(true);
+    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "calc-backend-svc";
+    appInsights.start();
 }
 var client = appInsights.defaultClient;
+
+const express = require('express');
+const app = express();
+const morgan = require('morgan');
+
+const OS = require('os');
 
 // add logging middleware
 app.use(morgan('dev'));
@@ -51,7 +52,7 @@ app.post('/api/calculation', function(req, res) {
     console.log(req.headers.number);
     if (config.instrumentationKey){ 
         var startDate = new Date();
-        client.trackEvent( { name: "calculation-jsbackend-call"});
+        client.trackEvent( { name: "calculation-js-backend-call"});
     }
     var resultValue = [0];
     try{
@@ -68,8 +69,8 @@ app.post('/api/calculation', function(req, res) {
     if (config.instrumentationKey){ 
         var endDate = new Date();
         var duration = endDate - startDate;
-        client.trackEvent({ name: "calculation-jsbackend-result"});
-        client.trackMetric({ name:"calculation-jsbackend-duration", value: duration });
+        client.trackEvent({ name: "calculation-js-backend-result"});
+        client.trackMetric({ name:"calculation-js-backend-duration", value: duration });
     }
     var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname() } );
     console.log(serverResult);
@@ -80,7 +81,7 @@ app.post('/api/dummy', function(req, res) {
     console.log("received dummy request:");
     console.log(req.headers)
     if (config.instrumentationKey){ 
-        client.trackEvent({ name: "dummy-jsbackend-call"});
+        client.trackEvent({ name: "dummy-js-backend-call"});
     }
     res.send('42');
 });
@@ -89,7 +90,7 @@ console.log(config);
 console.log(OS.hostname());
 // Listen
 if (config.instrumentationKey){ 
-    client.trackEvent({ name: "jsbackend-initializing"});
+    client.trackEvent({ name: "js-backend-initializing"});
 }
 app.listen(config.port);
 console.log('Listening on localhost:'+ config.port);

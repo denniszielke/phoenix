@@ -9,7 +9,7 @@ spec:
   ports:
   - port: 80
     name: calcbackend
-    targetPort: 3001
+    targetPort: 80
   selector:
     name: calcbackend
     app: calculator
