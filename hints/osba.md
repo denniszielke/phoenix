@@ -1,8 +1,5 @@
 # Hints for the integration challenge
 
-## Install Helm
-# Using Helm
-
 ## Installing helm and tiller
 https://github.com/kubernetes/helm
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm
