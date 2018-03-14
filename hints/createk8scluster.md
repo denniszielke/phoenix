@@ -28,7 +28,7 @@ az vm list-sizes -l eastus
 ```
 and set as parameter
 ```
---node-vm-size 
+--node-vm-size Standard_B2s
 ```
 3. Export the kubectrl credentials files. 
 ```
