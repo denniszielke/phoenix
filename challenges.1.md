@@ -31,7 +31,7 @@ In this chapter you will get a basic experience in working with containers. For 
     ```
 - Run the image in a container locally on your machine. Remember to open up the correct port in your command (-p).
     ```
-    docker run -d -p 8080:8080 helloworld
+    docker run -d -p 8080:80 helloworld
     ```
 - Open the browser and navigate to the application you just started with your browser (http://localhost:8080). If you're running on a Linux VM in Azure, just run this command to avoid working with a graphical browser:
     ```
