@@ -2,6 +2,7 @@
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 
 **Hint:** The "set KEY value" values commands work in Powershell. In Bash use KEY=value.
+Look up regions https://github.com/Azure/AKS/blob/master/preview_regions.md
 
 1. Use bash to create the resource group by using azure cloud shell (https://shell.azure.com/ )
 ```
@@ -19,6 +20,15 @@ Additional parameters can be found here https://docs.microsoft.com/en-us/cli/azu
 if you have to use the given service principal (because you are not allowed to create services principals in azure ad) add the following parameters
 ```
 --client-secret HEREBESECRET --service-principal HEREBEAPPID
+```
+Customize the vm size with
+Look up vm sizes 
+```
+az vm list-sizes -l eastus
+```
+and set as parameter
+```
+--node-vm-size 
 ```
 3. Export the kubectrl credentials files. 
 ```
