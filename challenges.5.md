@@ -25,6 +25,7 @@
 - Parametrize the deployment
 
 ## 4. Integrate using the open service broker
+![](/img/appmapredis.jpg)
 - Expand the requirements for your helm chart
 - Define naming and parametery for your helm chart to make use of the Azure Redis Cache
 - Deploy your app!

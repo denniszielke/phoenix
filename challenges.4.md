@@ -31,6 +31,7 @@ https://hub.docker.com/r/denniszielke/js-calc-backend/
 - Deploy a new frontend and services
 
 ## 4. Analyze and Improve the performance of your new backend
+![](/img/appmap.jpg)
 - Trigger a continuous look and generate sufficient telemetry data
 - Use Application Insights to compare the performance
 - Use OMS to check for performance and health of the containers and your cluster
