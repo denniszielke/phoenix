@@ -10,7 +10,7 @@ metadata:
 spec:
   type: {{ .Values.service.frontendType }}
   selector:
-    name: js-calc-frontend 
+    name: calc-frontend 
     release: {{ .Release.Name }}
   ports:
    - port: 80
@@ -30,7 +30,7 @@ metadata:
 spec:
   type: {{ .Values.service.backendType }}
   selector:
-    name: js-calc-backend
+    name: calc-backend
     release: {{ .Release.Name }}
   ports:
   - port: 80

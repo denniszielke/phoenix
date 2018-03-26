@@ -3,6 +3,8 @@
 # Declare variables to be passed into your templates.
 frontendReplicaCount: 2
 backendReplicaCount: 2
+useRedis: no
+useAppInsights: no
 image:
   repository: denniszielke
   frontendImage: js-calc-frontend

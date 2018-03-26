@@ -20,7 +20,7 @@ spec:
     metadata:
       labels:
         app: {{ template "multicalchart.name" . }}
-        name: js-calc-frontend
+        name: calc-frontend
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -34,13 +34,35 @@ spec:
           env: 
             - name: "ENDPOINT"
               value: "{{ .Release.Name }}-calc-backend-svc"
+{{- if .Values.useAppInsights }}
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
                   name: appinsightsecret
                   key: appinsightskey
+{{- else }}
+            - name: "INSTRUMENTATIONKEY"
+              value: "dummy"
+{{- end }}
             - name: "PORT"
               value: "3000"
+{{- if .Values.useRedis }}
+            - name: "REDIS_HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redishostkey
+            - name: "REDIS_AUTH"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redisauthkey
+{{- else }}
+            - name: "REDIS_HOST"
+              value: ""
+            - name: "REDIS_AUTH"
+              value: ""
+{{- end }}
           livenessProbe:
             httpGet:
               path: /ping
@@ -72,7 +94,7 @@ spec:
     metadata:
       labels:
         app: {{ template "multicalchart.name" . }}
-        name: js-calc-backend
+        name: calc-backend
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -84,11 +106,16 @@ spec:
               name: http         
               protocol: TCP
           env: 
+{{- if .Values.useAppInsights }}
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
                   name: appinsightsecret
                   key: appinsightskey
+{{- else }}
+            - name: "INSTRUMENTATIONKEY"
+              value: "dummy"
+{{- end }}
             - name: "PORT"
               value: "3001"
           livenessProbe:
