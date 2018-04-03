@@ -40,7 +40,7 @@ Log in and out to re-evaluate your group membership
 
 3. Test docker engine
 ~~~
-sudo docker run hello-world
+docker run hello-world
 ~~~
 
 
