@@ -12,7 +12,7 @@ Team Services Configuration to build & push a docker image to your Azure Contain
 4. Choose "Hosted Linux Preview" as build agent queue.
 
 5. Add the following tasks for your build phase (if you don't find them you can search or install from the marketplace)
-**Hint:** Use BuildId (instead of Buildnumber) 
+**Hint:** Use $(Build.DefinitionName):$(Build.BuildId) to name your image automatically in a format that will allow you find it later. 
 **Hint:** Make sure you reference your Dockerfile correctly
 
     - "Docker" task to create a container image
