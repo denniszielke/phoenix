@@ -12,6 +12,8 @@ or
 kubectl create secret docker-registry kuberegistry --docker-server $REGISTRY_URL --docker-username $REGISTRY_NAME --docker-password $REGISTRY_PASSWORD --docker-email 'example@example.com'
 ```
 
+Hint: In case of problems pulling your images, try creating the secret without '' around the values.
+
 # Deploying additional secrets
 https://kubernetes.io/docs/concepts/configuration/secret/
 
