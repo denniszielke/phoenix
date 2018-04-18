@@ -16,7 +16,7 @@ Team Services Configuration to build & push a docker image to your Azure Contain
 **Hint:** Make sure you reference your Dockerfile correctly
 
     - "Docker" task to create a container image
-    ![](images/vstshelloworldbuildimage.jpg)
+    ![](images/vstsbuild.png)
     - "Docker" task to push the image
     ![](images/vstshelloworldpushimage.jpg)
 
