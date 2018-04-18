@@ -81,6 +81,7 @@ Implement the solution and upgrade your application to the Go-backend without do
 - Modify your backend-service Yaml to target the new image
 - Deploy
 - Check monitoring data for performance impact
+- Use helm charts to deploy continous via vsts hints [here :blue_book:](hints/TeamServicesHelmK8s.md)!
 
 
 
