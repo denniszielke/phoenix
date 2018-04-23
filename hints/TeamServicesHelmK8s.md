@@ -11,7 +11,7 @@ $(releaseNameDev) . --install --force --reset-values --wait --set image.reposito
 ```
 ![](images/vstshelmrelease.jpeg)
 5. Set the working directory to the artifacts path of your helm chart
-````
+```
 $(System.DefaultWorkingDirectory)/phoenix-CI/multicalchart
 ```
 
