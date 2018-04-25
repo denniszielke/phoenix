@@ -46,5 +46,5 @@ kubectl delete pods/<podid> // to delete a specific pod
 > Need help? Check hints [here :blue_book:](hints/yamlfiles.md)!
 
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)
-- Launch a custom image from your registry (learn about secrets)
+- Launch a custom image from your registry (learn about secrets or registry authentication)
 - You can declare a namespace inside your yaml file
