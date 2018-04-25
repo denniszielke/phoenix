@@ -1,5 +1,7 @@
 # Create Azure Container Registry secret in Kubernetes
-https://medium.com/devoops-and-universe/your-very-own-private-docker-registry-for-kubernetes-cluster-on-azure-acr-ed6c9efdeb51
+
+!!! This is only required if you are not using an azure container registry that is part of the same subscription
+!!! Prefered approach is to grant the Kubernetes service principal Reader role permissions in your azure container registry via Access Control (IAM
 
 ```
 kubectl create secret docker-registry kuberegistry --docker-server 'myveryownregistry-on.azurecr.io' --docker-username 'username' --docker-password 'password' --docker-email 'example@example.com'
