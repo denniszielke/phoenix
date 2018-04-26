@@ -60,6 +60,9 @@ If you are running linux create create a folder named ".kube" in your home direc
 6. Download kubectl for your plattform
 https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
 
+or use this link
+https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/windows/amd64/kubectl.exe
+
 7. Check that everything is running ok
 ```
 kubectl cluster-info
