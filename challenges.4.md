@@ -22,7 +22,7 @@ https://hub.docker.com/r/denniszielke/js-calc-backend/
 ## 2. Deploy an ingress controller
 - Learn about ingress controller (https://kubernetes.io/docs/concepts/services-networking/ingress/)
 - Deploy an ingress controller via Helm (https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
-- Configure the routes for ingress to your application
+- Configure the routes for ingress to your application (https://docs.microsoft.com/en-us/azure/aks/ingress)
 
 ## 3. Deploy your new backend
 - Create a deployment yaml file
@@ -34,6 +34,7 @@ https://hub.docker.com/r/denniszielke/js-calc-backend/
 ![](/img/appmap.jpg)
 - Trigger a continuous look and generate sufficient telemetry data
 - Use Application Insights to compare the performance
-- Use OMS to check for performance and health of the containers and your cluster
+- Deploy a load/ availability test from azure to your ingress
+- Use AKS health to check for performance and health of the containers and your cluster
 - If the performance is not good enough perform a rollback
 
