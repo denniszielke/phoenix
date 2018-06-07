@@ -3,8 +3,8 @@ kind: Pod
 metadata:
   name: helloworld
   labels:
-    name: helloworld
-    app: helloworld
+    release: V76
+    app: helloworld-demo
 spec:
   containers:
     - name: aci-helloworld
