@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: aci-helloworld
-      image: aksacrdev.azurecr.io/aci-helloworld:v1
+      image: dzkubereg.azurecr.io/aci-helloworld-ci:76
       ports:
         - containerPort: 80
           name: http
