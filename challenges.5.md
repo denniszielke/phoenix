@@ -13,6 +13,7 @@
 - Configure a storage class
 - Deploy a pod and mount a volume from a persistent volume
 - Have the application write to that volume
+- Use redis in a sidecar container to
 
 ## 2. Install the open service broker api
 - Configure your azure service principal for the open service broker
