@@ -7,5 +7,5 @@ Creating resources on Azure:
 - *Azure shell* - this will be used to execute commands
 - *Azure Container Registry* - here we are going to store our Docker container images
 
- > Need help? Check hints [here :blue_book:](hints/creatingresources.md)! 
+ > Need help? Check hints [here :blue_book:](hints/creating_resources.md)! 
 

@@ -22,6 +22,4 @@ spec:
               name: appinsightsecret
               key: appinsightskey
         - name: "PORT"
-          value: "80"  
-  imagePullSecrets:
-    - name: kuberegistry              
+          value: "80"              

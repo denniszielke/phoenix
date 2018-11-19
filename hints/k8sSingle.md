@@ -1,6 +1,6 @@
-# Single Container app in K8s
+# Single Container app in Kubernetes
 
-**Hint: You have to install kubectl first!**
+**Hint:** You have to install kubectl first!**
 
 1. Run single container app in your K8s cluster
 ```

@@ -48,7 +48,9 @@ spec:
 
 ## Referencing images from your own registry
 
-To reference an image from your own registry you need to reference a credential for the cluster to login. Check the hint about secrets: [here :blue_book:](createsecrets.md)
+To allow for authentication to your azrue container registry make sure that your kubernetes service principal has at least ***Reader*** permissions on your container registry:
+https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/container-registry/container-registry-auth-aks.md
+
 
 ```
 apiVersion: "v1"
@@ -63,9 +65,5 @@ spec:
       image: someRegistryOnAzure.azurecr.io/someImage:latest
       ports:
         - containerPort: 80
-          name: http
           protocol: TCP 
-  imagePullSecrets:
-    - name: nameOfYourSecret
-
 ```

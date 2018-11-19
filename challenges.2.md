@@ -1,7 +1,7 @@
 # Kubernetes 101 Challenge
-> For scheduling applications consisting of multiple containers you typically use an orchestrator. Kubernetes is an orchestrator and in this chapter you will set up a Kubernetes cluster in Azure Container Services (ACS) and an Azure Container Registry (ACR) to store your images.
+> For scheduling applications consisting of multiple containers you typically use an orchestrator. Kubernetes is an orchestrator and in this chapter you will set up a Kubernetes cluster in Azure Kubernetes Service (AKS) and an Azure Container Registry (ACR) to store your images.
 >## Here's what you'll learn:
-> - How to set up a Kubernetes Cluster with Azure Container Services
+> - How to set up a Kubernetes Cluster with Azure Kubernetes Services
 > - How to access the cluster with the commandline command "kubectl"
 > - Get to know the basic command set of "kubectl"
 > - Understand the concept of pods and services and how they come together
@@ -9,8 +9,8 @@
 
 
 ## 1. Create a Kubernetes cluster on Azure Container Services 
-- Set up your Kuberenetes cluster using Azure Container Services.
-> Need help? Check hints [here :blue_book:](hints/createk8scluster.md)!
+- Set up your Kuberenetes cluster using Azure Kubernetes Services.
+> Need help? Check hints [here :blue_book:](hints/create_aks_cluster.md)!
 
 The deployment will take some time (~20 min). 
 
@@ -43,7 +43,7 @@ kubectl delete pods/<podid> // to delete a specific pod
 ```
 
 ## 4. Execute deployments via yaml
-> Need help? Check hints [here :blue_book:](hints/yamlfiles.md)!
+> Need help? Check hints [here :blue_book:](hints/learn_yaml_files.md)! [here :blue_book:](hints/create_secrets.md)!
 
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)
 - Launch a custom image from your registry (learn about secrets or registry authentication)

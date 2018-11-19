@@ -12,7 +12,7 @@ In this chapter you will get a basic experience in working with containers. For 
     - Get a sense for container networking and ports
     - How to create new versions of images
     - Learn about tagging
-    - How to use VSTS automation to set up an automated workflow
+    - How to use azure devops automation to set up an automated workflow
 - Deployment
     - How to provide a container image in a registry 
     - How to set up a container registry
@@ -75,14 +75,13 @@ docker kill bc4b6b155c2c
 - Push your image to your registry
 
 ## 2. Start your container in azure container instances
-> Need help? Check hints [here :blue_book:](hints/ManualReleaseToACI.md)!
+> Need help? Check hints [here :blue_book:](hints/deploy_to_aci.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
 ## 3. Automate the build of your container
-> Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
-- Import the sample code from to your VSTS Team Project. You can do this via UI. 
-- Use VSTS to create a build definition which triggers on code changes. The build definition should 
+> Need help? Check hints [here :blue_book:](hints/automate_container_build.md)!
+- Import the sample code from to your azure devops project. You can do this via UI. 
+- Use azure devops to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
     - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
-
