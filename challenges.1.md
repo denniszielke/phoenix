@@ -20,7 +20,28 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 1. Containerize your app 
-- Get the code of the hello world application (git clone https://github.com/denniszielke/phoenix) locally and navigate to the folder (phoenix\apps\aci-helloworld).
+- Get the code of the hello world application (*git clone https://github.com/denniszielke/phoenix*) locally and navigate to the folder (phoenix\apps\aci-helloworld).
+
+### A. Create a container remotely (without docker engine) (https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task )
+- Go to azure shell (https://shell.azure.com)
+
+- Clone the repository 
+```
+git clone https://github.com/denniszielke/phoenix
+```
+- Go the the aci-hello world app folder
+```
+cd phoenix/apps/aci-helloworld/
+```
+- Trigger your azure container registry to build your container remotely
+```
+ACR_NAME=
+az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
+```
+- Verify the results in your container registry.
+![](/img/acr-remote-build.png)
+
+### B. Create a container locally
 - Create a container image locally (you need docker running on your machine). Don't forget the trailing "." in the following line!
     ```
     docker build -t helloworld .
@@ -51,26 +72,17 @@ bc4b6b155c2c        helloworld          "/bin/sh -c 'node /u…"   12 seconds ag
 ```
 docker kill bc4b6b155c2c
 ```
+- Push your image to your registry
 
+## 2. Start your container in azure container instances
+> Need help? Check hints [here :blue_book:](hints/ManualReleaseToACI.md)!
+- Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
-## 2. Automate your build 
+## 3. Automate the build of your container
 > Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
 - Import the sample code from to your VSTS Team Project. You can do this via UI. 
 - Use VSTS to create a build definition which triggers on code changes. The build definition should 
     - create a new container image     
     - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
-
-## 3. Release to ACI manually
-> Need help? Check hints [here :blue_book:](hints/ManualReleaseToACI.md)!
-- Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
-
-
-## 4. Relase to ACI via VSTS
-> Need help? Check hints [here :blue_book:](hints/TeamServicesToACI.md)!
-- Use VSTS to create a release definition which is triggered by your build definition. This release definition should
-    - deploy the latest image created by your build definition to ACI. Use the Azure CLI 
-    task.
-- Now you have a full end to end flow for single container applications.
-
 

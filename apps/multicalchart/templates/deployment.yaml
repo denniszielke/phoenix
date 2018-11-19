@@ -28,13 +28,12 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.frontendImage }}:{{ .Values.image.frontendTag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 3000
-              name: http         
+            - containerPort: 3000      
               protocol: TCP
           env: 
             - name: "ENDPOINT"
               value: "{{ .Release.Name }}-calc-backend-svc"
-{{- if .Values.useAppInsights }}
+{{- if .Values.dependencies.useAppInsights }}
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
@@ -46,7 +45,13 @@ spec:
 {{- end }}
             - name: "PORT"
               value: "3000"
-{{- if .Values.useRedis }}
+{{- if .Values.dependencies.usePodRedis }}
+            - name: "REDIS_HOST"
+              value: "localhost"
+            - name: "REDIS_AUTH"
+              value: "MySuperSecretRedis"
+{{- else }}
+{{- if .Values.dependencies.useRedis }}
             - name: "REDIS_HOST"
               valueFrom:
                 secretKeyRef:
@@ -63,6 +68,7 @@ spec:
             - name: "REDIS_AUTH"
               value: ""
 {{- end }}
+{{- end }}
           livenessProbe:
             httpGet:
               path: /ping
@@ -71,6 +77,21 @@ spec:
             httpGet:
               path: /ping
               port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- if .Values.dependencies.usePodRedis }}
+        - name: redis
+          image: redis:4.0.11-alpine
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--requirepass", "MySuperSecretRedis"]
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -102,11 +123,10 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.backendImage }}:{{ .Values.image.backendTag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 3001
-              name: http         
+            - containerPort: 3001    
               protocol: TCP
           env: 
-{{- if .Values.useAppInsights }}
+{{- if .Values.dependencies.useAppInsights }}
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
@@ -126,3 +146,5 @@ spec:
             httpGet:
               path: /ping
               port: 3001
+          resources:
+{{ toYaml .Values.resources | indent 12 }}

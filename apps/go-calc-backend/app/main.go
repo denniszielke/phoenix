@@ -18,6 +18,7 @@ type Calculation struct {
 	Timestamp time.Time `json:"timestamp"`
 	Value      string	`json:"value"`
 	Host		string 	`json:"host"`
+	Remote		string 	`json:"remote"`
 }
 
 func main() {
@@ -109,7 +110,9 @@ func GetCalculation(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	var calcResult = Calculation{Value: "[" + primestr + "]", Timestamp: time.Now(), Host: hostname}
+	var remoteip string
+	remoteip = req.RemoteAddr;
+	var calcResult = Calculation{Value: "[" + primestr + "]", Timestamp: time.Now(), Host: hostname, Remote: remoteip}
 	elapsed := time.Since(start)
 	var milliseconds =  int64(elapsed / time.Millisecond)
 	client.TrackEvent("calculation-go-backend-result")

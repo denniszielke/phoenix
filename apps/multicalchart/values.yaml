@@ -2,27 +2,31 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 frontendReplicaCount: 2
-backendReplicaCount: 2
-useRedis: no
-useAppInsights: no
+backendReplicaCount: 3
+dependencies:
+  useRedis: no
+  usePodRedis: no
+  redisSecret: rediscachesecret
+  useAppInsights: no
+  appInsightsSecret: appinsightsecret
+  appInsightsSecretValue: dummyValue
+  useIngress: no
 image:
-  repository: denniszielke
+  repository: dzkubereg.azurecr.io
   frontendImage: js-calc-frontend
   frontendTag: latest
   backendImage: js-calc-backend
   backendTag: latest
   pullPolicy: IfNotPresent
+  pullSecret: kuberegistry
 service:
   frontendType: LoadBalancer
   backendType: ClusterIP
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  dnsName: calcName
+resources:
+  limits:
+    cpu: 300m
+    memory: 350Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi

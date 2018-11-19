@@ -6,7 +6,7 @@ Look up regions https://github.com/Azure/AKS/blob/master/preview_regions.md
 
 1. Use bash to create the resource group by using azure cloud shell (https://shell.azure.com/ )
 ```
-LOCATION=eastus
+LOCATION=westeurope
 KUBE_GROUP=myKubeRG
 KUBE_NAME=myFirstKube
 az group create -n $KUBE_GROUP -l $LOCATION
@@ -40,6 +40,7 @@ az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
 cat ~/.kube/config
 ```
 
+The following is optional (for local)
 ![Copy kubeconfig to your local system](images/kubeconfig.png)
 
 5. Download the config file from ~/.kube/config to your local disk.
@@ -63,14 +64,29 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl/
 or use this link
 https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/windows/amd64/kubectl.exe
 
-7. Check that everything is running ok
+5. Check that everything is running ok
 ```
 kubectl cluster-info
 ```
-8. Launch the dashboard
+
+6. Launch the dashboard
+in the azure shell
+```
+az aks browse --resource-group $KUBE_GROUP --name $KUBE_NAME
+```
+
+or locally 
+
 ```
 kubectl proxy
 ```
 
-Go to kubernetes dashoard
+7. If you see an access denied - you have to give the dashboard pod permissions first
+```
+kubectl create clusterrolebinding kubernetes-dashboard \
+--clusterrole=cluster-admin \
+--serviceaccount=kube-system:kubernetes-dashboard
+```
+
+Go to kubernetes dashoard (locally)
 http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/pod?namespace=default 

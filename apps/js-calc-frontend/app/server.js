@@ -19,9 +19,6 @@ const OS = require('os');
 const redis = require("redis");
 
 var redisClient = null;
-if (config.redisHost && config.redisAuth) {
-    redisClient = redis.createClient(6380, config.redisHost, {auth_pass: config.redisAuth, tls: {servername: config.redisHost}});
-}
 
 var publicDir = require('path').join(__dirname, '/public');
 
@@ -31,7 +28,6 @@ app.use(express.static(publicDir));
 
 // Routes
 app.get('/ping', function(req, res) {
-    client.trackEvent({ name: 'ping-js-frontend-received' });
     console.log('received ping');
     res.send('Pong');
 });
@@ -54,7 +50,18 @@ app.post('/api/calculation', function(req, res) {
         client.trackEvent( { name: "calculation-js-frontend-call-start"});
     }
 
+    if (config.redisHost && config.redisAuth && redisClient == null) {
+        try{
+            redisClient = redis.createClient(6379, config.redisHost, {auth_pass: config.redisAuth, password: config.redisAuth});
+        }
+        catch(e){
+            console.log(e);
+            redisClient=null;
+        }
+    }
+
     if (redisClient){
+        console.log("calling redis:" + config.redisHost + " with " + config.redisAuth);
         var cachedResult = redisClient.get(req.headers.number, function(err, reply) {
             if (reply && !err){
                 if (config.instrumentationKey){ 
@@ -71,13 +78,6 @@ app.post('/api/calculation', function(req, res) {
                 res.send(reply);            
                 console.log(reply);                
             }else{
-                // if (err){
-                //     console.log("cache error:");
-                //     console.log(err);
-                //     if (config.instrumentationKey){ 
-                //         client.trackException(err);
-                //     }
-                // }
                 console.log("cache miss");
                 var formData = {
                     received: new Date().toLocaleString(), 
@@ -108,7 +108,7 @@ app.post('/api/calculation', function(req, res) {
                         client.trackMetric({ name:"calculation-js-frontend-duration", value: duration });
                     }
                                        
-                    var cachedResult = redisClient.set(req.headers.number, body, function(err, reply) {
+                    var cachedResult = redisClient.set(req.headers.number.toString(), body.toString(), function(err, reply) {
                         console.log("cache save");
                         console.log(reply);
                     });
