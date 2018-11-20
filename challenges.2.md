@@ -15,7 +15,9 @@
 The deployment will take some time (~20 min). 
 
 ## 2. Run single container app in your K8s cluster
+> This is about running your first container in Kubernetes
 > Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
+
 - Run a public available application in a single container on your cluster. The image name is "nginx".
     - Use the "kubectl run" command
 - Add a service to make your application accessible from the internet
@@ -23,7 +25,9 @@ The deployment will take some time (~20 min).
 - Start your webbrowser to view your application running in your cluster.
 
 ## 3. Kubernetes discovery
-- Open the K8s portal for a graphical interface. Run `kubectl proxy`then open up a browser an navigate to http://localhost:8001/ui or http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/pod?namespace=default
+> This is about learning the Kubernetes objects
+> Need help? Check hints [here :blue_book:](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)!
+
 - If you want to work with namespaces. Create your own namespace 'dennisspace' with 
 ```
 kubectl create ns dennisspace
@@ -39,12 +43,22 @@ kubectl get pods    // to display all pods
 kubectl get svc     // to display all services
 kubectl get deployments     // to display all deployments
 kubectl delete pods/<podid> // to delete a specific pod
-
+kubectl describe deployment <deploymentname> // look up yaml for a deployment
 ```
 
 ## 4. Execute deployments via yaml
+> This is about creating a desired state configration for your apps
 > Need help? Check hints [here :blue_book:](hints/learn_yaml_files.md)! [here :blue_book:](hints/create_secrets.md)!
-
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)
-- Launch a custom image from your registry (learn about secrets or registry authentication)
+- Launch a custom image from your registry (learn about secrets or registry authentication)  [here :blue_book:](hints/yaml/aci-helloworld.yaml)!
 - You can declare a namespace inside your yaml file
+- Delete the frontend pod using the commandline and call the website again. 
+- You'll recognize that it will no longer work - but they restart?
+
+## BONUS Challenge - Scaling apps automatically
+> Need help? Check hints [here :blue_book:](hints/create_traffic.md)!
+
+- Configure your deployment to ensure that the number of replicas scales automatically according to the load
+- Configure a horizontal pod autoscaler for your deployment
+- Create some traffic to ensure that the scale operation starts
+- Evaluate the azure monitor to see performance metrics

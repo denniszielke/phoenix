@@ -19,16 +19,25 @@ https://hub.docker.com/r/denniszielke/go-calc-backend/
 https://hub.docker.com/r/denniszielke/js-calc-frontend/
 https://hub.docker.com/r/denniszielke/js-calc-backend/
 
-## 2. Deploy an ingress controller
-- Learn about ingress controller (https://kubernetes.io/docs/concepts/services-networking/ingress/)
-- Deploy an ingress controller via Helm (https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
-- Configure the routes for ingress to your application (https://docs.microsoft.com/en-us/azure/aks/ingress)
+## 2. Create a helm chart for your application
+> This is about packaging your whole app
+> Need help? Check hints [here :blue_book:](hints/helm.md)!
 
-## 3. Deploy your new backend
+You will need to create:
 - Create a deployment yaml file
+- Create an helm chart
 - Make sure that the environment variables for PORT and INSTRUMENTATIONKEY are set correctly
-- Deploy the new backend into your cluster
-- Deploy a new frontend and services
+- Deploy your helm chart to your cluster manually
+
+## 3. Deploy your helm chart via azure devops
+> This is about continously deploying your app via azure devops
+> Need help? Check hints [here :blue_book:](hints/azuredevops_helm.md)!
+
+You will need to create:
+- Checkin your helm chart into your repo
+- Make sure that the environment variables for PORT and INSTRUMENTATIONKEY are set correctly
+- Create a build pipeline so that it packages and versions your helm chart during build with your containers
+- Create a release pipeline so that you deploy your helm chart automatically
 
 ## 4. Analyze and Improve the performance of your new backend
 ![](/img/appmap.jpg)
@@ -38,3 +47,7 @@ https://hub.docker.com/r/denniszielke/js-calc-backend/
 - Use AKS health to check for performance and health of the containers and your cluster
 - If the performance is not good enough perform a rollback
 
+## BONUS Challenge - Put your helm chart into an helm chart repository
+https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-helm-repos
+- Automatically publish your helm chart in your container registry
+- Share the helm chart repo with your co-worker and see that the installation works from remote

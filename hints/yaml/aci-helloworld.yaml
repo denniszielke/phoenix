@@ -8,11 +8,9 @@ metadata:
 spec:
   containers:
     - name: aci-helloworld
-      image: dzkubereg.azurecr.io/aci-helloworld-ci:76
+      image: dzkubereg.azurecr.io/aci-helloworld-ci:latest
       ports:
         - containerPort: 80
-          name: http
-          protocol: TCP
       resources:
         requests:
           memory: "128Mi"

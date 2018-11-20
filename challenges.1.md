@@ -20,9 +20,11 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 1. Containerize your app 
-- Get the code of the hello world application (*git clone https://github.com/denniszielke/phoenix*) locally and navigate to the folder (phoenix\apps\aci-helloworld).
+> This is about putting your apps inside a container
+- Get the code of the hello world application (*git clone https://github.com/denniszielke/phoenix*) locally and use the app in folder (phoenix\apps\aci-helloworld).
 
-### A. Create a container remotely (without docker engine) (https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task )
+### A. Create a container remotely (without docker engine) 
+https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task 
 - Go to azure shell (https://shell.azure.com)
 
 - Clone the repository 
@@ -75,10 +77,12 @@ docker kill bc4b6b155c2c
 - Push your image to your registry
 
 ## 2. Start your container in azure container instances
+> This is about checking that your container actually works outside of your dev environment. 
 > Need help? Check hints [here :blue_book:](hints/deploy_to_aci.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
 ## 3. Automate the build of your container
+> This is about automating the build of your container outside of your dev environment.
 > Need help? Check hints [here :blue_book:](hints/automate_container_build.md)!
 - Import the sample code from to your azure devops project. You can do this via UI. 
 - Use azure devops to create a build definition which triggers on code changes. The build definition should 

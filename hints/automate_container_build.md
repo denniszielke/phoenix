@@ -15,6 +15,9 @@ There are two options
 ![](images/azuredevops_import_project.png)
 
 5. Add the following tasks for your pipeline phase (if you don't find them you can search or install from the marketplace)
+
+`If you have issues with authentication to your azure container registry - you can create use the docker registry type ` [here :blue_book:](azuredevops_service_connection.md)!
+
 **Hint:** Use $(Build.DefinitionName):$(Build.BuildId) to name your image automatically in a format that will allow you find it later. 
 **Hint:** Make sure you reference your Dockerfile correctly
 **Hint:** On the first pipeline you have to authorize your pipeline for your azure subscription.
