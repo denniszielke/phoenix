@@ -23,6 +23,11 @@ kubectl get service
 kubectl edit service/nginx-service
 ```
 6. This opens up an editor. Exchange ClusterIp to LoadBalancer. Close and save the file.
+Shortcuts for vi:
+- `i` switches to insert mode
+- `CRTL + C ` switches to command mode
+- `wq!` saves your changes and closes the file
+
 7. Check the state of your service
 ```
 kubectl get service -w
