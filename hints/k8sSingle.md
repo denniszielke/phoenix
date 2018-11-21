@@ -12,7 +12,7 @@ kubectl get pods
 ```
 3. Wrap your pod into a service 
 ```
-kubectl expose deployment nginx --port=80
+kubectl expose deployment nginx --port=80 --name=nginx-service
 ```
 4. See what you got
 ```
@@ -20,7 +20,7 @@ kubectl get service
 ```
 5. Edit your service to be able to be accessed from the public internet
 ```
-kubectl edit service/nginx
+kubectl edit service/nginx-service
 ```
 6. This opens up an editor. Exchange ClusterIp to LoadBalancer. Close and save the file.
 7. Check the state of your service
