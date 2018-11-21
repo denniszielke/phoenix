@@ -40,29 +40,18 @@ az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
 cat ~/.kube/config
 ```
 
-The following is ** optional** (only for local kubectl)
-![Copy kubeconfig to your local system](images/kubeconfig.png)
-
-a. Download the config file from ~/.kube/config to your local disk.
-If you are running windows do the following
-- Open a cmd.exe windows
-- Enter  to move to your user profile directory
+You can download the latest version of kubectl (only for local machine - azure shell already has kubectl)
 ```
-cd %HOMEPATH%
+az aks install-cli 
 ```
-- Create a folder named .kube 
-``` 
-mkdir .kube
-```
-- Copy the file named "config" (no extension) to your .kube folder or create the file and copy its contents (look out for line breaks).
 
-If you are running linux create create a folder named ".kube" in your home directory and move the config file there
-
-b. Download kubectl for your plattform
+Alternatively for your plattform
 https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
 
-or use this direct link for windows
-https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/windows/amd64/kubectl.exe
+Set up autocompletion
+```
+kubectl completion -h
+```
 
 5. Check that everything is running ok
 ```
