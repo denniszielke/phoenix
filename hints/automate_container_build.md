@@ -16,17 +16,19 @@ There are two options
 
 5. Add the following tasks for your pipeline phase (if you don't find them you can search or install from the marketplace)
 
-`If you have issues with authentication to your azure container registry - you can create use the docker registry type ` [here :blue_book:](azuredevops_service_connection.md)!
+> If you have issues with authentication to your azure container registry - you can create use the docker registry type  [here :blue_book:](azuredevops_service_connection.md)!
 
-**Hint:** Use $(Build.DefinitionName):$(Build.BuildId) to name your image automatically in a format that will allow you find it later. 
-**Hint:** Make sure you reference your Dockerfile correctly
-**Hint:** On the first pipeline you have to authorize your pipeline for your azure subscription.
-**Hint:** Make sure there is always a latest tag on your images
+- Use $(Build.DefinitionName):$(Build.BuildId) to name your image automatically in a format that will allow you find it later. 
+- Make sure you reference your Dockerfile correctly
+- On the first pipeline you have to authorize your pipeline for your azure subscription.
+- Make sure there is always a latest tag on your images
 
     - "Docker" task to create a container image
-    ![](images/vstsbuild.png)
+
+![](images/vstsbuild.png)
     - "Docker" task to push the image
-    ![](images/vstshelloworldpushimage.jpg)
+    
+![](images/vstshelloworldpushimage.jpg)
 
 6. Start the pipeline and check your container registry for the new image
 

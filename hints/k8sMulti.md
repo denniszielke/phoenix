@@ -2,6 +2,7 @@
 
 1. Build images local. 
 Navigate to the multi-calculator folder and into the calc-frontend folder.
+
 Then run:
 ```
 docker build -t calcfrontend .

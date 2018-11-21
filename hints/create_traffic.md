@@ -2,7 +2,7 @@
 
 ## Create a pod that you can log into
 
-- Create a pod that can host some command line tools
+1. Create a pod that can host some command line tools
 ```
 apiVersion: v1
 kind: Pod
@@ -19,17 +19,17 @@ spec:
     - "3600"
 ```
 
-- Log into that pod
+2. Log into that pod
 ```
 kubectl exec -ti centos -- /bin/bash
 ```
 
-- Run a query against a service from the inside
+3. Run a query against a service from the inside
 ```
 for i in {1..10000}; do curl -s -w "%{time_total}\n" -o /dev/null http://nameofyourservice; done
 ```
 
-- Cleanup of your pod
+4. Cleanup of your pod
 ```
 kubectl delete pod centos
 ```
@@ -37,7 +37,7 @@ kubectl delete pod centos
 ## Configure a horizontal pod autoscaler
 https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 
-- Select a deployment
+Select a deployment
 ```
 kubectl autoscale deployment azure-vote-front --cpu-percent=20 --min=20 --max=30
 ```

@@ -34,12 +34,18 @@
     ```
     
 1. Then run 
-> kubectl apply -f replication yml
+```
+kubectl apply -f replication yml
+```
 1. Now check 
-> kubectl get pods
+```
+kubectl get pods
+```
 1. You should see the number of pods specified in your Replica set.
 1. Now kill one pod with 
-> kubectl delete pods/<IDOFPOD>
+```
+kubectl delete pods/<IDOFPOD>
+```
 1. Check the number of pods again. you should see one pod termintating and anotherone is recreated instantly.
 
 

@@ -19,6 +19,7 @@ cat ~/.kube/config
 Copy the output into the KubeConfig field
 
 2. Verify that the connection works
+
 ![](/hints/images/aks_service_connection.png)
 
 
