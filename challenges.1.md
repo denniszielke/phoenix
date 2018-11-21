@@ -3,6 +3,8 @@
 Containers can make certain aspects of a developer's or admin's life very easy by hiding complexity and by providing reliability.
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
 
+![](/img/challenge1.png)
+
 ## Here's what you'll learn: ##
 - Container basics
     - Get a feeling for work with containers and understand their purpose

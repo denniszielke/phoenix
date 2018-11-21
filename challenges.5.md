@@ -3,6 +3,8 @@
 
 > In this challenge you will extend your application plattform capabilities with the vast set of services of native Azure PaaS Services - by using SQL, Redis Cache, MySQL, Service Bus, Cosmos DB from your apps. You will make sure that the management of these services will be done by the service catalog in Kubernetes and minimize the impact of your operational teams to use Azure PaaS.
 
+![](/img/challenge5.png)
+
 ## Here's what you'll learn:
 > - How to persist data in a container
 > - How to set up the open service broker api for your Cluster

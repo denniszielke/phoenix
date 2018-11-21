@@ -3,7 +3,9 @@
 
 > In this chapter you will create a multi-container appliation in Kubernetes. This is more close to real-life but makes administration a little more challenging. In reality you might want to be able to specify that mutliple containers are able to talk to each other in a defined way. You might want to make make sure certain parts of your application run in multiple instances to cover load. You might want to be able to monitor performance of your application. You might want to make sure that your system is self-healing so that faulty components are replaced automatically. For updates you might want to make sure to have zero downtime of your application. We are going to configure all of this in this section.
 
->## Here's what you'll learn:
+![](/img/challenge3.png)
+
+## Here's what you'll learn:
 >- How to write Yaml files to specify a desired state of a Kubernetes object
 >- How to use the Azure Portal to view Application performance
 >- How to store secrets in Kubernetes
