@@ -48,7 +48,7 @@ https://kubeapps.com/
 1. Create helm chart manually and modify accordingly
 
 ```
-helm create multicalc
+helm create multicalchart
 ```
 
 Validate template
