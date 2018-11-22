@@ -4,6 +4,7 @@
 
 1. Create a pod that can host some command line tools
 ```
+cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -17,6 +18,7 @@ spec:
     command:
     - sleep
     - "3600"
+EOF
 ```
 
 2. Log into that pod
