@@ -12,7 +12,7 @@ There are two options
 ![](images/azuredevops_new_pipeline.png)
 
 4. Choose "Hosted Linux Preview" as build agent queue and make sure your pipeline has a propper name.
-![](images/azuredevops_import_project.png)
+![](images/azuredevops_pipeline_pool.png)
 
 5. Add the following tasks for your pipeline phase (if you don't find them you can search or install from the marketplace)
 
