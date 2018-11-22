@@ -39,7 +39,7 @@ https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 
 Select a deployment
 ```
-kubectl autoscale deployment azure-vote-front --cpu-percent=20 --min=20 --max=30
+kubectl autoscale deployment azure-vote-front --cpu-percent=20 --min=1 --max=8
 ```
 
 ## Look up performance metrics in azure container monitor
