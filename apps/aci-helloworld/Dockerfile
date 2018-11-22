@@ -1,8 +1,7 @@
- FROM node:8.2.0-alpine
- RUN mkdir -p /usr/src/app
+FROM node:8.2.0-alpine
+RUN mkdir -p /usr/src/app
 COPY ./app/* /usr/src/app/
 WORKDIR /usr/src/app
 RUN npm install
-EXPOSE 8080
 EXPOSE 80
 CMD node /usr/src/app/index.js
