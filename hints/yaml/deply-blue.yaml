@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: colorsdemo
+spec:
+  replicas: 5
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: servicedemo
+        color: blue
+        demo: colorsdemo
+    spec:
+      containers:
+        - name: blue
+          image: denniszielke/green:latest
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP 
