@@ -91,3 +91,9 @@ docker kill bc4b6b155c2c
     - create a new container image     
     - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
+
+## BONUS Challenge - Update images based on base image changes
+> Need help? Check hints [here :blue_book:](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update)!
+
+- Configure your image to use a base image from your registry
+- Configure a base image trigger
