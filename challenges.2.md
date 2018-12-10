@@ -15,7 +15,9 @@
 - Set up your Kuberenetes cluster using Azure Kubernetes Services.
 > Need help? Check hints [here :blue_book:](hints/create_aks_cluster.md)!
 
-The deployment will take some time (~20 min). 
+The deployment will take some time (~10 min). 
+
+If you want you can create the cluster using terraform and the example terraform script [here :blue_book:](hints/terraform.md)!
 
 ## 2. Run single container app in your K8s cluster
 > This is about running your first container in Kubernetes
