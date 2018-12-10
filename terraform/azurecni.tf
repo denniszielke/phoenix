@@ -75,7 +75,7 @@ resource "azurerm_subnet" "aksnet" {
 
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
-  name                = "{var.dns_prefix}-${random_integer.random_int.result}-ai"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-ai"
   location            = "West Europe"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   application_type    = "Web"
@@ -83,13 +83,15 @@ resource "azurerm_application_insights" "aksainsights" {
 
 # https://www.terraform.io/docs/providers/azurerm/r/redis_cache.html
 resource "azurerm_redis_cache" "aksredis" {
-  name                = "{var.dns_prefix}-${random_integer.random_int.result}-redis"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-redis"
   location            = "${azurerm_resource_group.aksrg.location}"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   capacity            = 0
   family              = "C"
   sku_name            = "Basic"
   enable_non_ssl_port = true
+  redis_configuration {
+  }
 }
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html

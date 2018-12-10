@@ -36,15 +36,15 @@ cd terraform
 
 initialize the terraform state storage account
 ```
-./terraform init -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" 
+terraform init -backend-config="storage_account_name=$TERRAFORM_STORAGE_NAME" -backend-config="container_name=tfstate" -backend-config="access_key=$TERRAFORM_STORAGE_KEY" -backend-config="key=codelab.microsoft.tfstate" 
 ```
 
 create an execution plan
 ```
-./terraform plan -out out.plan
+terraform plan -out out.plan
 ```
 
 apply the execution plan
 ```
-./terraform apply out.plan
+terraform apply out.plan
 ```
