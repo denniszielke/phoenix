@@ -1,10 +1,12 @@
 # Use terraform to deploy all resources
 
+0. Define variables
+```
 TERRAFORM_STORAGE_NAME=
 SUBSCRIPTION_ID=
 TERRAFORM_RG_NAME=terraform 
 LOCATION=westeurope
-
+```
 
 1. Create a sp for terraform
 You need a service principal that has permissions to create resources in your subscriptions - if you do not have one already you can create one
@@ -27,7 +29,7 @@ az storage container create -n tfstate --account-name $TERRAFORM_STORAGE_NAME --
 
 3. plan terraform execution and execute plan
 
-navigate to the terraform folder and ensure that all variables have been correctly configured in variables.tf
+navigate to the terraform folder and ensure that all variables have been correctly configured in `variables.tf`
 ```
 cd terraform
 ```

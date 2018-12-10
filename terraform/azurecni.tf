@@ -8,9 +8,15 @@ provider "azurerm" {
     tenant_id       = "${var.tenant_id}"
 }
 
+# random value
+resource "random_integer" "random_int" {
+  min = 10
+  max = 99
+}
+
 # https://www.terraform.io/docs/providers/azurerm/d/resource_group.html
 resource "azurerm_resource_group" "aksrg" {
-  name     = "${var.resource_group_name}"
+  name     = "${var.resource_group_name}-${random_integer.random_int.result}"
   location = "${var.location}"
     
   tags {
@@ -20,7 +26,7 @@ resource "azurerm_resource_group" "aksrg" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/virtual_network.html
 resource "azurerm_virtual_network" "kubevnet" {
-  name                = "${var.dns_prefix}-vnet"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = "${azurerm_resource_group.aksrg.location}"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
@@ -69,7 +75,7 @@ resource "azurerm_subnet" "aksnet" {
 
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
-  name                = "aks-tf-appinsights"
+  name                = "{var.dns_prefix}-${random_integer.random_int.result}-ai"
   location            = "West Europe"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   application_type    = "Web"
@@ -77,7 +83,7 @@ resource "azurerm_application_insights" "aksainsights" {
 
 # https://www.terraform.io/docs/providers/azurerm/r/redis_cache.html
 resource "azurerm_redis_cache" "aksredis" {
-  name                = "tf-redis-basic"
+  name                = "{var.dns_prefix}-${random_integer.random_int.result}-redis"
   location            = "${azurerm_resource_group.aksrg.location}"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   capacity            = 0
@@ -88,7 +94,7 @@ resource "azurerm_redis_cache" "aksredis" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
-  name                = "${var.dns_prefix}-lga"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-lga"
   location            = "${azurerm_resource_group.aksrg.location}"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   sku                 = "Free"
@@ -109,7 +115,7 @@ resource "azurerm_log_analytics_solution" "akslogs" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/kubernetes_cluster.html
 resource "azurerm_kubernetes_cluster" "akstf" {
-  name                = "${var.cluster_name}"
+  name                = "${var.cluster_name}-${random_integer.random_int.result}"
   location            = "${azurerm_resource_group.aksrg.location}"
   resource_group_name = "${azurerm_resource_group.aksrg.name}"
   dns_prefix          = "${var.dns_prefix}"
