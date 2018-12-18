@@ -55,7 +55,7 @@ kubectl describe deployment <deploymentname> // look up yaml for a deployment
 > This is about creating a desired state configration for your apps
 > Need help? Check hints [here :blue_book:](hints/learn_yaml_files.md)! [here :blue_book:](hints/create_secrets.md)!
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)
-- Launch a custom image from your registry (learn about secrets or registry authentication)  [here :blue_book:](hints/yaml/aci-helloworld.yaml)!
+- Launch a custom image from your registry (learn about secrets or registry authentication)  [here :blue_book:](hints/yaml/aci-helloworld-reg.yaml)!
 - You can declare a namespace inside your yaml file
 - Delete the frontend pod using the commandline and call the website again. 
 - You'll recognize that it will no longer work - but they restart?
