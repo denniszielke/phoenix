@@ -18,4 +18,4 @@ spec:
           memory: "256Mi"
           cpu: "1000m"
   imagePullSecrets:
-    - name: registrykey
+    - name: kuberegistry
