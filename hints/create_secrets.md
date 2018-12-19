@@ -30,7 +30,7 @@ echo -n "someRandomSecretValue" | base64
 
 To create an application insights secret required for the calculator enter the following with the correct key
 ~~~
-kubectl create secret generic appinsightsecret --from-literal=appinsightskey=12345678
+kubectl create secret generic appinsightsecret --from-literal=appinsightskey=ab0bebe0-7e34-4ed3-b943-6fa683730a55
 ~~~
 
 Define secret in yaml file
