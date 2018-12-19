@@ -67,7 +67,7 @@ helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3 --na
 3. Make sure you have the app insights key secret provisioned
 ```
 APPINSIGHTS_KEY=
-kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY
+kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY -n $APP_NS
 ```
 
 4. Install
