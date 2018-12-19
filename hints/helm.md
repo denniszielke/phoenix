@@ -60,13 +60,14 @@ helm lint ./multicalchart
 ```
 APP_NS=calculator
 APP_IN=calc1
-helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3
+kubectl create ns $APP_NS
+helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3 --name=$APP_IN
 ```
 
 3. Make sure you have the app insights key secret provisioned
 ```
 APPINSIGHTS_KEY=
-kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY
+kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY -n $APP_NS
 ```
 
 4. Install
