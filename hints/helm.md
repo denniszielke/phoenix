@@ -18,7 +18,7 @@ kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceac
 helm init --service-account tiller --upgrade
 ```
 
-Install tiller and upgrade tiller
+Install tiller and upgrade tiller for NON-RBAC clusters
 ```
 helm
 
