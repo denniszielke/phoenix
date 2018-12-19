@@ -109,7 +109,7 @@ kind: Deployment
 metadata:
   name: gocalcbackend
 spec:
-  replicas: 0
+  replicas: 3
   minReadySeconds: 5
   strategy:
     type: RollingUpdate

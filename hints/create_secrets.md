@@ -49,6 +49,14 @@ Deploy secret to cluster
 kubectl create -f secrets.yml
 ```
 
+Deploy secret for redis
+```
+REDIS_HOST=sadasdf.redis.azure.com
+REDIS_AUTH=HereBeAuthKEy
+kubectl create secret generic rediscachesecret --from-literal=redishostkey=$REDIS_HOST --from-literal=redisauthkey=$REDIS_AUTH
+
+```
+
 # Referencing a secret from an environment variable
 
 Assuming you have deployed your secret to your cluster you can now reference your secret during deployments and set the value of a secret to an environment variable like this:

@@ -5,14 +5,14 @@ frontendReplicaCount: 2
 backendReplicaCount: 3
 dependencies:
   useRedis: no
-  usePodRedis: no
+  usePodRedis: yes
   redisSecret: rediscachesecret
   useAppInsights: no
   appInsightsSecret: appinsightsecret
   appInsightsSecretValue: dummyValue
   useIngress: no
 image:
-  repository: dzkubereg.azurecr.io
+  repository: denniszielke
   frontendImage: js-calc-frontend
   frontendTag: latest
   backendImage: js-calc-backend
