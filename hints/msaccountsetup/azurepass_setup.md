@@ -1,4 +1,4 @@
-#Setup a Microsoft Account
+# Setup a Microsoft Account
 You need a Microsoft account to use an Azure pass. If you already have one you can take the existing. If not here's how you create a new one.
 All you need up front is either a valid mobile number or an existing email address.
 
