@@ -4,7 +4,7 @@
 
 1. Run single container app in your K8s cluster
 ```
-kubectl run nginx --image=nginx
+kubectl run meinnginx --image=nginx
 ```
 2. See what you got
 ```
@@ -12,7 +12,7 @@ kubectl get pods
 ```
 3. Wrap your pod into a service 
 ```
-kubectl expose deployment nginx --port=80 --name=nginx-service
+kubectl expose deployment meinnginx --port=80 --name=nginx-service
 ```
 4. See what you got
 ```
