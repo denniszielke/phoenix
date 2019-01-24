@@ -22,7 +22,13 @@ kubectl get service
 ```
 kubectl edit service/nginx-service
 ```
+
 6. This opens up an editor. Exchange ClusterIp to LoadBalancer. Close and save the file.
+If you want to use nano instead of vi set the following environment variable
+```
+KUBE_EDITOR="nano"
+```
+
 Shortcuts for vi:
 - `i` switches to insert mode
 - `CRTL + C ` switches to command mode
