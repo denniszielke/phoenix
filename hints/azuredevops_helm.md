@@ -30,6 +30,11 @@ $(System.DefaultWorkingDirectory)/_phoenix_ws-aci-helloworld-helm/chart/multical
 ```
 calc-pr-$(Build.BuildId)
 ```
+7. You should at lease override the image tags with your build version in the arguments.
+```
+--set image.frontendTag=$(Build.BuildId) --set image.backendTag=$(Build.BuildId)
+```
+7. You should at lease override the image tags with your build version.
 7. You should at lease override the image tags with your build version.
 8. Set the force tag to override eventual errors
 
