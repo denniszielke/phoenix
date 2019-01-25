@@ -40,8 +40,7 @@ reinstall or delte tiller
 helm reset
 ```
 
-helm install stable/mysql
-https://kubeapps.com/
+Find and install helm charts from https://kubeapps.com/
 
 ## Create your own helm chart
 
