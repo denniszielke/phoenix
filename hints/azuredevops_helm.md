@@ -34,8 +34,10 @@ calc
 ```
 --set image.frontendTag=$(Build.BuildId) --set image.backendTag=$(Build.BuildId)
 ```
-7. You should at lease override the image tags with your build version.
-7. You should at lease override the image tags with your build version.
+If you are using images from your own registry you should override image.repository argument
+```
+--set image.repository=yourownregistry.azurecr.io
+```
 8. Set the force tag to override eventual errors
 
 ![](/hints/images/azuredevops_release_helm.png)
