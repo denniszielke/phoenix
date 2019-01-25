@@ -28,7 +28,7 @@ $(System.DefaultWorkingDirectory)/_phoenix_ws-aci-helloworld-helm/chart/multical
 ```
 6. It is recommended to always deploy into a namespace and give the release a unique name. In this case we use the buildid for this
 ```
-calc-pr-$(Build.BuildId)
+calc
 ```
 7. You should at lease override the image tags with your build version in the arguments.
 ```
