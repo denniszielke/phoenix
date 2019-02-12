@@ -44,5 +44,23 @@ Select a deployment
 kubectl autoscale deployment nginx --cpu-percent=20 --min=1 --max=8
 ```
 
+## Trigger a load generator via aci
+
+create resource group
+```
+az group create --name myResourceGroup --location westeurope
+```
+
+create aci helloworld instance 
+```
+az container create --name mycontainer --image denniszielke/aci-helloworld --resource-group myResourceGroup --ip-address public --port 80
+```
+
+retrieve the endpoint that you want to post against (including path) 
+```
+PUBLIC_IP="x.x.x.x"
+az container create --name myloadrunner3 --image denniszielke/load-generator --resource-group myResourceGroup --environment-variables ENDPOINT=$PUBLIC_IP
+```
+
 ## Look up performance metrics in azure container monitor
 https://docs.microsoft.com/en-us/azure/azure-monitor/insights/container-insights-analyze
