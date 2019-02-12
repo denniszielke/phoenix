@@ -60,16 +60,16 @@ helm lint ./multicalchart
 APP_NS=calculator
 APP_IN=calc1
 kubectl create ns $APP_NS
-helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3 --name=$APP_IN
+helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY
 ```
 
-3. Make sure you have the app insights key secret provisioned
+Optionally make sure you have the app insights key secret provisioned
 ```
 APPINSIGHTS_KEY=
 kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY -n $APP_NS
 ```
 
-4. Install
+3. Install
 ```
 helm install multicalchart --name=$APP_IN --set frontendReplicaCount=1 --set backendReplicaCount=1 --namespace $APP_NS
 ```
@@ -79,12 +79,12 @@ verify
 helm get values $APP_IN
 ```
 
-5. Change config and perform an upgrade
+4. Change config and perform an upgrade
 ```
 helm upgrade --set backendReplicaCount=4 $APP_IN multicalchart
 ```
 
-7. See rollout history
+5. See rollout history
 ```
 helm history $APP_IN
 helm rollback $APP_IN 1
