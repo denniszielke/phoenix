@@ -93,7 +93,7 @@ docker kill bc4b6b155c2c
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
     
 ## Bonus Challenge 1 - Automate your build using ACR tasks based on Github commits
-> Need help? Check hints [here :blue_book:](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-github-update)!
+> Need help? Check hints [here :blue_book:](https://github.com/denniszielke/phoenix/blob/master/hints/acr_task_github_trigger.md)!
 - Create an ACR Tasks which triggers whenever you update your Github repo.
 
 
