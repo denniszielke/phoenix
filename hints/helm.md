@@ -47,12 +47,12 @@ Find and install helm charts from https://kubeapps.com/
 1. Create helm chart manually and modify accordingly
 
 ```
-helm create multicalchart
+helm create dummychart
 ```
 
 Validate template
 ```
-helm lint ./multicalchart
+helm lint ./dummychart
 ```
 
 2. Dry run the chart and override parameters
