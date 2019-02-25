@@ -91,6 +91,11 @@ docker kill bc4b6b155c2c
     - create a new container image     
     - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
+    
+## Bonus Challenge - Automate your build using ACR tasks based on Github commits
+> Need help? Check hints [here :blue_book:](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-github-update)!
+- Create an ACR Tasks which triggers whenever you update your Github repo.
+
 
 ## BONUS Challenge - Update images based on base image changes
 > Need help? Check hints [here :blue_book:](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update)!
