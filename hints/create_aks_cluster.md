@@ -13,7 +13,7 @@ az group create -n $KUBE_GROUP -l $LOCATION
 
 2. Create the aks cluster using azure shell
 ```
-az aks create --name $KUBE_NAME --resource-group $KUBE_GROUP --node-count 3 --generate-ssh-keys --enable-addons monitoring --kubernetes-version 1.11.4
+az aks create --name $KUBE_NAME --resource-group $KUBE_GROUP --node-count 3 --generate-ssh-keys --enable-addons monitoring --kubernetes-version 1.12.6
 ```
 Additional parameters can be found here https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az_aks_create
 if you have to use the given service principal (because you are not allowed to create services principals in azure ad) add the following parameters
