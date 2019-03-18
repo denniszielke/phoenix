@@ -11,7 +11,7 @@ After the workshop you should have hands on experience with:
 4. Unterstanding of Kubernetes objects (Pods, Services, Deployments, Secrets) and their usage for multi container applications.
 5. Logging, scaling and monitoring of container runtimes.
 
-![](/img/kubernetes_on_azure.png)
+ACTIVATION OF AZURE PAAS: https://www.microsoftazurepass.com/
 
 ## How should the sample application look like?
 ![](/img/osba_multicalculator.png)
