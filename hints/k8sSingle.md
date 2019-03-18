@@ -4,7 +4,7 @@
 
 1. Run single container app in your K8s cluster
 ```
-kubectl run meinnginx --image=nginx
+kubectl run meinnginx --generator=run-pod/v1 --image=nginx
 ```
 2. See what you got
 ```
