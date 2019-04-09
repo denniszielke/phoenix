@@ -16,16 +16,21 @@
 
 ## 1. Create Kubernetes multi container app deployment via yaml 
 > This is about creating a desired state configuration for multiple apps
-- Get the sample code for a container application. [here :blue_book:](hints/yaml/backend-pod.yaml)!
-- Make sure that all source code has been built and the container images pushed to your registry.
-- Create a deployment file to decribe the desired state of your application including replicas of your backend service.
-- Modify the deployment file manually so that 
+- For this sample we will deploy three different apps:
+  - js-calc-frontend
+  - js-calc-backend
+  - go-calc-backend
+- Get the source code for each app from [here](https://github.com/denniszielke/phoenix/tree/master/apps) (if you have not already cloned it in the first exercise). 
+- Build the images for each app and push them to your container registry.
+- Create a deployment yaml file to decribe the desired state of your application including replicas of your backend service.
+- Construct the deployment yaml file manually so that 
     - the backend service can be found
     - the backend service is available internally only
-    - the correct image is being used. 
-    - the upgrades happen using the right upgrade strategy
-- Apply the deployment file manually.
-- Configure your application to be accessible from the internet and call the page.
+    - the front end service is available from the internet
+    - the correct image is being used
+    - the upgrades happen using the rolling upgrade strategy
+- Apply the deployment file manually using kubectl
+- Get the public IP address and call the page of the frontend.
 
 ## 2. Automate yaml deployment via azure devops
 > This is about automatically releasing your app via yaml to you cluster. [here :blue_book:](hints/azuredevops_yaml_kubernetes.md)!
