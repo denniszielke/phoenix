@@ -4,28 +4,27 @@
 frontendReplicaCount: 2
 backendReplicaCount: 3
 dependencies:
-  useRedis: no
-  usePodRedis: yes
+  useRedis: false
+  usePodRedis: false
   redisSecret: rediscachesecret
-  useAppInsights: no
+  useAppInsights: false
   appInsightsSecretValue: dummyValue
-  useIngress: no
+  useIngress: false
 image:
-  repository: denniszielke
+  repository: dzkubereg.azurecr.io
   frontendImage: js-calc-frontend
   frontendTag: latest
   backendImage: js-calc-backend
   backendTag: latest
-  pullPolicy: IfNotPresent
-  pullSecret: kuberegistry
+  pullPolicy: Always
 service:
   frontendType: LoadBalancer
   backendType: ClusterIP
   dnsName: calcName
 resources:
   limits:
-    cpu: 300m
+    cpu: 150m
     memory: 350Mi
   requests:
-    cpu: 250m
+    cpu: 100m
     memory: 256Mi

@@ -24,7 +24,8 @@ If you want you can create the cluster using terraform and the example terraform
 > Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
 
 - Run a public available application in a single container on your cluster. The image name is "nginx".
-    - Use the "kubectl run" command
+    - Use the "kubectl run" to create an individual pod
+    - Use the "kubectl create " to create a desired state configuration using a deployment
 - Add a service to make your application accessible from the internet
     - Use the "kubectl expose" command and "kubectl edit YOURSERVICE" command.
 - Start your webbrowser to view your application running in your cluster.
@@ -37,8 +38,9 @@ If you want you can create the cluster using terraform and the example terraform
 ```
 kubectl create ns dennisspace
 ```
-and apply this postfix to your  kubectl commands like 
+and apply this postfix to your kubectl commands like 
 ```
+kubectl run meinnginx --generator=run-pod/v1 --image=nginx -n dennisspace
 kubectl get pods -n dennisspace
 ```
 

@@ -40,6 +40,7 @@ cd phoenix/apps/aci-helloworld/
 - Trigger your azure container registry to build your container remotely
 ```
 ACR_NAME=
+az configure --defaults acr=$ACR_NAME
 az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
 ```
 - Verify the results in your container registry.

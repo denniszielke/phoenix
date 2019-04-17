@@ -11,6 +11,6 @@ spec:
   type: LoadBalancer
   ports:
    - port: 80
-     name: http
-     targetPort: 80
+     name: calcfrontend
+     targetPort: 8080
      protocol: TCP

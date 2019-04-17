@@ -15,7 +15,7 @@ spec:
   ports:
    - port: 80
      name: {{ .Release.Name }}-calc-frontend
-     targetPort: 3000
+     targetPort: 8080
      protocol: TCP
 ---
 apiVersion: v1
@@ -36,4 +36,4 @@ spec:
   - port: 80
     protocol: TCP
     name: {{ .Release.Name }}-calc-backend
-    targetPort: 3001
+    targetPort: 8080

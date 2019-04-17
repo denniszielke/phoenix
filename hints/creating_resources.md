@@ -15,7 +15,3 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get
 https://azure.microsoft.com/en-us/features/cloud-shell/
 
 Goto:https://shell.azure.com
-
-
-
-

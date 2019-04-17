@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:alpine
 ARG basedir="apps/aci-helloworld/app"
 ARG build_info="Docker container build"
 ENV NODE_ENV production

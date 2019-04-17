@@ -10,8 +10,8 @@ spec:
     - name: calcfrontend
       image: dzregistry.azurecr.io/calc/calc-frontend:latest
       ports:
-        - containerPort: 80
-          name: http
+        - containerPort: 8080
+          name: calcfrontend
           protocol: TCP
       env:       
         - name: "ENDPOINT"
@@ -22,4 +22,4 @@ spec:
               name: appinsightsecret
               key: appinsightskey
         - name: "PORT"
-          value: "80"              
+          value: "8080"              

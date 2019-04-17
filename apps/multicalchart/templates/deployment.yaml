@@ -28,7 +28,7 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.frontendImage }}:{{ .Values.image.frontendTag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 3000      
+            - containerPort: 8080      
               protocol: TCP
           env: 
             - name: "ENDPOINT"
@@ -39,12 +39,9 @@ spec:
                 secretKeyRef:
                   name: appinsightsecret
                   key: appinsightskey
-{{- else }}
-            - name: "INSTRUMENTATIONKEY"
-              value: "dummy"
 {{- end }}
             - name: "PORT"
-              value: "3000"
+              value: "8080"
 {{- if .Values.dependencies.usePodRedis }}
             - name: "REDIS_HOST"
               value: "localhost"
@@ -62,21 +59,16 @@ spec:
                 secretKeyRef:
                   name: rediscachesecret
                   key: redisauthkey
-{{- else }}
-            - name: "REDIS_HOST"
-              value: ""
-            - name: "REDIS_AUTH"
-              value: ""
 {{- end }}
 {{- end }}
           livenessProbe:
             httpGet:
               path: /ping
-              port: 3000
+              port: 8080
           readinessProbe:
             httpGet:
               path: /ping
-              port: 3000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
           resources:
@@ -123,7 +115,7 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.backendImage }}:{{ .Values.image.backendTag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 3001    
+            - containerPort: 8080    
               protocol: TCP
           env: 
 {{- if .Values.dependencies.useAppInsights }}
@@ -132,19 +124,16 @@ spec:
                 secretKeyRef:
                   name: appinsightsecret
                   key: appinsightskey
-{{- else }}
-            - name: "INSTRUMENTATIONKEY"
-              value: "dummy"
 {{- end }}
             - name: "PORT"
-              value: "3001"
+              value: "8080"
           livenessProbe:
             httpGet:
               path: /ping
-              port: 3001
+              port: 8080
           readinessProbe:
             httpGet:
               path: /ping
-              port: 3001
+              port: 8080
           resources:
 {{ toYaml .Values.resources | indent 12 }}

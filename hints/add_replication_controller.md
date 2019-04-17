@@ -14,8 +14,8 @@
     - add information about the required ports for your container
     ```
             ports:
-              - containerPort: 3000
-                name: http
+              - containerPort: 8080
+                name: calcfrontend
                 protocol: TCP
     ```
     - add all required environment variabes (ports, endpoints...) including the INSTRUMENTATIONKEY which gets the value from a secret which has been provided by you. Check hints for secrets [here]

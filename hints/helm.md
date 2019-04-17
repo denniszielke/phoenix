@@ -4,12 +4,16 @@
 https://github.com/kubernetes/helm
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm
 
-Install helm
+Install helm (not required for azure shell)
 ```
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0-linux-amd64.tar.gz
 tar -zxvf helm-v2.12.0-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 ```
+
+If you are unsure if your cluster is set up with RBAC please check by running
+```
+kubectl cluster-info dump --namespace kube-system | grep authorization-mode
 
 ***Warning***: If your cluster has been set up with RBAC you have to create a role for tiller first
 ```
@@ -63,15 +67,10 @@ kubectl create ns $APP_NS
 helm install --dry-run --debug ./multicalchart --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY
 ```
 
-Optionally make sure you have the app insights key secret provisioned
-```
-APPINSIGHTS_KEY=
-kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY -n $APP_NS
-```
 
 3. Install
 ```
-helm install multicalchart --set frontendReplicaCount=4 --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.useAppInsights=yes --set dependencies.appInsightsSecret=appinsightsecret --set dependencies.appInsightsSecretValue="" --namespace=$APP_NS
+helm install multicalchart --set frontendReplicaCount=4 --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --namespace=$APP_NS
 ```
 
 verify
@@ -79,9 +78,14 @@ verify
 helm get values $APP_IN
 ```
 
-4. Change config and perform an upgrade
+4. Change config and perform an upgrade (change the backend image to to the go version)
 ```
-helm upgrade --set backendReplicaCount=4 $APP_IN multicalchart
+helm upgrade multicalchart --set frontendReplicaCount=4 --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY -set image.backendImage=go-calc-backend --namespace=$APP_NS
+```
+
+5. Change config and perform an upgrade (add a redis cache to the frontend pod)
+```
+helm upgrade multicalchart --set frontendReplicaCount=4 --set frontendReplicaCount=3 --name=$APP_IN --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true --namespace=$APP_NS
 ```
 
 5. See rollout history

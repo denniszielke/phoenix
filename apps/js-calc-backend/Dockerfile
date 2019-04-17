@@ -1,7 +1,10 @@
-FROM node:8.12.0-alpine
-RUN mkdir -p /usr/src/app
-COPY ./app/* /usr/src/app/
-WORKDIR /usr/src/app
+FROM node:alpine
+ARG appfolder="app"
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+COPY ${appfolder}/* ./
+USER node
 RUN npm install
-EXPOSE 80
+COPY --chown=node:node . .
+EXPOSE 8080
 CMD [ "npm", "start" ]

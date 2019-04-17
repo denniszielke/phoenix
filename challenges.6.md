@@ -21,7 +21,6 @@ Deploy the network policy daemonset
 kubectl apply -f  https://github.com/Azure/acs-engine/blob/master/parts/k8s/addons/kubernetesmasteraddons-azure-npm-daemonset.yaml
 ```
 
-
 ## 3. Configure auth proxy
 https://github.com/buzzfeed/sso
 

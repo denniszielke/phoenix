@@ -35,6 +35,3 @@ To make your application accessible from the internet modify your frontend servi
 ```
 kubectl edit svc/calcfrontend-svc
 ```
-
-
-

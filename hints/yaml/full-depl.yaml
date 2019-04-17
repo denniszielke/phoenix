@@ -1,26 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: calcfrontendsvc
+  name: calc-frontend-svc
   labels:
-    name: calcfrontendsvc
+    name: calc-frontend-svc
     app: calculator
 spec:
   selector:
-    name: jscalcfrontend 
+    name: js-calc-frontend 
   type: LoadBalancer
   ports:
    - port: 80
-     name: http
-     targetPort: 80
+     name: calc-frontend 
+     targetPort: 8080
      protocol: TCP
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jscalcfrontend
+  name: js-calc-frontend-depl
 spec:
-  replicas: 3
+  replicas: 1
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -30,50 +30,50 @@ spec:
   template:
     metadata:
       labels:
-        name: jscalcfrontend
+        name: js-calc-frontend
         app: calculator
     spec:
       containers:
-      - name: jscalcfrontend
+      - name: js-calc-frontend
         image: denniszielke/js-calc-frontend:latest
-        imagePullPolicy: Always 
+        imagePullPolicy: Always
         ports:
-          - containerPort: 80
-            name: http         
+          - containerPort: 8080
+            name: calc-frontend         
             protocol: TCP
         env: 
           - name: "ENDPOINT"
-            value: "calcbackendsvc"
+            value: "calc-backend-svc"
           - name: "INSTRUMENTATIONKEY"
             valueFrom:
               secretKeyRef:
                 name: appinsightsecret
                 key: appinsightskey
           - name: "PORT"
-            value: "80"
+            value: "8080"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: calcbackendsvc
+  name: calc-backend-svc
   labels:
-    name: calcbackendsvc
+    name: calc-backend-svc
     app: calculator 
 spec:
   ports:
   - port: 80
-    name: calcbackend
-    targetPort: 80
+    name: calc-backend
+    targetPort: 8080
   selector:
-    role: calcbackend
+    role: calc-backend
     app: calculator
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jscalcbackend
+  name: js-calc-backend-depl
 spec:
-  replicas: 3
+  replicas: 1
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -83,17 +83,17 @@ spec:
   template:
     metadata:
       labels:
-        name: jscalcbackend
-        role: calcbackend
+        name: js-calc-backend
+        role: calc-backend
         app: calculator
     spec:
       containers:
-      - name: calcbackend
+      - name: js-calc-backend
         image: denniszielke/js-calc-backend:latest
-        imagePullPolicy: Always 
+        imagePullPolicy: Always
         ports:
-          - containerPort: 80
-            name: http         
+          - containerPort: 8080
+            name: calc-backend         
             protocol: TCP
         env: 
           - name: "INSTRUMENTATIONKEY"
@@ -102,14 +102,14 @@ spec:
                 name: appinsightsecret
                 key: appinsightskey
           - name: "PORT"
-            value: "80"
+            value: "8080"
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: gocalcbackend
+  name: go-calc-backend-depl
 spec:
-  replicas: 3
+  replicas: 1
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -119,17 +119,17 @@ spec:
   template:
     metadata:
       labels:
-        name: gocalcbackend
-        role: calcbackend
+        name: go-calc-backend
+        role: calc-backend
         app: calculator
     spec:
       containers:
-      - name: gocalcbackend
+      - name: go-calc-backend
         image: denniszielke/go-calc-backend:latest
-        imagePullPolicy: Always 
+        imagePullPolicy: Always
         ports:
-          - containerPort: 80
-            name: http         
+          - containerPort: 8080
+            name: calc-backend         
             protocol: TCP
         env: 
           - name: "INSTRUMENTATIONKEY"
@@ -138,4 +138,4 @@ spec:
                 name: appinsightsecret
                 key: appinsightskey
           - name: "PORT"
-            value: "80"
+            value: "8080"
