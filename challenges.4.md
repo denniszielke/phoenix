@@ -55,6 +55,13 @@ https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-hel
 - Share the helm chart repo with your co-worker and see that the installation works from remote
 
 ## BONUS Challenge 2 - Use an azure redis cache to optimize performance
-- Create an azure redis cache
-- Create a redis secret
+- Create an azure redis cache and set environment variables
+```
+REDIS_HOST=XXXXX.redis.cache.windows.net
+REDIS_AUTH=ASDFASDFASDFASDF=
+```
+- Create a redis secret in the app namespaces
+```
+kubectl create secret generic rediscachesecret --from-literal=redishostkey=$REDIS_HOST --from-literal=redisauthkey=$REDIS_AUTH --namespace $APP_NS
+```
 - Configure the deploymet to use '--set dependencies.useRedis=true'

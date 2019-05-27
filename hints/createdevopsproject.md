@@ -17,3 +17,59 @@
 1. The build will kick off automatically. During the build a Container Registry will be created. During release the AKS cluster will be created.
 
 After cluster creation set up your work environment (or bash) to enable cluster access. See the hints at the lower part of this file [here :blue_book:](create_aks_cluster.md)! 
+
+# Get access to cluster
+
+1. Get the environment variables for the first cluster
+```
+KUBE_NAME=$(az aks list --query '[0].{NAME:name}' -o tsv) 
+KUBE_GROUP=$(az aks list --query '[0].{RESOURCEGROUP:resourceGroup}' -o tsv)
+```
+
+1. Export the kubectrl credentials files. 
+```
+az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
+```
+
+1. Now you can look at the cluster config file under
+```
+cat ~/.kube/config
+```
+
+You can download the latest version of kubectl (only for local machine - azure shell already has kubectl)
+```
+az aks install-cli 
+```
+
+Alternatively for your plattform
+https://kubernetes.io/docs/tasks/tools/install-kubectl/ 
+
+Set up autocompletion
+```
+kubectl completion -h
+```
+
+5. Check that everything is running ok
+```
+kubectl cluster-info
+```
+
+6. Launch the dashboard
+in the azure shell (look for the url in the output and click on it - you will be directed to the dashboard)
+```
+az aks browse --resource-group $KUBE_GROUP --name $KUBE_NAME
+```
+
+or locally 
+
+```
+kubectl proxy
+http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/#!/pod?namespace=default 
+```
+
+7. If you see an access denied - you have to give the dashboard pod permissions first
+```
+kubectl create clusterrolebinding kubernetes-dashboard \
+--clusterrole=cluster-admin \
+--serviceaccount=kube-system:kubernetes-dashboard
+```
