@@ -11,9 +11,11 @@
 > - Get in touch with Yaml files to specify a desired state for a Kubernetes object
 
 
-## 1. Create a Kubernetes cluster on Azure Container Services 
+## 1. Create a Kubernetes cluster using Azure DevOps Project
 - Set up your Kuberenetes cluster using Azure Kubernetes Services.
-> Need help? Check hints [here :blue_book:](hints/create_aks_cluster.md)!
+
+> Use simple node app, create new cluster, set kubernetes version to 12.8, set for westeurope, get credentials [here :blue_book:](hints/createdevopsproject.md)!
+> If you want to create a cluster via cli use this one [here :blue_book:](hints/create_aks_cluster.md)!
 
 The deployment will take some time (~10 min). 
 

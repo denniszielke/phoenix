@@ -84,7 +84,12 @@ docker kill bc4b6b155c2c
 > Need help? Check hints [here :blue_book:](hints/deploy_to_aci.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
-## 3. Automate the build of your container
+    
+## Bonus Challenge 1 - Automate your build using ACR tasks based on Github commits
+> Need help? Check hints [here :blue_book:](https://github.com/denniszielke/phoenix/blob/master/hints/acr_task_github_trigger.md)!
+- Create an ACR Tasks which triggers whenever you update your Github repo.
+
+## Bonus Challenge 2 . Automate the build of your container
 > This is about automating the build of your container outside of your dev environment.
 > Need help? Check hints [here :blue_book:](hints/automate_container_build.md)!
 - Import the sample code from to your azure devops project. You can do this via UI. 
@@ -92,14 +97,3 @@ docker kill bc4b6b155c2c
     - create a new container image     
     - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
     - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
-    
-## Bonus Challenge 1 - Automate your build using ACR tasks based on Github commits
-> Need help? Check hints [here :blue_book:](https://github.com/denniszielke/phoenix/blob/master/hints/acr_task_github_trigger.md)!
-- Create an ACR Tasks which triggers whenever you update your Github repo.
-
-
-## BONUS Challenge 2 - Update images based on base image changes
-> Need help? Check hints [here :blue_book:](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update)!
-
-- Configure your image to use a base image from your registry
-- Configure a base image trigger

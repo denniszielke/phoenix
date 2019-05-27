@@ -49,7 +49,12 @@ You will need to create:
 - Use AKS health to check for performance and health of the containers and your cluster
 - If the performance is not good enough perform a rollback
 
-## BONUS Challenge - Put your helm chart into an helm chart repository
+## BONUS Challenge 1 - Put your helm chart into an helm chart repository
 https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-helm-repos
 - Automatically publish your helm chart in your container registry
 - Share the helm chart repo with your co-worker and see that the installation works from remote
+
+## BONUS Challenge 2 - Use an azure redis cache to optimize performance
+- Create an azure redis cache
+- Create a redis secret
+- Configure the deploymet to use '--set dependencies.useRedis=true'
