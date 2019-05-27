@@ -30,6 +30,8 @@ and set as parameter
 --node-vm-size Standard_B2s
 ```
 
+# Get access to cluster
+
 3. Export the kubectrl credentials files. 
 ```
 az aks get-credentials --resource-group=$KUBE_GROUP --name=$KUBE_NAME
