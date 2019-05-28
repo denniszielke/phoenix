@@ -1,5 +1,7 @@
 # Create an ACR task which fires when your Github repo changes
 1. Fork the phoenix project to your own github account
+1. Get a Personal Token ( https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task#create-a-github-personal-access-token )
+
 1. Create an ACR task 
 ```
 az acr task create --registry $ACR_NAME --name taskhelloworld --image phoenixautohelloworld:{{.Run.ID}} --context https://github.com/$USER/phoenix.git  --branch master --file apps/aci-helloworld/ACR.Dockerfile     --git-access-token $GITHUBTOKEN
