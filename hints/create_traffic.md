@@ -6,7 +6,7 @@ https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 
 create a deployment
 ```
-kubectl create deployment helloworld --image=denniszielke/aci-helloworld
+kubectl create deployment helloworld-app --image=denniszielke/aci-helloworld
 kubectl expose deployment helloworld-app --type=LoadBalancer --port=80
 kubectl autoscale deployment helloworld-app --cpu-percent=30 --min=1 --max=8
 ```

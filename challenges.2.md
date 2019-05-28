@@ -43,6 +43,9 @@ kubectl create ns dennisspace
 and apply this postfix to your kubectl commands like 
 ```
 kubectl run meinnginx --generator=run-pod/v1 --image=nginx -n dennisspace
+
+kubectl expose pod meinnginx --port 80 --type=LoadBalancer -n dennisspace
+
 kubectl get pods -n dennisspace
 ```
 

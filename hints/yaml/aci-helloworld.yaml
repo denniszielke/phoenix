@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: aci-helloworld
-      image: dzkubereg.azurecr.io/aci-helloworld-ci:latest
+      image: dz1workshopacr.azurecr.io/phoenix:latest
       ports:
         - containerPort: 80
       resources:
@@ -17,4 +17,19 @@ spec:
           cpu: "200m"
         limits:
           memory: "256Mi"
-          cpu: "100m"
+          cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-svc
+  labels:
+    name: helloworld-svc
+    app: helloworld-svc  
+spec:
+  ports:
+  - port: 80
+    name: http
+    targetPort: 80
+  selector:
+    app: helloworld-demo
