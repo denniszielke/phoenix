@@ -47,17 +47,23 @@ If you want you can create the cluster using Terraform and the example Terraform
 >
 > Need help? Check hints [here :blue_book:](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)!
 
-- If you want to work with namespaces. Create your own namespace like `dennisspace` and apply this postfix to your `kubectl` commands like shown below:
+- If you want to work with namespaces. Create your own namespace 'dennisspace' with
 
   ```bash
   kubectl create ns dennisspace
+  ```
 
+  and apply this postfix to your kubectl commands like
+
+  ```bash
   kubectl run meinnginx --generator=run-pod/v1 --image=nginx -n dennisspace
+
+  kubectl expose pod meinnginx --port 80 --type=LoadBalancer -n dennisspace
 
   kubectl get pods -n dennisspace
   ```
 
-- Familiarize yourself with the following commands on commandline
+- Familiarize yourself with the following commands on commandline, eg.
 
   ```bash
   # display all pods
