@@ -8,6 +8,7 @@ metadata:
 spec:
   selector:
     name: js-calc-frontend 
+    app: calculator
   type: LoadBalancer
   ports:
    - port: 80
@@ -20,7 +21,7 @@ kind: Deployment
 metadata:
   name: js-calc-frontend-depl
 spec:
-  replicas: 1
+  replicas: 4
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -51,6 +52,8 @@ spec:
                 key: appinsightskey
           - name: "PORT"
             value: "8080"
+          - name: "SOMETHING"
+            value: "Dennis"
 ---
 apiVersion: v1
 kind: Service
@@ -73,7 +76,7 @@ kind: Deployment
 metadata:
   name: js-calc-backend-depl
 spec:
-  replicas: 1
+  replicas: 4
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
