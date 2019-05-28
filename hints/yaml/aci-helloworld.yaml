@@ -4,11 +4,11 @@ metadata:
   name: helloworld
   labels:
     release: V76
-    app: helloworld-demo
+    app: helloworld-dfasd
 spec:
   containers:
     - name: aci-helloworld
-      image: dzkubereg.azurecr.io/aci-helloworld-ci:latest
+      image: dz1workshopacr.azurecr.io/helloacrtasks:v2
       ports:
         - containerPort: 80
       resources:
@@ -17,4 +17,4 @@ spec:
           cpu: "200m"
         limits:
           memory: "256Mi"
-          cpu: "100m"
+          cpu: "200m"
