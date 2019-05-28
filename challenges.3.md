@@ -6,14 +6,18 @@ In this chapter you will create a multi-container application in Kubernetes. Thi
 
 ![](/img/challenge3.png)
 
-## Here's what you'll learn:
+---
+
+## What you will learn
 
 - How to write Yaml files to specify a desired state of a Kubernetes object
-- How to use the Azure Portal to view Application performance
+- How to use the Azure Portal to view application performance
 - How to store secrets in Kubernetes
 - How to configure your Kubernetes instance to ensure a certain number of pods is always running
 - How to define rolling upgrades to avoid downtime during an application update
-- How to put all what you've learned into an end to end azure devops pipeline
+- How to put all what you've learned into an end to end Azure DevOps pipeline
+
+---
 
 ## 1. Create Kubernetes multi container app deployment via yaml
 
@@ -25,14 +29,14 @@ In this chapter you will create a multi-container application in Kubernetes. Thi
   - go-calc-backend
 - Get the source code for each app from [here](https://github.com/denniszielke/phoenix/tree/master/apps) (if you have not already cloned it in the first exercise).
 - Build the images for each app and push them to your container registry.
-- Create a deployment yaml file to decribe the desired state of your application including replicas of your backend service.
+- Create a deployment yaml file to describe the desired state of your application including replicas of your backend service.
 - Construct the deployment yaml file manually so that
   - the backend service can be found
   - the backend service is available internally only
   - the front end service is available from the internet
   - the correct image is being used
   - the upgrades happen using the rolling upgrade strategy
-- Apply the deployment file manually using kubectl
+- Apply the deployment file manually using `kubectl`
 - Get the public IP address and call the page of the frontend.
 
 ## 2. Automate yaml deployment via Azure DevOps
@@ -42,13 +46,13 @@ In this chapter you will create a multi-container application in Kubernetes. Thi
 - Check in your yaml file into your code repository
 - Make sure that your yaml file is available in the drop
 - Make sure to authenticate to your AKS cluster
-- Use the kubernetes apply task in your release to deploy your app continously
+- Use the kubernetes apply task in your release to deploy your app continuously
 - Activate the build and release trigger to deploy on every code change
 
 ## 3. Gaining insights by using Azure Application Insights
 
 > This is about understanding your application behavior while you change code and deploy
-
+>
 > Need help? Check hints [here :blue_book:](hints/applicationinsights.md)!
 
 In this chapter you will create an application insights resource for monitoring your application performance and health status.

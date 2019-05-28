@@ -6,12 +6,16 @@ In this chapter you will upgrade your application to use another implementation 
 
 ![](/img/challenge4.png)
 
-## Here's what you'll learn:
+---
 
-> - How to set up and configure ingress
-> - Learn how Helm facilitates the deployment of complex container dependencies
-> - How to gain insights into your application performance using Application Insights
-> - How to rollback a deployment
+## What you will learn
+
+- How to set up and configure ingress
+- Learn how Helm facilitates the deployment of complex container dependencies
+- How to gain insights into your application performance using Application Insights
+- How to rollback a deployment
+
+---
 
 ## 1. Containerize the go-calc-backend
 
@@ -19,31 +23,34 @@ In this chapter you will upgrade your application to use another implementation 
 - Build a container
 - Put it in your container registry
 
-If you do not want to build the go backend you can use the already built image from docker hub:
-https://hub.docker.com/r/denniszielke/go-calc-backend/
-https://hub.docker.com/r/denniszielke/js-calc-frontend/
-https://hub.docker.com/r/denniszielke/js-calc-backend/
+If you do not want to build the go backend you can use the already built images from Docker Hub:
+
+- [`denniszielke/go-calc-backend`](https://hub.docker.com/r/denniszielke/go-calc-backend/)
+- [`denniszielke/js-calc-frontend`](https://hub.docker.com/r/denniszielke/js-calc-frontend/)
+- [`denniszielke/js-calc-backend`](https://hub.docker.com/r/denniszielke/js-calc-backend/)
 
 ## 2. Create a helm chart for your application
 
 > This is about packaging your whole app
+>
 > Need help? Check hints [here :blue_book:](hints/helm.md)!
 
 You will need to create:
 
 - Create a deployment yaml file
 - Create an helm chart
-- Make sure that the environment variables for PORT and INSTRUMENTATIONKEY are set correctly
+- Make sure that the environment variables for `PORT` and `INSTRUMENTATIONKEY` are set correctly
 - Deploy your helm chart to your cluster manually
 
-## 3. Deploy your helm chart via azure devops
+## 3. Deploy your helm chart via Azure DevOps
 
-> This is about continously deploying your app via azure devops
+> This is about continuously deploying your app via Azure DevOps
+>
 > Need help? Check hints [here :blue_book:](hints/azuredevops_helm.md)!
 
 You will need to create:
 
-- Checkin your helm chart into your repo
+- Check-in your helm chart into your repository
 - Make sure that the environment variables for PORT and INSTRUMENTATIONKEY are set correctly
 - Create a build pipeline so that it packages and versions your helm chart during build with your containers
 - Create a release pipeline so that you deploy your helm chart automatically
@@ -54,7 +61,7 @@ You will need to create:
 
 - Trigger a continuous look and generate sufficient telemetry data
 - Use Application Insights to compare the performance
-- Deploy a load/ availability test from azure to your ingress
+- Deploy a load- / availability test from azure to your ingress
 - Use AKS health to check for performance and health of the containers and your cluster
 - If the performance is not good enough perform a rollback
 
@@ -69,15 +76,18 @@ https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-hel
 
 - Create an azure redis cache and set environment variables
 
-```
-REDIS_HOST=XXXXX.redis.cache.windows.net
-REDIS_AUTH=ASDFASDFASDFASDF=
-```
+  ```bash
+  REDIS_HOST=XXXXX.redis.cache.windows.net
+  REDIS_AUTH=ASDFASDFASDFASDF=
+  ```
 
 - Create a redis secret in the app namespaces
 
-```
-kubectl create secret generic rediscachesecret --from-literal=redishostkey=$REDIS_HOST --from-literal=redisauthkey=$REDIS_AUTH --namespace $APP_NS
-```
+  ```bash
+  kubectl create secret generic rediscachesecret \
+    --from-literal=redishostkey=$REDIS_HOST \
+    --from-literal=redisauthkey=$REDIS_AUTH \
+    --namespace $APP_NS
+  ```
 
-- Configure the deploymet to use '--set dependencies.useRedis=true'
+- Configure the deploymet to use `--set dependencies.useRedis=true`

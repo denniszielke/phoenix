@@ -4,13 +4,17 @@ For scheduling applications consisting of multiple containers you typically use 
 
 ![](/img/challenge2.png)
 
-## Here's what you'll learn:
+---
+
+## What you will learn
 
 - How to set up a Kubernetes Cluster with Azure Kubernetes Services
 - How to access the cluster with the commandline command `kubectl`
 - Get to know the basic command set of `kubectl`
 - Understand the concept of pods and services and how they come together
 - Get in touch with Yaml files to specify a desired state for a Kubernetes object
+
+---
 
 ## 1. Create a Kubernetes cluster using Azure DevOps Project
 
@@ -27,7 +31,7 @@ If you want you can create the cluster using Terraform and the example Terraform
 ## 2. Run single container app in your K8s cluster
 
 > This is about running your first container in Kubernetes
-
+>
 > Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
 
 - Run a public available application in a single container on your cluster. The image name is `nginx`.
@@ -40,45 +44,42 @@ If you want you can create the cluster using Terraform and the example Terraform
 ## 3. Kubernetes discovery
 
 > This is about learning the Kubernetes objects
+>
 > Need help? Check hints [here :blue_book:](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)!
 
-- If you want to work with namespaces. Create your own namespace `dennisspace` with
+- If you want to work with namespaces. Create your own namespace like `dennisspace` and apply this postfix to your `kubectl` commands like shown below:
 
-```bash
-kubectl create ns dennisspace
-```
+  ```bash
+  kubectl create ns dennisspace
 
-and apply this postfix to your kubectl commands like
+  kubectl run meinnginx --generator=run-pod/v1 --image=nginx -n dennisspace
 
-```bash
-kubectl run meinnginx --generator=run-pod/v1 --image=nginx -n dennisspace
-
-kubectl get pods -n dennisspace
-```
+  kubectl get pods -n dennisspace
+  ```
 
 - Familiarize yourself with the following commands on commandline
 
-```bash
-# display all pods
-kubectl get pods
+  ```bash
+  # display all pods
+  kubectl get pods
 
-# display all services
-kubectl get svc
+  # display all services
+  kubectl get svc
 
-# display all deployments
-kubectl get deployments
+  # display all deployments
+  kubectl get deployments
 
-# delete a specific pod
-kubectl delete pods/<podid>
+  # delete a specific pod
+  kubectl delete pods/<podid>
 
-# look up yaml for a deployment
-kubectl describe deployment <deploymentname>
-```
+  # look up yaml for a deployment
+  kubectl describe deployment <deploymentname>
+  ```
 
 ## 4. Execute deployments via yaml
 
 > This is about creating a desired state configration for your apps
-
+>
 > Need help? Check hints [here :blue_book:](hints/learn_yaml_files.md)! [here :blue_book:](hints/create_secrets.md)!
 
 - Launch the nginx deployment via yaml file (see if you can download it somewhere?)

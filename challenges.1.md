@@ -7,7 +7,9 @@ In this chapter you will get a basic experience in working with containers. For 
 
 ![](/img/challenge1.png)
 
-## Here's what you'll learn:
+---
+
+## What you will learn
 
 - Container basics
   - Get a feeling for work with containers and understand their purpose
@@ -23,6 +25,8 @@ In this chapter you will get a basic experience in working with containers. For 
   - How to set up a container registry
   - How to run a container in the cloud
 
+---
+
 ## 1. Containerize your app
 
 > This is about putting your apps inside a container
@@ -33,34 +37,35 @@ In this chapter you will get a basic experience in working with containers. For 
 
 https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task
 
-- Go to azure shell (https://shell.azure.com)
+- Go to Azure Shell (https://shell.azure.com)
 
 - Clone the repository
 
-```bash
-git clone https://github.com/denniszielke/phoenix
-```
+  ```bash
+  git clone https://github.com/denniszielke/phoenix
+  ```
 
 - Go the the `aci-helloworld` app folder
 
-```bash
-cd phoenix/apps/aci-helloworld/
-```
+  ```bash
+  cd phoenix/apps/aci-helloworld/
+  ```
 
-- Trigger your azure container registry to build your container remotely
+- Trigger your Azure Container Registry to build your container remotely
 
-```bash
-ACR_NAME=
-az configure --defaults acr=$ACR_NAME
-az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
-```
+  ```bash
+  ACR_NAME=
+  az configure --defaults acr=$ACR_NAME
+  az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
+  ```
 
-- Verify the results in your container registry.
+- Verify the results in your container registry
+
   ![](/img/acr-remote-build.png)
 
 ### B. Create a container locally
 
-- Create a container image locally (you need docker running on your machine). Don't forget the trailing "." in the following line!
+- Create a container image locally (you need docker running on your machine). Don't forget the trailing `.` in the following line!
 
   ```bash
   docker build -t helloworld .
@@ -72,7 +77,7 @@ az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
   docker images
   ```
 
-- Run the image in a container locally on your machine. Remember to open up the correct port in your command (-p).
+- Run the image in a container locally on your machine. Remember to open up the correct port in your command (`-p`).
 
   ```bash
   docker run -d -p 8080:80 helloworld
@@ -109,7 +114,7 @@ az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
 ## 2. Start your container in azure container instances
 
 > This is about checking that your container actually works outside of your dev environment.
-
+>
 > Need help? Check hints [here :blue_book:](hints/deploy_to_aci.md)!
 
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
@@ -123,7 +128,7 @@ az acr build --registry $ACR_NAME --image helloacrtasks:v1 .
 ## Bonus Challenge 2 - Automate the build of your container
 
 > This is about automating the build of your container outside of your dev environment.
-
+>
 > Need help? Check hints [here :blue_book:](hints/automate_container_build.md)!
 
 - Import the sample code from to your Azure DevOps project. You can do this via UI.

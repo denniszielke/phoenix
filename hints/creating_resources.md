@@ -12,6 +12,7 @@ Via Azure CLI:
 https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli
 
 ## Create an azure shell
+
 https://azure.microsoft.com/en-us/features/cloud-shell/
 
 Goto:https://shell.azure.com
