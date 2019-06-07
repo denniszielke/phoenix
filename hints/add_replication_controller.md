@@ -47,5 +47,3 @@ kubectl get pods
 kubectl delete pods/<IDOFPOD>
 ```
 1. Check the number of pods again. you should see one pod termintating and anotherone is recreated instantly.
-
-

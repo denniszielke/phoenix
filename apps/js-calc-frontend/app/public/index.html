@@ -41,8 +41,26 @@
                     </p>
                 </form>
                 <div class="row">
-                    <h2>Result</h2>
-                    <p class="bg-info">{{ result }}</p>
+                    <h2>Result: {{ result.value }}</h2>
+                    <p class="bg-info">{{ result.duration }}, {{ result.host }}, {{ result.remote }}</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Milliseconds</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Host</th>
+                            <th scope="col">RemoteIp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="response in responses track by $index">
+                          <td>{{ response.duration }}</td>
+                          <td>{{ response.value }}</td>
+                          <td>{{ response.host }}</td>
+                          <td>{{ response.remote }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -24,6 +24,7 @@ type Calculation struct {
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", GetPing).Methods("GET")
+	router.HandleFunc("/healthz", GetPing).Methods("GET")
 	router.HandleFunc("/api/dummy", GetPing).Methods("GET")
 	router.HandleFunc("/api/calculation", GetCalculation).Methods("POST")
 

@@ -7,6 +7,7 @@ metadata:
     app: {{ template "multicalchart.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
+    version: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.frontendType }}
   selector:
@@ -14,7 +15,7 @@ spec:
     release: {{ .Release.Name }}
   ports:
    - port: 80
-     name: {{ .Release.Name }}-calc-frontend
+     name: http-calcfront
      targetPort: 8080
      protocol: TCP
 ---
@@ -27,6 +28,7 @@ metadata:
     app: {{ template "multicalchart.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
+    version: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.backendType }}
   selector:
@@ -35,5 +37,5 @@ spec:
   ports:
   - port: 80
     protocol: TCP
-    name: {{ .Release.Name }}-calc-backend
+    name: http-calcback
     targetPort: 8080

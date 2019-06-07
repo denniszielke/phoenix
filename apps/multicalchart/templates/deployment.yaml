@@ -8,6 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     role: frontend
+    version: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.frontendReplicaCount }}
   minReadySeconds: 5
@@ -30,6 +31,7 @@ spec:
           ports:
             - containerPort: 8080      
               protocol: TCP
+              name: http-calcfront
           env: 
             - name: "ENDPOINT"
               value: "{{ .Release.Name }}-calc-backend-svc"
@@ -94,6 +96,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    version: {{ .Release.Name }}
     role: backend
 spec:
   replicas: {{ .Values.backendReplicaCount }}
@@ -115,9 +118,16 @@ spec:
           image: "{{ .Values.image.repository }}/{{ .Values.image.backendImage }}:{{ .Values.image.backendTag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8080    
+            - containerPort: 8080  
+              name: http-calcback  
               protocol: TCP
           env: 
+{{- if .Values.introduceRandomResponseLag }}
+            - name: "LAGGY"
+              value: "{{ .Values.introduceRandomResponseLagValue }}"
+            - name: "BUGGY"
+              value: "true"
+{{- end }}
 {{- if .Values.dependencies.useAppInsights }}
             - name: "INSTRUMENTATIONKEY"
               valueFrom:

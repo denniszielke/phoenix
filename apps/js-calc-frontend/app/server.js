@@ -32,6 +32,10 @@ app.get('/ping', function(req, res) {
     res.send('Pong');
 });
 
+app.get('/healthz', function(req, res) {
+    res.send('OK');
+});
+
 app.get('/api/getappinsightskey', function(req, res) {
     console.log('returned app insights key');
     if (config.instrumentationKey){ 
@@ -86,7 +90,9 @@ app.post('/api/calculation', function(req, res) {
                 var options = { 
                     'url': config.endpoint + '/api/calculation',
                     'form': formData,
-                    'headers': req.headers
+                    'headers': {
+                        'number': req.headers.number
+                    }
                 };    
                 request.post(options, function(innererr, innerres, body) {
                     var endDate = new Date();
@@ -126,7 +132,9 @@ app.post('/api/calculation', function(req, res) {
         var options = { 
             'url': config.endpoint + '/api/calculation',
             'form': formData,
-            'headers': req.headers
+            'headers': {
+                'number': req.headers.number
+            }
         };    
         request.post(options, function(innererr, innerres, body) {
             var endDate = new Date();

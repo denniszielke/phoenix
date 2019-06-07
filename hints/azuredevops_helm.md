@@ -9,7 +9,7 @@ helm version
 
 ## Create build pipeline for packaging helm charts
 1. Create a build pipeline - you can clone an existing pipeline - make sure it includes all your containers.
-2. Add an `Install Helm` task. Make sure that you have the latest helm version (2.12.0) and kubectl version (1.11.3).
+2. Add an `Install Helm` task. Make sure that you have the latest helm version (2.13.1) and kubectl version (1.14.1).
 3. Add two `Package and deploy Helm charts` task to your pipeline and set the connection to your Kubernetes cluster.
 4. Modify the first helm task command to `init`. Set the arguments to `--client-only`
 5. Modify the second helm task command to `package`. Leave the destination to `$(Build.ArtifactStagingDirectory)`.

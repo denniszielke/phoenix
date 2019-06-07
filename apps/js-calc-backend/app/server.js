@@ -7,7 +7,7 @@ if (config.instrumentationKey){
     .setAutoDependencyCorrelation(true)
     .setAutoCollectDependencies(true)
     .setAutoCollectPerformance(true);
-    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "calc-backend-svc";
+    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-calcback";
     appInsights.start();
 }
 var client = appInsights.defaultClient;
@@ -16,12 +16,16 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
+
 const OS = require('os');
 
 // add logging middleware
 app.use(morgan('dev'));
 
 // Routes
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', function(req, res) {
     console.log('received request');
@@ -31,14 +35,26 @@ app.get('/ping', function(req, res) {
     console.log('received ping');
     res.send('Pong');
 });
+app.get('/healthz', function(req, res) {
+    res.send('OK');
+});
 
 var primeFactors = function getAllFactorsFor(remainder) {
     var factors = [], i;
     
     for (i = 2; i <= remainder; i++) {
-        while ((remainder % i) === 0) {
-            factors.push(i);
-            remainder /= i;
+        try{
+            while ((remainder % i) === 0) {
+                if (config.laggy && i == 19){
+                    console.log("blocking for " + config.laggy +" seconds");
+                    var waitTill = new Date(new Date().getTime() +config.laggy * 1000);
+                    while(waitTill > new Date()){}
+                }
+                factors.push(i);
+                remainder /= i;
+            }
+        }catch(e){
+            console.log(e);
         }
     }
     
@@ -74,10 +90,19 @@ app.post('/api/calculation', function(req, res) {
     if (req.headers.joker){
         resultValue = "42";
     }
-    var remoteAddress = req.connection.remoteAddress;
-    var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname(), remote: remoteAddress } );
-    console.log(serverResult);
-    res.send(serverResult.toString());
+
+    var randomNumber = Math.floor((Math.random() * 20) + 1);
+
+    if (config.buggy && randomNumber > 19){
+        console.log("looks like a 19 bug");
+        res.status(500).send({ value: "[ b, u, g]", error: "looks like a 19 bug", host: OS.hostname(), remote: remoteAddress });
+    }
+    else{
+        var remoteAddress = req.connection.remoteAddress;
+        var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname(), remote: remoteAddress } );
+        console.log(serverResult);
+        res.send(serverResult.toString());
+    }
 });
 
 app.post('/api/dummy', function(req, res) {

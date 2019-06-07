@@ -1,27 +1,30 @@
 # Default values for multicalchart.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-frontendReplicaCount: 2
-backendReplicaCount: 3
+frontendReplicaCount: 2 # number of frontend pods
+backendReplicaCount: 3 # number of backend pods
+introduceRandomResponseLag: true # if set to true there will be random response lags and faults in the backend
+introduceRandomResponseLagValue: 3 # seconds of the response lag
 dependencies:
-  useRedis: false
-  usePodRedis: false
-  redisSecret: rediscachesecret
-  useAppInsights: false
-  appInsightsSecretValue: dummyValue
-  useIngress: false
+  useAzureRedis: false # use azure redis cache - specify redisHostValue and redisKeyValue
+  redisHostValue: xxx.redis.cache.windows.net # redis host (no ssl)
+  redisKeyValue: XXXX+= # redis auth key
+  usePodRedis: false # use a redis sidecar in the frontend pod
+  useAppInsights: false # use application insights - specify appInsightsSecretValue
+  appInsightsSecretValue: dummyValue # application insights instrumentation key
+  useIngress: false # use ingress - specify service.dnsName
 image:
-  repository: dzkubereg.azurecr.io
-  frontendImage: js-calc-frontend
-  frontendTag: latest
-  backendImage: js-calc-backend
-  backendTag: latest
+  repository: denniszielke # repository to pull from either docker hub denniszielke or yourregistryonazure.azurecr.io
+  frontendImage: js-calc-frontend # name of the frontend image
+  frontendTag: latest # tag of the frontend
+  backendImage: js-calc-backend # name of the backend image
+  backendTag: latest # tag of the backend
   pullPolicy: Always
 service:
-  frontendType: LoadBalancer
+  frontendType: LoadBalancer # public load balancer, set to ClusterIP if you use the ingress
   backendType: ClusterIP
-  dnsName: calcName
-resources:
+  dnsName: calcName # dns name, if you do not have use 1.2.3.4.xip.io with 1.2.3.4 beeing the load balancer ip of your ingress
+resources: # resourece limits
   limits:
     cpu: 150m
     memory: 350Mi
