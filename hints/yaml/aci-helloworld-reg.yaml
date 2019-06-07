@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: helloworld
+  labels:
+    release: V76
+    app: helloworld-demo
+spec:
+  containers:
+    - name: aci-helloworld
+      image: dzkubereg.azurecr.io/aci-helloworld-ci:latest
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "200m"
+        limits:
+          memory: "256Mi"
+          cpu: "100m"
+  imagePullSecrets:
+    - name: kuberegistry

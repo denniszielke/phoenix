@@ -1,0 +1,149 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "multicalchart.name" . }}-frontend
+  labels:
+    app: {{ template "multicalchart.name" . }}-frontend
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    role: frontend
+    version: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.frontendReplicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "multicalchart.name" . }}
+        name: calc-frontend
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: calcfrontend
+          image: "{{ .Values.image.repository }}/{{ .Values.image.frontendImage }}:{{ .Values.image.frontendTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080      
+              protocol: TCP
+              name: http-calcfront
+          env: 
+            - name: "ENDPOINT"
+              value: "{{ .Release.Name }}-calc-backend-svc"
+{{- if .Values.dependencies.useAppInsights }}
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: appinsightsecret
+                  key: appinsightskey
+{{- end }}
+            - name: "PORT"
+              value: "8080"
+{{- if .Values.dependencies.usePodRedis }}
+            - name: "REDIS_HOST"
+              value: "localhost"
+            - name: "REDIS_AUTH"
+              value: "MySuperSecretRedis"
+{{- else }}
+{{- if .Values.dependencies.useRedis }}
+            - name: "REDIS_HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redishostkey
+            - name: "REDIS_AUTH"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redisauthkey
+{{- end }}
+{{- end }}
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- if .Values.dependencies.usePodRedis }}
+        - name: redis
+          image: redis:4.0.11-alpine
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--requirepass", "MySuperSecretRedis"]
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "multicalchart.name" . }}-backend
+  labels:
+    app: {{ template "multicalchart.name" . }}-backend
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    version: {{ .Release.Name }}
+    role: backend
+spec:
+  replicas: {{ .Values.backendReplicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "multicalchart.name" . }}
+        name: calc-backend
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: calcbackend
+          image: "{{ .Values.image.repository }}/{{ .Values.image.backendImage }}:{{ .Values.image.backendTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080  
+              name: http-calcback  
+              protocol: TCP
+          env: 
+{{- if .Values.introduceRandomResponseLag }}
+            - name: "LAGGY"
+              value: "{{ .Values.introduceRandomResponseLagValue }}"
+            - name: "BUGGY"
+              value: "true"
+{{- end }}
+{{- if .Values.dependencies.useAppInsights }}
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: appinsightsecret
+                  key: appinsightskey
+{{- end }}
+            - name: "PORT"
+              value: "8080"
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+          resources:
+{{ toYaml .Values.resources | indent 12 }}

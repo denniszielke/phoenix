@@ -1,0 +1,15 @@
+{
+  "name": "load-generator",
+  "version": "1.0.0",
+  "description": "calculator load generator node",
+  "main": "server.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": {
+    "name": "dzielke"
+  },
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

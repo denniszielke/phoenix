@@ -3,7 +3,9 @@
 Containers can make certain aspects of a developer's or admin's life very easy by hiding complexity and by providing reliability.
 In this chapter you will get a basic experience in working with containers. For this chapter we concentrate on single container applications running locally first and in Azure Container Instances in the second step.
 
-## Here's what you'll learn:##
+![](/img/challenge1.png)
+
+## Here's what you'll learn: ##
 - Container basics
     - Get a feeling for work with containers and understand their purpose
     - Understand what a Dockerfile is
@@ -12,7 +14,7 @@ In this chapter you will get a basic experience in working with containers. For 
     - Get a sense for container networking and ports
     - How to create new versions of images
     - Learn about tagging
-    - How to use VSTS automation to set up an automated workflow
+    - How to use azure devops automation to set up an automated workflow
 - Deployment
     - How to provide a container image in a registry 
     - How to set up a container registry
@@ -20,35 +22,78 @@ In this chapter you will get a basic experience in working with containers. For 
 
 
 ## 1. Containerize your app 
-- Get the code of the hello world application locally and navigate to the folder (phoenix\apps\aci-helloworld).
-- Create a container image locally (you need docker running on your machine).
+> This is about putting your apps inside a container
+- Get the code of the hello world application (*git clone https://github.com/denniszielke/phoenix*) locally and use the app in folder (phoenix\apps\aci-helloworld).
+
+### A. Create a container remotely (without docker engine) 
+https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task 
+- Go to azure shell (https://shell.azure.com)
+
+- Clone the repository 
+```
+git clone https://github.com/denniszielke/phoenix
+```
+- Go the the aci-hello world app folder
+```
+cd phoenix/apps/aci-helloworld/
+```
+- Trigger your azure container registry to build your container remotely
+```
+ACR_NAME=$( az acr list --query "[].{Name:name}" -o tsv )
+az configure --defaults acr=$ACR_NAME
+az acr build --image helloacrtasks:v1 .
+```
+- Verify the results in your container registry.
+![](/img/acr-remote-build.png)
+
+### B. Create a container locally
+- Create a container image locally (you need docker running on your machine). Don't forget the trailing "." in the following line!
     ```
     docker build -t helloworld .
     ```
+- Check if the image has been built.
+    ```
+    docker images
+    ```
 - Run the image in a container locally on your machine. Remember to open up the correct port in your command (-p).
     ```
-    docker run -p 8080:80 helloworld
+    docker run -d -p 8080:80 helloworld
     ```
-- Open the browser and navigate to the application you just started with your browser (http://localhost:8080). 
+- Open the browser and navigate to the application you just started with your browser (http://localhost:8080). If you're running on a Linux VM in Azure, just run this command to avoid working with a graphical browser:
+    ```
+    wget http://localhost:8080
+    ```
+    Then check the content with:
+    ```
+    cat index.html
+    ```
+- Check the running processes
+```
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+bc4b6b155c2c        helloworld          "/bin/sh -c 'node /u…"   12 seconds ago      Up 9 seconds        0.0.0.0:8080->8080/tcp   peaceful_mccarthy
+```
+- Kill the process to clean up
+```
+docker kill bc4b6b155c2c
+```
+- Push your image to your registry
 
-## 2. Automate your build 
-> Need help? Check hints [here :blue_book:](hints/TeamServicesContainerBuild.md)!
-- Import the sample code from to your VSTS Team Project. You can do this via UI. 
-- Use VSTS to create a build definition which triggers on code changes. The build definition should 
-    - create a new container image     
-    - use the build number as tag to identify your image. The buildnumber can be found in variable *$(Build.BuildNumber)* 
-    - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)
-
-## 3. Release to ACI manually
-> Need help? Check hints [here :blue_book:](hints/ManualReleaseToACI.md)!
+## 2. Start your container in azure container instances
+> This is about checking that your container actually works outside of your dev environment. 
+> Need help? Check hints [here :blue_book:](hints/deploy_to_aci.md)!
 - Run your newly created image in Azure Container Instances to see if everything works. You can start it manually in the portal or via command line.
 
+    
+## Bonus Challenge 1 - Automate your build using ACR tasks based on Github commits
+> Need help? Check hints [here :blue_book:](https://github.com/denniszielke/phoenix/blob/master/hints/acr_task_github_trigger.md)!
+- Create an ACR Tasks which triggers whenever you update your Github repo.
 
-## 4. Relase to ACI via VSTS
-> Need help? Check hints [here :blue_book:](hints/TeamServicesToACI.md)!
-- Use VSTS to create a release definition which is triggered by your build definition. This release definition should
-    - deploy the latest image created by your build definition to ACI. Use the Azure CLI 
-    task.
-- Now you have a full end to end flow for single container applications.
-
-
+## Bonus Challenge 2 . Automate the build of your container
+> This is about automating the build of your container outside of your dev environment.
+> Need help? Check hints [here :blue_book:](hints/automate_container_build.md)!
+- Import the sample code from to your azure devops project. You can do this via UI. 
+- Use azure devops to create a build definition which triggers on code changes. The build definition should 
+    - create a new container image     
+    - use the build number as tag to identify your image. The buildId can be found in variable *$(Build.BuildId)*  (The screenshots may show Buildnumber - make sure to use the BuildId)
+    - push the new image to your private Azure Container Registry (if you don't have an ACR, create one first)

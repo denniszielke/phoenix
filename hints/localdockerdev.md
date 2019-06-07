@@ -22,3 +22,8 @@ sudo usermod -aG docker $USER
 ~~~
 
 Logout and log in again to make sure group membership get loaded
+
+## Run nginx hello world
+~~~
+docker run --name docker-nginx -p 8080:80 nginx
+~~~

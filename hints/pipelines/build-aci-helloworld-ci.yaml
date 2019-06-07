@@ -1,0 +1,24 @@
+resources:
+- repo: self
+
+pool:
+  vmImage: Hosted Ubuntu 1604
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: 'my Subscription'
+    azureContainerRegistry: '{"loginServer":"myregistry.azurecr.io", "id" : "/subscriptions/1111/resourceGroups/kuberegistry/providers/Microsoft.ContainerRegistry/registries/myregistry"}'
+    dockerFile: 'apps/aci-helloworld/Dockerfile'
+    imageName: 'aci-helloworld-ci:$(Build.BuildId)'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: 'my Subscription'
+    azureContainerRegistry: '{"loginServer":"myregistry.azurecr.io", "id" : "/subscriptions/1111/resourceGroups/kuberegistry/providers/Microsoft.ContainerRegistry/registries/myregistry"}'
+    action: 'Push an image'
+    imageName: 'aci-helloworld-ci:$(Build.BuildId)'
+    includeLatestTag: true
+

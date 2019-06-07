@@ -2,6 +2,7 @@
 
 1. Build images local. 
 Navigate to the multi-calculator folder and into the calc-frontend folder.
+
 Then run:
 ```
 docker build -t calcfrontend .
@@ -34,6 +35,3 @@ To make your application accessible from the internet modify your frontend servi
 ```
 kubectl edit svc/calcfrontend-svc
 ```
-
-
-

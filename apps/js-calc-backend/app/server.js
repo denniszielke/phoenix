@@ -1,41 +1,60 @@
 require('dotenv-extended').load();
+const config = require('./config');
+var appInsights = require("applicationinsights");
+
+if (config.instrumentationKey){ 
+    appInsights.setup(config.instrumentationKey)
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectDependencies(true)
+    .setAutoCollectPerformance(true);
+    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-calcback";
+    appInsights.start();
+}
+var client = appInsights.defaultClient;
 
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
 
-const config = require('./config');
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 
-var appInsights = require("applicationinsights");
-
-if (config.instrumentationKey){ 
-    appInsights.setup(config.instrumentationKey);
-    appInsights.start();
-}
-var client = appInsights.defaultClient;
+const OS = require('os');
 
 // add logging middleware
 app.use(morgan('dev'));
 
 // Routes
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', function(req, res) {
     console.log('received request');
     res.send('Hi!');
 });
 app.get('/ping', function(req, res) {
-    client.trackEvent({ name: 'ping-js-backend-received' });
     console.log('received ping');
     res.send('Pong');
+});
+app.get('/healthz', function(req, res) {
+    res.send('OK');
 });
 
 var primeFactors = function getAllFactorsFor(remainder) {
     var factors = [], i;
     
     for (i = 2; i <= remainder; i++) {
-        while ((remainder % i) === 0) {
-            factors.push(i);
-            remainder /= i;
+        try{
+            while ((remainder % i) === 0) {
+                if (config.laggy && i == 19){
+                    console.log("blocking for " + config.laggy +" seconds");
+                    var waitTill = new Date(new Date().getTime() +config.laggy * 1000);
+                    while(waitTill > new Date()){}
+                }
+                factors.push(i);
+                remainder /= i;
+            }
+        }catch(e){
+            console.log(e);
         }
     }
     
@@ -48,7 +67,7 @@ app.post('/api/calculation', function(req, res) {
     console.log(req.headers.number);
     if (config.instrumentationKey){ 
         var startDate = new Date();
-        client.trackEvent( { name: "calculation-jsbackend-call"});
+        client.trackEvent( { name: "calculation-js-backend-call"});
     }
     var resultValue = [0];
     try{
@@ -62,29 +81,44 @@ app.post('/api/calculation', function(req, res) {
         }
         resultValue = [0];
     }
+    var endDate = new Date();
     if (config.instrumentationKey){ 
-        var endDate = new Date();
         var duration = endDate - startDate;
-        client.trackEvent({ name: "calculation-jsbackend-result"});
-        client.trackMetric({ name:"calculation-jsbackend-duration", value: duration });
+        client.trackEvent({ name: "calculation-js-backend-result"});
+        client.trackMetric({ name:"calculation-js-backend-duration", value: duration });
     }
-    var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue } );
-    console.log(serverResult);
-    res.send(serverResult.toString());
+    if (req.headers.joker){
+        resultValue = "42";
+    }
+
+    var randomNumber = Math.floor((Math.random() * 20) + 1);
+
+    if (config.buggy && randomNumber > 19){
+        console.log("looks like a 19 bug");
+        res.status(500).send({ value: "[ b, u, g]", error: "looks like a 19 bug", host: OS.hostname(), remote: remoteAddress });
+    }
+    else{
+        var remoteAddress = req.connection.remoteAddress;
+        var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname(), remote: remoteAddress } );
+        console.log(serverResult);
+        res.send(serverResult.toString());
+    }
 });
 
 app.post('/api/dummy', function(req, res) {
     console.log("received dummy request:");
     console.log(req.headers)
     if (config.instrumentationKey){ 
-        client.trackEvent({ name: "dummy-jsbackend-call"});
+        client.trackEvent({ name: "dummy-js-backend-call"});
     }
     res.send('42');
 });
 
+console.log(config);
+console.log(OS.hostname());
 // Listen
 if (config.instrumentationKey){ 
-    client.trackEvent({ name: "jsbackend-initializing"});
+    client.trackEvent({ name: "js-backend-initializing"});
 }
 app.listen(config.port);
 console.log('Listening on localhost:'+ config.port);

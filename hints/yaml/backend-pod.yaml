@@ -1,0 +1,23 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: calcbackend
+  labels:
+    name: calcbackend
+    app: calculator
+spec:
+  containers:
+    - name: calcbackend
+      image: dzregistry.azurecr.io/calc/calc-backend:latest
+      ports:
+        - containerPort: 8080
+          name: calcbackend         
+          protocol: TCP
+      env: 
+        - name: "INSTRUMENTATIONKEY"
+          valueFrom:
+            secretKeyRef:
+              name: appinsightsecret
+              key: appinsightskey
+        - name: "PORT"
+          value: "8080"

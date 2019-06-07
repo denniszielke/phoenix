@@ -2,6 +2,12 @@
 
 Application Insights is an extensible Application Performance Management (APM) service for web developers on multiple platforms. Use it to monitor your live web application. It will automatically detect performance anomalies
 
+## How do I create a secret for application insights?
+```
+APPINSIGHTS_KEY=HereBeYourKey
+kubectl create secret generic appinsightsecret --from-literal=appinsightskey=$APPINSIGHTS_KEY
+```
+
 ## Creating application insights
 After you have set up Application Insights on your project, telemetry data about your app's performance and usage will appear in your project's Application Insights resource in the Azure portal.
 
