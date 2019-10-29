@@ -32,6 +32,6 @@
     - also check this out: https://github.com/denniszielke/phoenix/blob/master/hints/k8sSingle.md
 
 ## *Compact Challenge 5.* Deploy a yaml definiton to your cluster
-- pick a sample yaml file found in /hints/yaml/full-challange3.yaml and deploy it to your cluster
+- pick a sample yaml file found in /hints/yaml/full-depl-no-appinsights.yaml and deploy it to your cluster
     - see the hints here https://github.com/denniszielke/phoenix/blob/master/hints/k8sSingle.md 
 - open a browser and check if the app is running correctly
