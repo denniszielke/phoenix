@@ -16,6 +16,7 @@
     - Run: git clone https://github.com/denniszielke/phoenix/
 - build the container for a very simple app found in /apps/helloworld using ACR build quick tasks 
     - docs: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tasks-overview#quick-task
+    - example: https://github.com/denniszielke/phoenix/blob/master/hints/acr_task_github_trigger.md#manually-build-a-container
 
 ## *Compact Challenge 3.* Deploy your container to AKS and work with kubectl
 - run your newly created container image in your cluster using kubectl
