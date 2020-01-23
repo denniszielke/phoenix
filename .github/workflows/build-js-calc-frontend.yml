@@ -16,10 +16,12 @@ jobs:
         DOCKER_HUB_SECRET: ${{ secrets.DOCKER_HUB_SECRET }}
       run: |
         ls -l
+        cd apps/js-calc-frontend
+        ls -l
         echo "Docker login"
         docker login -u $DOCKER_HUB -p $DOCKER_HUB_SECRET
         echo "Running docker build"
-        docker build . --file apps/js-calc-frontend/ACR.Dockerfile --tag denniszielke/js-calc-frontend:latest
+        docker build . --tag denniszielke/js-calc-frontend:latest
         echo "Pushing image"
         docker push denniszielke/js-calc-frontend:latest
         echo "Done"
