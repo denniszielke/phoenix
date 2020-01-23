@@ -19,7 +19,7 @@ jobs:
         echo "Docker login"
         docker login -u $DOCKER_HUB -p $DOCKER_HUB_SECRET
         echo "Running docker build"
-        docker build . --file /apps/aci-helloworld/Dockerfile --tag denniszielke/aci-helloworld:latest
+        docker build . --file apps/aci-helloworld/Dockerfile --tag denniszielke/aci-helloworld:latest
         echo "Pushing image"
         docker push denniszielke/aci-helloworld:latest
         echo "Done"
