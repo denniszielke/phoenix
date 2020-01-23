@@ -20,8 +20,10 @@ jobs:
         ACR_NAME: ${{ secrets.ACR_NAME }}
       run: |
         ls -l
+        cd apps/aci-helloworld
+        ls -l
         echo "Running docker build"
-        docker build --file apps/aci-helloworld/ACR.Dockerfile --tag $ACR_NAME/aci-helloworld:${{ github.sha }}
+        docker build . --tag $ACR_NAME/aci-helloworld:${{ github.sha }}
         echo "Tagging with latest"
         docker tag $ACR_NAME/aci-helloworld:${{ github.sha }} $ACR_NAME/aci-helloworld:latest
         echo "Pushing image"
