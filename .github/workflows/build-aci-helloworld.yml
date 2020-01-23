@@ -10,16 +10,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_NAME }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
     - name: Build the Docker image
       env:
         ACR_NAME: ${{ secrets.ACR_NAME }}
-        ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
       run: |
         ls -l
-        echo "Docker login"
-        docker login $ACR_NAME -p $ACR_PASSWORD
         echo "Running docker build"
-        docker build . --file apps/aci-helloworld/ACR.Dockerfile --tag $ACR_NAME/aci-helloworld:latest
+        docker build --file apps/aci-helloworld/ACR.Dockerfile --tag $ACR_NAME/aci-helloworld:${{ github.sha }} --tag $ACR_NAME/aci-helloworld:latest 
         echo "Pushing image"
-        docker push $ACR_NAME/aci-helloworld:latest
+        docker push $ACR_NAME/aci-helloworld:${{ github.sha }}
         echo "Done"
