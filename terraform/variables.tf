@@ -8,15 +8,15 @@ variable "tenant_id" {
     default = ""
 }
 
-# Terraform client id
-variable "terraform_client_id" {
-    default = ""
-}
+# # Terraform client id
+# variable "terraform_client_id" {
+#     default = ""
+# }
 
-# Terraform client secret
-variable "terraform_client_secret" {
-    default = ""
-}
+# # Terraform client secret
+# variable "terraform_client_secret" {
+#     default = ""
+# }
 
 # Kubernetes service principal id
 variable "client_id" {
@@ -40,7 +40,7 @@ variable "agent_count" {
 
 # Kubernetes Version
 variable "kubernetes_version" {
-    default = "1.11.5"
+    default = "1.15.7"
 }
 
 # Public key

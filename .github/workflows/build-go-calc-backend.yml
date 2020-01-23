@@ -1,0 +1,25 @@
+name: go-calc-backend
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      env:
+        DOCKER_HUB: ${{ secrets.DOCKER_HUB }}
+        DOCKER_HUB_SECRET: ${{ secrets.DOCKER_HUB_SECRET }}
+      run: |
+        ls -l
+        echo "Docker login"
+        docker login -u $DOCKER_HUB -p $DOCKER_HUB_SECRET
+        echo "Running docker build"
+        docker build . --file apps/go-calc-backend/ACR.Dockerfile --tag denniszielke/go-calc-backend:latest
+        echo "Pushing image"
+        docker push denniszielke/go-calc-backend:latest
+        echo "Done"

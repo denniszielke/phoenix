@@ -2,10 +2,10 @@
 # https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/terraform/terraform-create-k8s-cluster-with-tf-and-aks.md
 
 provider "azurerm" {
-    subscription_id = "${var.subscription_id}"
-    client_id       = "${var.terraform_client_id}"
-    client_secret   = "${var.terraform_client_secret}"
-    tenant_id       = "${var.tenant_id}"
+    subscription_id = var.subscription_id
+    # client_id       = var.terraform_client_id
+    # client_secret   = var.terraform_client_secret
+    tenant_id       = var.tenant_id
 }
 
 # random value
@@ -17,75 +17,75 @@ resource "random_integer" "random_int" {
 # https://www.terraform.io/docs/providers/azurerm/d/resource_group.html
 resource "azurerm_resource_group" "aksrg" {
   name     = "${var.resource_group_name}-${random_integer.random_int.result}"
-  location = "${var.location}"
+  location = var.location
     
-  tags {
-    Environment = "${var.environment}"
+  tags = {
+    Environment = var.environment
   }
 }
 
 # https://www.terraform.io/docs/providers/azurerm/d/virtual_network.html
 resource "azurerm_virtual_network" "kubevnet" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = "${azurerm_resource_group.aksrg.location}"
-  resource_group_name = "${azurerm_resource_group.aksrg.name}"
+  address_space       = ["10.0.0.0/20"]
+  location            = azurerm_resource_group.aksrg.location
+  resource_group_name = azurerm_resource_group.aksrg.name
 
-  tags {
-    Environment = "${var.environment}"
+  tags = {
+    Environment = var.environment
   }
 }
 
 # https://www.terraform.io/docs/providers/azurerm/d/subnet.html
 resource "azurerm_subnet" "gwnet" {
   name                      = "gw-1-subnet"
-  resource_group_name       = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
   address_prefix            = "10.0.1.0/24"
-  virtual_network_name      = "${azurerm_virtual_network.kubevnet.name}"
+  virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "acinet" {
   name                      = "aci-2-subnet"
-  resource_group_name       = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
   address_prefix            = "10.0.2.0/24"
-  virtual_network_name      = "${azurerm_virtual_network.kubevnet.name}"
+  virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "fwnet" {
   name                      = "AzureFirewallSubnet"
-  resource_group_name       = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
   address_prefix            = "10.0.6.0/24"
-  virtual_network_name      = "${azurerm_virtual_network.kubevnet.name}"
+  virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "ingnet" {
   name                      = "ing-4-subnet"
-  resource_group_name       = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
   address_prefix            = "10.0.4.0/24"
-  virtual_network_name      = "${azurerm_virtual_network.kubevnet.name}"
+  virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "aksnet" {
   name                      = "aks-5-subnet"
-  resource_group_name       = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
   address_prefix            = "10.0.5.0/24"
-  virtual_network_name      = "${azurerm_virtual_network.kubevnet.name}"
+  virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-ai"
   location            = "West Europe"
-  resource_group_name = "${azurerm_resource_group.aksrg.name}"
+  resource_group_name = azurerm_resource_group.aksrg.name
   application_type    = "Web"
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/redis_cache.html
 resource "azurerm_redis_cache" "aksredis" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-redis"
-  location            = "${azurerm_resource_group.aksrg.location}"
-  resource_group_name = "${azurerm_resource_group.aksrg.name}"
+  location            = azurerm_resource_group.aksrg.location
+  resource_group_name = azurerm_resource_group.aksrg.name
   capacity            = 0
   family              = "C"
   sku_name            = "Basic"
@@ -96,18 +96,18 @@ resource "azurerm_redis_cache" "aksredis" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
-  name                = "${var.dns_prefix}-${random_integer.random_int.result}-lga"
-  location            = "${azurerm_resource_group.aksrg.location}"
-  resource_group_name = "${azurerm_resource_group.aksrg.name}"
-  sku                 = "Free"
+  name                = "${var.dns_prefix}-lga"
+  location            = azurerm_resource_group.aksrg.location
+  resource_group_name = azurerm_resource_group.aksrg.name
+  sku                 = "PerGB2018"
 }
 
 resource "azurerm_log_analytics_solution" "akslogs" {
   solution_name         = "ContainerInsights"
-  location              = "${azurerm_resource_group.aksrg.location}"
-  resource_group_name   = "${azurerm_resource_group.aksrg.name}"
-  workspace_resource_id = "${azurerm_log_analytics_workspace.akslogs.id}"
-  workspace_name        = "${azurerm_log_analytics_workspace.akslogs.name}"
+  location              = azurerm_resource_group.aksrg.location
+  resource_group_name   = azurerm_resource_group.aksrg.name
+  workspace_resource_id = azurerm_log_analytics_workspace.akslogs.id
+  workspace_name        = azurerm_log_analytics_workspace.akslogs.name
 
   plan {
     publisher = "Microsoft"
@@ -118,26 +118,30 @@ resource "azurerm_log_analytics_solution" "akslogs" {
 # https://www.terraform.io/docs/providers/azurerm/d/kubernetes_cluster.html
 resource "azurerm_kubernetes_cluster" "akstf" {
   name                = "${var.cluster_name}-${random_integer.random_int.result}"
-  location            = "${azurerm_resource_group.aksrg.location}"
-  resource_group_name = "${azurerm_resource_group.aksrg.name}"
-  dns_prefix          = "${var.dns_prefix}"
-  kubernetes_version  = "${var.kubernetes_version}"
+  location            = azurerm_resource_group.aksrg.location
+  resource_group_name = azurerm_resource_group.aksrg.name
+  dns_prefix          = var.dns_prefix
+  kubernetes_version  = var.kubernetes_version
 
   linux_profile {
-    admin_username = "dennis"
+    admin_username = "phoenix"
 
     ssh_key {
-      key_data = "${file("${var.ssh_public_key}")}"
+      key_data = file("${var.ssh_public_key}")
     }
   }
 
-  agent_pool_profile {
-    name            = "default"
-    count           =  "${var.agent_count}"
-    vm_size         = "Standard_DS2_v2"
-    os_type         = "Linux"
-    os_disk_size_gb = 30
-    vnet_subnet_id = "${azurerm_subnet.aksnet.id}"
+  default_node_pool {
+    name               = "default"
+    node_count         = var.agent_count
+    vm_size            = "Standard_DS2_v2" #"Standard_F4s" # Standard_DS2_v2
+    os_disk_size_gb    = 120
+    max_pods           = 30
+    vnet_subnet_id     = azurerm_subnet.aksnet.id
+    type               = "VirtualMachineScaleSets" #"AvailabilitySet" #
+    #enable_auto_scaling = true
+    #min_count       = 2
+    #max_count       = 4
   }
 
   network_profile {
@@ -146,49 +150,63 @@ resource "azurerm_kubernetes_cluster" "akstf" {
       dns_service_ip = "10.2.0.10"
       docker_bridge_cidr = "172.17.0.1/16"
       #pod_cidr = "" selected by subnet_id
+      load_balancer_sku = "standard"
   }
 
   service_principal {
-    client_id     = "${var.client_id}"
-    client_secret = "${var.client_secret}"
+    client_id     = var.client_id
+    client_secret = var.client_secret
   }
 
   addon_profile {
     oms_agent {
       enabled                    = true
-      log_analytics_workspace_id = "${azurerm_log_analytics_workspace.akslogs.id}"
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.akslogs.id
+    }
+
+    kube_dashboard {
+      enabled = true
     }
   }
 
-  tags {
-    Environment = "${var.environment}"
+  tags = {
+    Environment = var.environment
   }
 }
 
-output "id" {
-    value = "${azurerm_kubernetes_cluster.akstf.id}"
+
+# merge kubeconfig from the cluster
+resource "null_resource" "get-credentials" {
+  provisioner "local-exec" {
+    command = "az aks get-credentials --resource-group ${azurerm_resource_group.aksrg.name} --name ${azurerm_kubernetes_cluster.akstf.name}"
+  }
+  depends_on = [azurerm_kubernetes_cluster.akstf]
 }
 
-output "kube_config" {
-  value = "${azurerm_kubernetes_cluster.akstf.kube_config_raw}"
+# set env variables for scripts
+resource "null_resource" "set-env-vars" {
+  provisioner "local-exec" {
+    command = "export KUBE_GROUP=${azurerm_resource_group.aksrg.name}; export KUBE_NAME=${azurerm_kubernetes_cluster.akstf.name}; export LOCATION=${var.location}"
+  }
+  depends_on = [azurerm_kubernetes_cluster.akstf]
 }
 
-output "client_key" {
-  value = "${azurerm_kubernetes_cluster.akstf.kube_config.0.client_key}"
+output "KUBE_NAME" {
+    value = var.cluster_name
 }
 
-output "client_certificate" {
-  value = "${azurerm_kubernetes_cluster.akstf.kube_config.0.client_certificate}"
+output "KUBE_GROUP" {
+    value = azurerm_resource_group.aksrg.name
 }
 
-output "cluster_ca_certificate" {
-  value = "${azurerm_kubernetes_cluster.akstf.kube_config.0.cluster_ca_certificate}"
+output "NODE_GROUP" {
+  value = "${azurerm_resource_group.aksrg.name}_nodes_${azurerm_resource_group.aksrg.location}"
 }
 
-output "host" {
-  value = "${azurerm_kubernetes_cluster.akstf.kube_config.0.host}"
+output "ID" {
+    value = azurerm_kubernetes_cluster.akstf.id
 }
 
 output "instrumentation_key" {
-  value = "${azurerm_application_insights.aksainsights.instrumentation_key}"
+  value = azurerm_application_insights.aksainsights.instrumentation_key
 }

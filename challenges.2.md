@@ -14,7 +14,7 @@
 ## 1. Create a Kubernetes cluster using Azure DevOps Project
 - Set up your Kuberenetes cluster using Azure Kubernetes Services. To get up to speed quickly we use Azure DevOps Project to do this for us. However this could also be done manually.
 
-> Use simple node app, create new cluster, set kubernetes version to 12.8, set for westeurope, get credentials [here :blue_book:](hints/createdevopsproject.md)!
+> Use simple node app, create new cluster, set kubernetes version to 1.15.7, set for westeurope, get credentials [here :blue_book:](hints/createdevopsproject.md)!
 > If you want to create a cluster via cli use this one [here :blue_book:](hints/create_aks_cluster.md)!
 
 The deployment will take some time (~10 min). If you created your cluster using Azure DevOps Projects you will see the cluster only after running the full pipeline. Check your Azure resource groups to see if you find your Kubernetes service.
