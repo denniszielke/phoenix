@@ -1,4 +1,4 @@
-name: aci-helloworld
+name: dockerhub-aci-helloworld
 
 on: [push]
 

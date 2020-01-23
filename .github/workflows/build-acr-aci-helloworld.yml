@@ -1,4 +1,4 @@
-name: aci-helloworld
+name: acr-aci-helloworld
 
 on: [push]
 
