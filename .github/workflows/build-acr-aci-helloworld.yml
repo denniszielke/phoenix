@@ -28,4 +28,5 @@ jobs:
         docker tag $ACR_NAME/aci-helloworld:${{ github.sha }} $ACR_NAME/aci-helloworld:latest
         echo "Pushing image"
         docker push $ACR_NAME/aci-helloworld:${{ github.sha }}
+        docker push $ACR_NAME/aci-helloworld:latest
         echo "Done"
