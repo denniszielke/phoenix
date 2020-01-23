@@ -12,14 +12,14 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build the Docker image
       env:
-        DOCKER_HUB: ${{ secrets.DOCKER_HUB }}
-        DOCKER_HUB_SECRET: ${{ secrets.DOCKER_HUB_SECRET }}
+        ACR_NAME: ${{ secrets.ACR_NAME }}
+        ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
       run: |
         ls -l
         echo "Docker login"
-        docker login -u $DOCKER_HUB -p $DOCKER_HUB_SECRET
+        docker login $ACR_NAME -p $ACR_PASSWORD
         echo "Running docker build"
-        docker build . --file apps/aci-helloworld/ACR.Dockerfile --tag denniszielke/aci-helloworld:latest
+        docker build . --file apps/aci-helloworld/ACR.Dockerfile --tag $ACR_NAME/aci-helloworld:latest
         echo "Pushing image"
-        docker push denniszielke/aci-helloworld:latest
+        docker push $ACR_NAME/aci-helloworld:latest
         echo "Done"
