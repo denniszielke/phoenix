@@ -23,9 +23,12 @@ In this chapter you will get a basic experience in working with containers. For 
 
 ## 1. Containerize your app 
 > This is about putting your apps inside a container
-- Get the code of the hello world application (*git clone https://github.com/denniszielke/phoenix*) locally and use the app in folder (phoenix\apps\aci-helloworld).
+- Get the code of the hello world application 
+    ``` 
+    git clone https://github.com/denniszielke/phoenix
+    ```
 
-### A. Create a container remotely (without docker engine) 
+### A. Create a container remotely (using azure container registry builds) 
 https://docs.microsoft.com/en-gb/azure/container-registry/container-registry-tutorial-quick-task 
 - Go to azure shell (https://shell.azure.com)
 
@@ -37,6 +40,10 @@ git clone https://github.com/denniszielke/phoenix
 ```
 cd phoenix/apps/aci-helloworld/
 ```
+- Open up vs code in your cloud shell
+```
+code .
+```
 - Trigger your azure container registry to build your container remotely
 ```
 ACR_NAME=$( az acr list --query "[].{Name:name}" -o tsv )
@@ -47,18 +54,21 @@ az acr build --image helloacrtasks:v1 .
 ![](/img/acr-remote-build.png)
 
 ### B. Create a container automatically using github actions
-https://github.com/features/actions
-https://github.com/Azure/docker-login
+Check out github actions: https://github.com/features/actions
+
+We recommend this github action for azure container registry: https://github.com/Azure/docker-login
 
 - Fork the phoenix repository to your own github account
 
-- Configure your ACR to use the admin account
+- Configure your azure container registry to use the admin account
 
 - Configure the values for ACR_NAME (take the loginserver name of your ACR), ACR_USERNAME and ACR_PASSWORD (take a password from the access keys) as github secrets for your project
 
 - Use this sample https://raw.githubusercontent.com/denniszielke/phoenix/master/.github/workflows/build-acr-aci-helloworld.yml and configure it as a github 
 
 - Run the github action and check that it will build, push and tag your container to your azure container registry
+
+![](/img/githubactions.png)
 
 ### C. Create a container locally (as last resort)
 - Create a container image locally (you need docker running on your machine). Don't forget the trailing "." in the following line!

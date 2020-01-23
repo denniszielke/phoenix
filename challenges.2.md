@@ -5,8 +5,8 @@
 
 ## Here's what you'll learn:
 > - How to set up a Kubernetes Cluster with Azure Kubernetes Services
-> - How to access the cluster with the commandline command "kubectl"
-> - Get to know the basic command set of "kubectl"
+> - How to access the cluster with the commandline command `kubectl`
+> - Get to know the basic command set of `kubectl`
 > - Understand the concept of pods and services and how they come together
 > - Get in touch with Yaml files to specify a desired state for a Kubernetes object
 
@@ -15,6 +15,7 @@
 - Set up your Kuberenetes cluster using Azure Kubernetes Services. To get up to speed quickly we use Azure DevOps Project to do this for us. However this could also be done manually.
 
 > Use simple node app, create new cluster, set kubernetes version to 1.15.7, set for westeurope, get credentials [here :blue_book:](hints/createdevopsproject.md)!
+> 
 > If you want to create a cluster via cli use this one [here :blue_book:](hints/create_aks_cluster.md)!
 
 The deployment will take some time (~10 min). If you created your cluster using Azure DevOps Projects you will see the cluster only after running the full pipeline. Check your Azure resource groups to see if you find your Kubernetes service.
@@ -26,17 +27,17 @@ If you want you can create the cluster using terraform and the example terraform
 > Need help? Check hints [here :blue_book:](hints/k8sSingle.md)!
 
 - Run a public available application in a single container on your cluster. The image name is "nginx".
-    - Use the "kubectl run" to create an individual pod
-    - Use the "kubectl create " to create a desired state configuration using a deployment
+    - Use the `kubectl run` to create an individual pod
+    - Use the `kubectl create` to create a desired state configuration using a deployment
 - Add a service to make your application accessible from the internet
-    - Use the "kubectl expose" command and "kubectl edit YOURSERVICE" command.
+    - Use the `kubectl expose` command and `kubectl edit` command.
 - Start your webbrowser to view your application running in your cluster.
 
 ## 3. Kubernetes discovery
 > This is about learning the Kubernetes objects
 > Need help? Check hints [here :blue_book:](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)!
 
-- If you want to work with namespaces. Create your own namespace 'dennisspace' with 
+- If you want to work with namespaces. Create your own namespace `dennisspace` with 
 ```
 kubectl create ns dennisspace
 ```

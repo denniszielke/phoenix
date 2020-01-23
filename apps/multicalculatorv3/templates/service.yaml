@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "multicalculatorv3.fullname" . }}-frontend
+  labels:
+    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    role: frontend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "multicalculatorv3.selectorLabels" . | nindent 4 }}
+    role: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "multicalculatorv3.fullname" . }}-backend
+  labels:
+    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    role: backend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "multicalculatorv3.selectorLabels" . | nindent 4 }}
+    role: backend
+
+

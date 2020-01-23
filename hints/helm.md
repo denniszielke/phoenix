@@ -4,12 +4,7 @@
 https://github.com/kubernetes/helm
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm
 
-Install helm (not required for azure shell)
-```
-wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0-linux-amd64.tar.gz
-tar -zxvf helm-v2.12.0-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/helm
-```
+Install helm (not required for azure shell) on your own machine: https://github.com/helm/helm#install
 
 If you are unsure if your cluster is set up with RBAC please check by running
 ```

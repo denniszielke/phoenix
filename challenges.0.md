@@ -9,3 +9,13 @@ Creating resources on Azure:
 
  > Need help? Check hints [here :blue_book:](hints/creating_resources.md)! 
 
+## Bonus Challenge 1 - Deploy all the infrastructure through terraform
+- Open up an azure cloud shell
+
+- Clone the repository
+
+- Check out and configure the variables file in the terraform folder
+
+- Deploy all components
+
+ > Need help? Check hints [here :blue_book:](hints/terraform.md)! 
