@@ -1,9 +1,9 @@
-Team Services Configuration to build & push a docker image to your Azure Container Registry
+# Using Azure DevoOps to build & push a docker image to your Azure Container Registry
 
 1. [Here](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal) is how you create an Azure Container Registry in the Azure portal if you don't have one yet.
 
 
-2. Import the sample code from to your VSTS Team Project. You can do this via UI in the Code tab of your Team Project.
+2. Import the sample code from to your azure devops project. You can do this via UI in the Code tab of your Team Project.
 ![](images/import_code.jpg)
 
 3. Create a new build definition you can do this in the Build & Release tab. Choose the submenu "Builds". Create an empty build definition.
