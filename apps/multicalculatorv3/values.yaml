@@ -22,7 +22,7 @@ dependencies:
   redisHostValue: xxx.redis.cache.windows.net # redis host (no ssl)
   redisKeyValue: XXXX+= # redis auth key
   usePodRedis: false # use a redis sidecar in the frontend pod
-  useAppInsights: true # use application insights - specify appInsightsSecretValue
+  useAppInsights: false # use application insights - specify appInsightsSecretValue
   appInsightsSecretValue: dummyValue # application insights instrumentation key
   useIngress: false # use ingress - specify service.dnsName
 
@@ -34,7 +34,7 @@ serviceAccount:
   name:
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
 
 ingress:

@@ -24,7 +24,7 @@ metadata:
     {{- include "multicalculatorv3.labels" . | nindent 4 }}
     role: backend
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
