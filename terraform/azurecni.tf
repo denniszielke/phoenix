@@ -174,6 +174,24 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 }
 
+# https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
+resource "azurerm_role_assignment" "aksacrrole" {
+  scope                = azurerm_container_registry.aksacr.id
+  role_definition_name = "Reader"
+  principal_id         = var.client_id
+  
+  depends_on = [azurerm_container_registry.aksacr]
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/container_registry.html
+
+resource "azurerm_container_registry" "aksacr" {
+  name                     = "${var.dns_prefix}acr"
+  resource_group_name      = azurerm_resource_group.aksrg.name
+  location                 = azurerm_resource_group.aksrg.location
+  sku                      = "Standard"
+  admin_enabled            = true
+}
 
 # merge kubeconfig from the cluster
 resource "null_resource" "get-credentials" {
