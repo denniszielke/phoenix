@@ -122,7 +122,7 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   resource_group_name = azurerm_resource_group.aksrg.name
   dns_prefix          = var.dns_prefix
   kubernetes_version  = var.kubernetes_version
-
+  node_resource_group = "${azurerm_resource_group.aksrg.name}_nodes_${azurerm_resource_group.aksrg.location}"
   linux_profile {
     admin_username = "phoenix"
 
