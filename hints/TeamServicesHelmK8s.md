@@ -1,5 +1,5 @@
 # Team Services to K8s via helm
-1. Make sure to drop the helm chart ** multicalchart** to the artifacts in the build definition
+1. Make sure to drop the helm chart ** multicalculatorv3** to the artifacts in the build definition
 ![](images/vstsartifacts.jpeg)
 2. Create a release pipeline and create a helm release task from here to your vsts https://github.com/debben/vsts-helm-extension
 3. Configure the container registry connection information in a process variable
@@ -12,6 +12,6 @@ $(releaseNameDev) . --install --force --reset-values --wait --set image.reposito
 ![](images/vstshelmrelease.jpeg)
 5. Set the working directory to the artifacts path of your helm chart
 ```
-$(System.DefaultWorkingDirectory)/phoenix-CI/multicalchart
+$(System.DefaultWorkingDirectory)/phoenix-CI/multicalculatorv3
 ```
 

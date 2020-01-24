@@ -55,7 +55,7 @@ helm search
 az acr helm list -o table
 ```
 
-## Deploy the existing multicalchart
+## Deploy the existing multicalculator v3
 
 1. Dry run the chart and override parameters
 ```
