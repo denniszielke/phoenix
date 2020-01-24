@@ -18,7 +18,7 @@ fullnameOverride: ""
 introduceRandomResponseLag: true # if set to true there will be random response lags and faults in the backend
 introduceRandomResponseLagValue: 3 # seconds of the response lag
 dependencies:
-  useAzureRedis: true # use azure redis cache - specify redisHostValue and redisKeyValue
+  useAzureRedis: false # use azure redis cache - specify redisHostValue and redisKeyValue
   redisHostValue: xxx.redis.cache.windows.net # redis host (no ssl)
   redisKeyValue: XXXX+= # redis auth key
   usePodRedis: false # use a redis sidecar in the frontend pod
