@@ -3,9 +3,10 @@ https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough#create-aks-clu
 
 **Hint:** The "set KEY value" values commands work in Powershell. In Bash use KEY=value.
 
+
 1. Use bash to create the resource group by using azure cloud shell (https://shell.azure.com/ )
 ```
-LOCATION=westeurope
+LOCATION=northeurope
 KUBE_GROUP=myKubeRG
 KUBE_NAME=myFirstKube
 az group create -n $KUBE_GROUP -l $LOCATION
