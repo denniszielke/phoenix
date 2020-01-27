@@ -115,6 +115,10 @@ spec:
                 key: appinsightskey
           - name: "PORT"
             value: "8080"
+          - name: "LAGGY"
+            value: "3"
+          - name: "BUGGY"
+            value: "true"
 ---
 apiVersion: apps/v1
 kind: Deployment
