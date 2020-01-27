@@ -22,7 +22,7 @@ jobs:
         ls -l
         cd apps/aci-helloworld
         ls -l
-        echo "Running docker build"
+        echo "Running docker build "
         docker build . --tag $ACR_NAME/aci-helloworld:${{ github.sha }}
         echo "Tagging with latest"
         docker tag $ACR_NAME/aci-helloworld:${{ github.sha }} $ACR_NAME/aci-helloworld:latest
