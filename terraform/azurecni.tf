@@ -174,14 +174,14 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 }
 
-# https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
-resource "azurerm_role_assignment" "aksacrrole" {
-  scope                = azurerm_container_registry.aksacr.id
-  role_definition_name = "Reader"
-  principal_id         = var.client_id
+# # https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
+# resource "azurerm_role_assignment" "aksacrrole" {
+#   scope                = azurerm_container_registry.aksacr.id
+#   role_definition_name = "Reader"
+#   principal_id         = var.client_id
   
-  depends_on = [azurerm_container_registry.aksacr]
-}
+#   depends_on = [azurerm_container_registry.aksacr]
+# }
 
 # https://www.terraform.io/docs/providers/azurerm/r/container_registry.html
 
