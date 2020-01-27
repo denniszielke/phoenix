@@ -111,9 +111,9 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-        name: jscalcbackend
-        role: calcbackend
-        app: calculator
+      name: gocalcbackend
+      role: calcbackend
+      app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
