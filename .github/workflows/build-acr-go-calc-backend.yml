@@ -1,0 +1,32 @@
+name: build-acr-go-calc-backend
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_NAME }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    - name: Build the Docker image
+      env:
+        ACR_NAME: ${{ secrets.ACR_NAME }}
+      run: |
+        ls -l
+        cd apps/go-calc-backend
+        ls -l
+        echo "Running docker build "
+        docker build . --tag $ACR_NAME/go-calc-backend:${{ github.sha }}
+        echo "Tagging with latest"
+        docker tag $ACR_NAME/go-calc-backend:${{ github.sha }} $ACR_NAME/go-calc-backend:latest
+        echo "Pushing image"
+        docker push $ACR_NAME/go-calc-backend:${{ github.sha }}
+        docker push $ACR_NAME/go-calc-backend:latest
+        echo "Done"
