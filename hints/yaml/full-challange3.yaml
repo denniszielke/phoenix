@@ -15,12 +15,16 @@ spec:
      targetPort: 80
      protocol: TCP
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jscalcfrontend
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      name: jscalcfrontend
+      app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -63,12 +67,17 @@ spec:
     role: calcbackend
     app: calculator
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jscalcbackend
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+        name: jscalcbackend
+        role: calcbackend
+        app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -94,12 +103,17 @@ spec:
           - name: "PORT"
             value: "80"
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gocalcbackend
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+        name: jscalcbackend
+        role: calcbackend
+        app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate

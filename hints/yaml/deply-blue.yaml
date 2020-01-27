@@ -1,9 +1,14 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: colorsdemo
 spec:
   replicas: 5
+  selector:
+    matchLabels:
+      name: servicedemo
+      color: blue
+      demo: colorsdemo
   minReadySeconds: 5
   strategy:
     type: RollingUpdate

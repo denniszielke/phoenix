@@ -16,12 +16,16 @@ spec:
      targetPort: 8080
      protocol: TCP
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: js-calc-frontend-depl
 spec:
   replicas: 4
+  selector:
+    matchLabels:
+      name: js-calc-frontend
+      app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -71,12 +75,17 @@ spec:
     role: calc-backend
     app: calculator
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: js-calc-backend-depl
 spec:
   replicas: 4
+  selector:
+    matchLabels:
+      name: js-calc-backend
+      role: calc-backend
+      app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
@@ -107,12 +116,17 @@ spec:
           - name: "PORT"
             value: "8080"
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-calc-backend-depl
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      name: go-calc-backend
+      role: calc-backend
+      app: calculator
   minReadySeconds: 5
   strategy:
     type: RollingUpdate
