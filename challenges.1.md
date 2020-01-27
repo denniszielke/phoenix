@@ -14,7 +14,7 @@ In this chapter you will get a basic experience in working with containers. For 
     - Get a sense for container networking and ports
     - How to create new versions of images
     - Learn about tagging
-    - How to use azure devops automation to set up an automated workflow
+    - How to use azure devops or github actions automation to set up an automated workflow
 - Deployment
     - How to provide a container image in a registry 
     - How to set up a container registry

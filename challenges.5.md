@@ -1,34 +1,35 @@
-# Kubernetes integration challenge
+# Security- Challenge
 > Need help? Check hints [here :blue_book:](hints/osba.md)! (hints/helm.md)!
 
-> In this challenge you will extend your application plattform capabilities with the vast set of services of native Azure PaaS Services - by using SQL, Redis Cache, MySQL, Service Bus, Cosmos DB from your apps. You will make sure that the management of these services will be done by the service catalog in Kubernetes and minimize the impact of your operational teams to use Azure PaaS.
+## Why
+Especially when running multiple applications in your cluster you want to controll how traffic is coming into your environment and how different worloads are allowed to communicate within the cluster. In this challenge you will learn how to lock down your application for enterprise use.
 
 ![](/img/challenge5.png)
 
 ## Here's what you'll learn:
-> - How to persist data in a container
-> - How to set up the open service broker api for your Cluster
-> - Learn how to package application and their dependencies using HELM
-> - Successfully deploy the multicalculator and the Redis Cache dependency
+> - Deploying ingress with ssl termination
+> - Using network policies to lock down internal traffic
+> - Using authentication proxy to enforce auth at the ingress
+> - Move secrets to azure key vault
 
-## 1. Mount a volumne
-- Configure a storage class
-- Deploy a pod and mount a volume from a persistent volume
-- Have the application write to that volume
-- Use redis in a sidecar container to
-
-## 2. Deploy an ingress controller
+## 1. Deploy an ingress controller
 - Learn about ingress controller (https://kubernetes.io/docs/concepts/services-networking/ingress/)
 - Deploy an ingress controller via Helm (https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 - Configure the routes for ingress to your application (https://docs.microsoft.com/en-us/azure/aks/ingress)
 
-## 3. Install the open service broker api
-- Configure your azure service principal for the open service broker
-- Deploy the azure open service broker into your AKS service catalog
-- Verify that it works by deploying wordpress 
+## 2. Deploy network policies
+- Learn about how to control traffic flows between containers https://docs.microsoft.com/de-de/azure/aks/use-network-policies
 
-## 4. Integrate using the open service broker
-![](/img/appmapredis.jpg)
-- Expand the requirements for your helm chart
-- Define naming and parametery for your helm chart to make use of the Azure Redis Cache
-- Deploy your app!
+Deploy the network policy daemonset
+```
+kubectl apply -f  https://github.com/Azure/acs-engine/blob/master/parts/k8s/addons/kubernetesmasteraddons-azure-npm-daemonset.yaml
+```
+
+## 3. Configure a network security group
+- Learn about having Kubernetes manage your azure network security group. 
+- Can you whitelist so that only specific ip ranges are allowed to your ingress controller?
+https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
+
+## 4. Move secrets to keyvault
+- Learn about moving secrets from your cluster to an azure keyvault
+- Check out what you need to do: https://github.com/Azure/kubernetes-keyvault-flexvol

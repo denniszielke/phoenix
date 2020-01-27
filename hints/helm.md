@@ -1,6 +1,6 @@
 # Using Helm
 
-## Installing helm and tiller
+## Installing helm
 https://github.com/kubernetes/helm
 https://docs.microsoft.com/en-us/azure/aks/kubernetes-helm
 
@@ -66,7 +66,7 @@ kubectl create ns $APP_NS
 helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install --dry-run --debug
 ```
 
-You should see the dry run yaml output that would have been sent to tiller
+You should see the dry run yaml output that would have been sent to Kubernetes
 
 1. Now install the helm chart for real
 ```
