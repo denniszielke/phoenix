@@ -96,7 +96,7 @@ resource "azurerm_redis_cache" "aksredis" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
-  name                = "${var.dns_prefix}-lga"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-lga"
   location            = azurerm_resource_group.aksrg.location
   resource_group_name = azurerm_resource_group.aksrg.name
   sku                 = "PerGB2018"
