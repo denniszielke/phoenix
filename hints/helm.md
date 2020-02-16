@@ -28,6 +28,11 @@ helm lint ./dummychart
 helm upgrade dummyInstanceName ./dummychart --install --dry-run --debug
 ```
 
+add helm stable repo to your helm instance
+```
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
+```
+
 Check the output
 
 ## Package your own helm chart

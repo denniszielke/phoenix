@@ -53,6 +53,12 @@ app.post('/api/calculation', function(req, res) {
         var startDate = new Date();
         client.trackEvent( { name: "calculation-js-frontend-call-start"});
     }
+    var victim = false;
+
+    var randomvictim = Math.floor((Math.random() * 20) + 1);
+    if (config.buggy && randomvictim){
+        victim = true;
+    }
 
     if (config.redisHost && config.redisAuth && redisClient == null) {
         try{
@@ -75,7 +81,7 @@ app.post('/api/calculation', function(req, res) {
                         { target: config.redisHost, dependencyTypeName: "REDIS", name: "calculation-cache", 
                         data:"calculate number " + req.headers.number, 
                         duration: duration, resultCode:0, success: true});
-                    client.trackEvent({ name: "calculation-js-frontend-cache" });
+                    client.trackEvent({ name: "calculation-js-frontend-cache", properties: {randomVictim: victim, cached: true} });
                     client.trackMetric({ name:"calculation-js-frontend-duration", value: duration });
                 }
                 console.log("cache hit");
@@ -91,7 +97,8 @@ app.post('/api/calculation', function(req, res) {
                     'url': config.endpoint + '/api/calculation',
                     'form': formData,
                     'headers': {
-                        'number': req.headers.number
+                        'number': req.headers.number,
+                        'randomvictim': victim
                     }
                 };    
                 request.post(options, function(innererr, innerres, body) {
@@ -110,7 +117,7 @@ app.post('/api/calculation', function(req, res) {
                         //     data:"calculate number " + req.headers.number, 
                         //     duration: duration, resultCode:200, success: true});
                         client.trackRequest({name:"POST /api/calculation", url: options.url, duration:duration, resultCode:200, success:true});
-                        client.trackEvent({ name: "calculation-js-frontend-call-complete" });
+                        client.trackEvent({ name: "calculation-js-frontend-call-complete", properties: {randomVictim: victim, cached: false} });
                         client.trackMetric({ name:"calculation-js-frontend-duration", value: duration });
                     }
                                        
@@ -133,7 +140,8 @@ app.post('/api/calculation', function(req, res) {
             'url': config.endpoint + '/api/calculation',
             'form': formData,
             'headers': {
-                'number': req.headers.number
+                'number': req.headers.number,
+                'randomvictim': victim
             }
         };    
         request.post(options, function(innererr, innerres, body) {
@@ -152,7 +160,7 @@ app.post('/api/calculation', function(req, res) {
                 //     { name: "POST /api/calculation", target: "calc-backend-svc | roleName:calc-backend-svc", 
                 //     data: options.url, dependencyTypeName: "Http",
                 //     duration: duration, resultCode:200, success: true});
-                client.trackEvent({ name: "calculation-js-frontend-call-complete" });
+                client.trackEvent({ name: "calculation-js-frontend-call-complete", properties: {randomVictim: victim, cached: false} });
                 client.trackRequest({name:"POST /api/calculation", url: options.url, duration:duration, resultCode:200, success:true});
                 client.trackMetric({ name:"calculation-js-frontend-duration", value: duration });
             }

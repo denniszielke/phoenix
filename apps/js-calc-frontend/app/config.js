@@ -9,5 +9,7 @@ if (config.instrumentationKey && config.instrumentationKey == "dummyValue")
 config.port = process.env.PORT || 8080;
 config.redisHost = process.env.REDIS_HOST;
 config.redisAuth = process.env.REDIS_AUTH;
+config.laggy = process.env.LAGGY;
+config.buggy = process.env.BUGGY;
 
 module.exports = config;

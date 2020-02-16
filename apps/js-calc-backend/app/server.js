@@ -93,7 +93,7 @@ app.post('/api/calculation', function(req, res) {
 
     var randomNumber = Math.floor((Math.random() * 20) + 1);
 
-    if (config.buggy && randomNumber > 19){
+    if (req.headers.randomvictim || (config.buggy && randomNumber > 19)){
         console.log("looks like a 19 bug");
         res.status(500).send({ value: "[ b, u, g]", error: "looks like a 19 bug", host: OS.hostname(), remote: remoteAddress });
     }
