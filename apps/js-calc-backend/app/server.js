@@ -61,7 +61,7 @@ var primeFactors = function getAllFactorsFor(remainder) {
     return factors;
 }
 
-// curl -X POST --header "number: 3" http://localhost:3001/api/calculation
+// curl -X POST --header "number: 3" --header "randomvictim: true" http://localhost:3002/api/calculation
 app.post('/api/calculation', function(req, res) {
     console.log("received client request:");
     console.log(req.headers.number);

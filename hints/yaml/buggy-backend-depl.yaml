@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggy-multicalculatorv3-backend
+  labels:
+    helm.sh/chart: multicalculatorv3-0.1.0
+    app.kubernetes.io/name: multicalculatorv3
+    app.kubernetes.io/instance: buggy
+    app.kubernetes.io/version: "3.16.0"
+    app.kubernetes.io/managed-by: Helm
+    role: frontend
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: multicalculatorv3
+      app.kubernetes.io/instance: calc1
+      role: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: multicalculatorv3
+        app.kubernetes.io/instance: calc1
+        role: backend
+    spec:
+      containers:
+        - name: buggy-backend
+          image: "denniszielke/js-calc-backend:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          env:
+            - name: "LAGGY"
+              value: "3"
+            - name: "BUGGY"
+              value: "true"
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: appinsightsecret
+                  key: appinsightskey
+            - name: "PORT"
+              value: "8080"
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

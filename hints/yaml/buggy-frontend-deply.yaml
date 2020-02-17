@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buggy-multicalculatorv3-frontend
+  labels:
+    helm.sh/chart: multicalculatorv3-0.1.0
+    app.kubernetes.io/name: multicalculatorv3
+    app.kubernetes.io/instance: buggy
+    app.kubernetes.io/version: "3.16.0"
+    app.kubernetes.io/managed-by: Helm
+    role: frontend
+spec:
+  replicas: 3
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: multicalculatorv3
+      app.kubernetes.io/instance: calc1
+      role: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: multicalculatorv3
+        app.kubernetes.io/instance: calc1
+        role: frontend
+    spec:
+      containers:
+        - name: buggy-frontend
+          image: "denniszielke/js-calc-frontend:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          env: 
+            - name: "ENDPOINT"
+              value: "calc1-multicalculatorv3-backend-svc"
+            - name: "LAGGY"
+              value: "3"
+            - name: "BUGGY"
+              value: "true"
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: appinsightsecret
+                  key: appinsightskey
+            - name: "PORT"
+              value: "8080"
+            - name: "REDIS_HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redishostkey
+            - name: "REDIS_AUTH"
+              valueFrom:
+                secretKeyRef:
+                  name: rediscachesecret
+                  key: redisauthkey
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

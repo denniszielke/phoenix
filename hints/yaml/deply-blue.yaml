@@ -6,7 +6,6 @@ spec:
   replicas: 5
   selector:
     matchLabels:
-      name: servicedemo
       color: blue
       demo: colorsdemo
   minReadySeconds: 5
@@ -18,13 +17,12 @@ spec:
   template:
     metadata:
       labels:
-        name: servicedemo
         color: blue
         demo: colorsdemo
     spec:
       containers:
         - name: blue
-          image: denniszielke/green:latest
+          image: denniszielke/blue:latest
           ports:
           - containerPort: 80
             name: http

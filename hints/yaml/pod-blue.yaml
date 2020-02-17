@@ -1,0 +1,20 @@
+apiVersion: "v1"
+kind: Pod
+metadata:
+  name: blue
+  labels:
+    color: blue
+    demo: colorsdemo
+spec:
+  containers:
+    - name: blue
+      image: denniszielke/blue:latest
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "200m"
+        limits:
+          memory: "256Mi"
+          cpu: "200m"
