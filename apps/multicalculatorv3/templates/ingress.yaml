@@ -13,16 +13,15 @@ spec:
 {{- if .Values.ingress.tls }}
   tls:
     - hosts:
-      - {{ .host | quote }}
+      - {{ .Values.ingress.host | quote }}
       secretName: {{ include "multicalculatorv3.fullname" . }}-tls
-  {{- end }}
 {{- end }}
   rules:
-    - host: {{ .host | quote }}
+    - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
           - path:
             backend:
-              serviceName: {{{ include "multicalculatorv3.fullname" . }}-frontend-svc
+              serviceName: {{ include "multicalculatorv3.fullname" . }}-frontend-svc
               servicePort: {{ .Values.service.port }}
 {{- end }}

@@ -1,5 +1,5 @@
 replicaCount: 2
-horizonalPodAutoscaler: true
+horizonalPodAutoscaler: false
 
 image:
   repository: denniszielke
@@ -37,10 +37,13 @@ service:
 ingress:
   enabled: false
   tls: true
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  class: nginx # traefik
   host: dapis.westeurope.cloudapp.azure.com
+  annotations: {
+    kubernetes.io/ingress.class: nginx,
+    nginx.ingress.kubernetes.io/rewrite-target: /,
+    cert-manager.io/cluster-issuer: letsencrypt
+  }
 
 resources: 
   limits:
