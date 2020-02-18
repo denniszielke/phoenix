@@ -3,7 +3,7 @@ name: acr-aci-helloworld
 on: 
   push:
     paths:
-      - 'apps'
+      - 'apps/**'
 
 jobs:
 

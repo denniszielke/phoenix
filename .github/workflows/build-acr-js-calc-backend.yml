@@ -3,7 +3,7 @@ name: build-acr-js-calc-backend
 on: 
   push:
     paths:
-      - 'apps'
+      - 'apps/**'
 
 jobs:
 
