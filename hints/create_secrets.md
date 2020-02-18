@@ -22,7 +22,7 @@ https://kubernetes.io/docs/concepts/configuration/secret/
 
 Simple way to deploy secrets via command line
 ```
-kubectl create secret generic mySecretName --from-literal=username=someRandomSecretValue
+kubectl create secret generic mysecretvalue --from-literal=username=someRandomSecretValue --from-literal=password=someRandomSecretPassword
 ```
 OR do it via yaml files  - here secrets must be base64 encoded.
 ~~~

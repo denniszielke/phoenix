@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: colorsdemo
 spec:
-  replicas: 5
+  replicas: 2
   selector:
     matchLabels:
       color: blue

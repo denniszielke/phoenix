@@ -64,7 +64,7 @@ var primeFactors = function getAllFactorsFor(remainder) {
 // curl -X POST --header "number: 3" --header "randomvictim: true" http://localhost:3002/api/calculation
 app.post('/api/calculation', function(req, res) {
     console.log("received client request:");
-    console.log(req.headers.number);
+    console.log(req.headers);
     if (config.instrumentationKey){ 
         var startDate = new Date();
         client.trackEvent( { name: "calculation-js-backend-call"});
@@ -93,7 +93,7 @@ app.post('/api/calculation', function(req, res) {
 
     var randomNumber = Math.floor((Math.random() * 20) + 1);
 
-    if (req.headers.randomvictim || (config.buggy && randomNumber > 19)){
+    if ((req.headers.randomvictim && req.headers.randomvictim ===true ) || (config.buggy && randomNumber > 19)){
         console.log("looks like a 19 bug");
         res.status(500).send({ value: "[ b, u, g]", error: "looks like a 19 bug", host: OS.hostname(), remote: remoteAddress });
     }
