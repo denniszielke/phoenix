@@ -1,6 +1,9 @@
 name: js-calc-backend
 
-on: [push]
+on: 
+  push:
+    paths:
+      - 'apps'
 
 jobs:
 

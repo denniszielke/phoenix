@@ -1,5 +1,5 @@
 # Security- Challenge
-> Need help? Check hints [here :blue_book:](hints/osba.md)! (hints/helm.md)!
+> Need help? Check hints [here :blue_book:] (hints/helm.md)!
 
 ## Why
 Especially when running multiple applications in your cluster you want to controll how traffic is coming into your environment and how different worloads are allowed to communicate within the cluster. In this challenge you will learn how to lock down your application for enterprise use.

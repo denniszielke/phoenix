@@ -64,7 +64,7 @@ az acr helm list -o table
 
 1. Dry run the chart and override parameters
 ```
-cd /phoenix/apps
+cd /phoenix
 APP_NS=calculator
 APP_IN=calc1
 kubectl create ns $APP_NS

@@ -1,6 +1,0 @@
-apiVersion: v1
-description: Multicalculator Helm chart
-name: multicalchart
-version: 0.2.0
-sources:
-   - https://github.com/denniszielke/container_demos

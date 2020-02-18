@@ -1,6 +1,9 @@
 name: dockerhub-aci-helloworld
 
-on: [push]
+on: 
+  push:
+    paths:
+      - 'apps'
 
 jobs:
 
