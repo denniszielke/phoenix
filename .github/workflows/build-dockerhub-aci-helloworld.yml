@@ -3,7 +3,7 @@ name: dockerhub-aci-helloworld
 on: 
   push:
     paths:
-      - 'apps/**'
+      - 'apps/aci-helloworld/**'
 
 jobs:
 

@@ -3,7 +3,7 @@ name: build-acr-go-calc-backend
 on: 
   push:
     paths:
-      - 'apps/**'
+      - 'apps/go-calc-backend/**'
 
 jobs:
 
