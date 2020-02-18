@@ -1,8 +1,5 @@
-# Default values for multicalculatorv3.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 3
+replicaCount: 2
+horizonalPodAutoscaler: true
 
 image:
   repository: denniszielke
@@ -39,16 +36,11 @@ service:
 
 ingress:
   enabled: false
+  tls: true
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  host: dapis.westeurope.cloudapp.azure.com
 
 resources: 
   limits:
