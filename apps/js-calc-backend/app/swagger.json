@@ -120,6 +120,10 @@
           "remote": {
             "type": "string",
             "description": "Caller ip"
+          },
+          "version": {
+            "type": "string",
+            "description": "app version"
           }
         },
         "xml": {

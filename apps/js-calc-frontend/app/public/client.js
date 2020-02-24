@@ -30,6 +30,15 @@ angular.module('CalculatorApp', [])
                     });                
             };
 
+            $scope.whatClassIsIt= function(someValue){
+                if(someValue.indexOf('blue') > 0)
+                       return "bg-info";
+                else if(someValue.indexOf('green') > 0)
+                    return "bg-green";
+                else
+                    return "bg-yellow";
+               };
+
             $scope.Calculate = function () {
                 var postUrl = apiUrl + 'calculation';
                 var config = {

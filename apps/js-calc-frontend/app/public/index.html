@@ -41,8 +41,9 @@
                     </p>
                 </form>
                 <div class="row">
-                    <h2>Result: {{ result.value }}</h2>
-                    <p class="bg-info">{{ result.duration }}, {{ result.host }}, {{ result.remote }}</p>
+                    <h2>Result: {{ result.result.value }}</h2>
+                    <p ng-class="whatClassIsIt(result.version)">Frontend: {{ result.host }}, {{ result.version }}</p>
+                    <p ng-class="whatClassIsIt(result.backend.version)">Backend: {{ result.duration }}, {{ result.backend.host }}, {{ result.backend.remote }}, {{ result.backend.version }}</p>
                     <table class="table">
                         <thead>
                             <tr>
@@ -50,14 +51,16 @@
                             <th scope="col">Value</th>
                             <th scope="col">Host</th>
                             <th scope="col">RemoteIp</th>
+                            <th scope="col">Version</th>
                             </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="response in responses track by $index">
-                          <td>{{ response.duration }}</td>
-                          <td>{{ response.value }}</td>
-                          <td>{{ response.host }}</td>
-                          <td>{{ response.remote }}</td>
+                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.duration }}</td>
+                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.value }}</td>
+                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.host }}</td>
+                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.remote }}</td>
+                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.version }}</td>
                         </tr>
                         </tbody>
                     </table>

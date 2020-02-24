@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  info.txt: "{{ .Values.production }} - :  {{ .Values.green.version }}"
+kind: ConfigMap
+metadata:
+  name: calcgreen-v{{ .Values.green.version }}
+---
+apiVersion: v1
+data:
+  info.txt: "{{ .Values.production }} - :  {{ .Values.blue.version }}"
+kind: ConfigMap
+metadata:
+  name: calcblue-v{{ .Values.green.version }}

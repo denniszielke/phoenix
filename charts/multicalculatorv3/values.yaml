@@ -45,6 +45,14 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt
   }
 
+blue:
+  version: 1
+
+green:
+  version: 1
+
+production: blue
+
 resources: 
   limits:
     cpu: 200m
