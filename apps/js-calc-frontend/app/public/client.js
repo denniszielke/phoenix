@@ -31,13 +31,15 @@ angular.module('CalculatorApp', [])
             };
 
             $scope.whatClassIsIt= function(someValue){
-                if(someValue.toString().indexOf('blue') > 0)
-                    return "bg-info";
-                else if(someValue.toString().indexOf('green') > 0)
-                    return "bg-green";
-                else
-                    return "bg-yellow";
-               };
+                if (someValue && someValue != undefined){
+                    if (someValue.toString().indexOf('blue') > 0)
+                        return "bg-info";
+                    else if (someValue.toString().indexOf('green') > 0)
+                        return "bg-green";
+                    else
+                        return "bg-yellow";
+                }
+            }
 
             $scope.Calculate = function () {
                 var postUrl = apiUrl + 'calculation';
