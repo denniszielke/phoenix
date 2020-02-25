@@ -31,9 +31,9 @@ angular.module('CalculatorApp', [])
             };
 
             $scope.whatClassIsIt= function(someValue){
-                if(someValue.indexOf('blue') > 0)
-                       return "bg-info";
-                else if(someValue.indexOf('green') > 0)
+                if(someValue.toString().indexOf('blue') > 0)
+                    return "bg-info";
+                else if(someValue.toString().indexOf('green') > 0)
                     return "bg-green";
                 else
                     return "bg-yellow";

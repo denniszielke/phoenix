@@ -34,6 +34,9 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+          - name: version
+            mountPath: /home/node/app/version
           livenessProbe:
             httpGet:
               path: /ping
@@ -91,7 +94,11 @@ spec:
               name: redis
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-{{- end }}            
+{{- end }}          
+      volumes:
+      - name: version
+        configMap:
+          name: calc{{ .Values.production }}  
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -141,6 +148,9 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+          - name: version
+            mountPath: /home/node/app/version
           livenessProbe:
             httpGet:
               path: /ping
@@ -171,6 +181,10 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+      - name: version
+        configMap:
+          name: calc{{ .Values.production }}  
     {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

@@ -64,7 +64,7 @@ az acr helm list -o table
 
 1. Dry run the chart and override parameters
 ```
-cd /phoenix
+cd /phoenix/charts
 APP_NS=calculator
 APP_IN=calc1
 kubectl create ns $APP_NS
@@ -89,9 +89,10 @@ helm get values $APP_IN $APP_IN
 helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install
 ```
 
-1. Change config and perform an upgrade (add a redis cache to the frontend pod)
+1. Change config and perform an upgrade (add application insights to your app)
 ```
-APPINSIGHTS_KEY=
+
+APPINSIGHTS_KEY=21dd72f3-7746-4cd7-8348-51d8111f891e
 helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
 ```
 
