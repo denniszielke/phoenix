@@ -30,11 +30,11 @@ angular.module('CalculatorApp', [])
                     });                
             };
 
-            $scope.whatClassIsIt= function(someValue){
-                if (someValue && someValue != undefined){
-                    if (someValue.toString().indexOf('blue') > 0)
+            $scope.CalculateCssClass = function(versionValue){
+                if (versionValue && versionValue != undefined){
+                    if (versionValue.toString().indexOf('blue') > 0)
                         return "bg-info";
-                    else if (someValue.toString().indexOf('green') > 0)
+                    else if (versionValue.toString().indexOf('green') > 0)
                         return "bg-green";
                     else
                         return "bg-yellow";

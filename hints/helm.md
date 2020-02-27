@@ -92,7 +92,7 @@ helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install
 1. Change config and perform an upgrade (add application insights to your app)
 ```
 
-APPINSIGHTS_KEY=21dd72f3-7746-4cd7-8348-51d8111f891e
+APPINSIGHTS_KEY=
 helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
 ```
 

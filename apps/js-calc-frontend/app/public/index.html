@@ -42,8 +42,8 @@
                 </form>
                 <div class="row">
                     <h2>Result: {{ result.result.value }}</h2>
-                    <p ng-class="whatClassIsIt(result.version)">Frontend: {{ result.host }}, {{ result.version }}</p>
-                    <p ng-class="whatClassIsIt(result.backend.version)">Backend: {{ result.duration }}, {{ result.backend.host }}, {{ result.backend.remote }}, {{ result.backend.version }}</p>
+                    <p ng-class="CalculateCssClass(result.version)">Frontend: {{ result.host }}, {{ result.version }}</p>
+                    <p ng-class="CalculateCssClass(result.backend.version)">Backend: {{ result.duration }}, {{ result.backend.host }}, {{ result.backend.remote }}, {{ result.backend.version }}</p>
                     <table class="table">
                         <thead>
                             <tr>
@@ -56,11 +56,11 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="response in responses track by $index">
-                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.duration }}</td>
-                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.value }}</td>
-                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.host }}</td>
-                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.remote }}</td>
-                          <td ng-class="whatClassIsIt(response.backend.version)">{{ response.backend.version }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.duration }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.value }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.host }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.remote }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.version }}</td>
                         </tr>
                         </tbody>
                     </table>
