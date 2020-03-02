@@ -26,7 +26,7 @@ stages:
       inputs:
         azureSubscription: 
         keyVaultName: $(azureKeyVaultName)
-        secretsFilter: 'phoenix-acr-name'
+        secretsFilter: 'phoenixacrname'
     - task: Bash@3
       displayName: set executable bit
       inputs:
@@ -56,7 +56,23 @@ stages:
          deploy:
             steps:
             - task: HelmInstaller@0
-              displayName: 'Install Helm $(helmVersion)''
+              displayName: 'Install Helm $(helmVersion)'
               inputs:
                 helmVersion: $(helmVersion)
                 checkLatestHelmVersion: false
+            - task: AzureCLI@2
+              displayName: Azure CLI
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                    az --version
+                    az account show
+                    ls -l
+            - task: AzureCLI@1
+              displayName: 'run build script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: $(System.DefaultWorkingDirectory)/_denniszielke.phoenix/scripts/deploy_multicalulator.sh
+                workingDirectory: '$(Build.SourcesDirectory)'

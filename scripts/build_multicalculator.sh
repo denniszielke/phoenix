@@ -10,6 +10,7 @@ echo "SYSTEM_HOSTTYPE is $SYSTEM_HOSTTYPE"
 echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_BUILDID"
 echo "Build Sources Folder is $BUILD_SOURCESDIRECTORY"
 echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY_NAME"
+echo "Secret Azure Container Registry value is $phoenixacrname"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 cd $BUILD_SOURCESDIRECTORY

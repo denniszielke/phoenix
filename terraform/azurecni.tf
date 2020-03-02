@@ -6,6 +6,7 @@ provider "azurerm" {
     # client_id       = var.terraform_client_id
     # client_secret   = var.terraform_client_secret
     tenant_id       = var.tenant_id
+    features {}
 }
 
 # random value
@@ -76,9 +77,9 @@ resource "azurerm_subnet" "aksnet" {
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-ai"
+  application_type    = "Node.JS"
   location            = "West Europe"
   resource_group_name = azurerm_resource_group.aksrg.name
-  application_type    = "Web"
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/redis_cache.html
@@ -91,6 +92,79 @@ resource "azurerm_redis_cache" "aksredis" {
   sku_name            = "Basic"
   enable_non_ssl_port = true
   redis_configuration {
+  }
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/key_vault.html
+resource "azurerm_key_vault" "aksvault" {
+  name                        = "${var.dns_prefix}-${random_integer.random_int.result}-vault"
+  location                    = azurerm_resource_group.aksrg.location
+  resource_group_name         = azurerm_resource_group.aksrg.name
+  enabled_for_disk_encryption = false
+  tenant_id                   = var.tenant_id
+
+  sku_name = "standard"
+
+  access_policy {
+    tenant_id = var.tenant_id
+    object_id = var.client_id
+
+    key_permissions = [
+      "get",
+    ]
+
+    secret_permissions = [
+      "get",
+    ]
+  }
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/key_vault_secret.html
+resource "azurerm_key_vault_secret" "appinsights_secret" {
+  name         = "phoenix-appinsights-key"
+  value        = azurerm_application_insights.aksainsights.instrumentation_key
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "redis_host_secret" {
+  name         = "phoenix-redis-host"
+  value        = azurerm_redis_cache.aksredis.hostname
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "redis_access_secret" {
+  name         = "phoenix-redis-access"
+  value        = azurerm_redis_cache.aksredis.primary_access_key
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "acrname_secret" {
+  name         = "phoenix-acr-name"
+  value        = azurerm_container_registry.aksacr.name
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
   }
 }
 
@@ -117,7 +191,7 @@ resource "azurerm_log_analytics_solution" "akslogs" {
 
 # https://www.terraform.io/docs/providers/azurerm/d/kubernetes_cluster.html
 resource "azurerm_kubernetes_cluster" "akstf" {
-  name                = "${var.cluster_name}-${random_integer.random_int.result}"
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}"
   location            = azurerm_resource_group.aksrg.location
   resource_group_name = azurerm_resource_group.aksrg.name
   dns_prefix          = var.dns_prefix
@@ -133,15 +207,15 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 
   default_node_pool {
     name               = "default"
-    node_count         = var.agent_count
+    node_count         = 1
     vm_size            = "Standard_DS2_v2" #"Standard_F4s" # Standard_DS2_v2
     os_disk_size_gb    = 120
     max_pods           = 30
     vnet_subnet_id     = azurerm_subnet.aksnet.id
-    type               = "VirtualMachineScaleSets" #"AvailabilitySet" #
-    #enable_auto_scaling = true
-    #min_count       = 2
-    #max_count       = 4
+    type               = "VirtualMachineScaleSets"
+    enable_auto_scaling = true
+    min_count       = 1
+    max_count       = 4
   }
 
   network_profile {
@@ -175,18 +249,18 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 }
 
 # # https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
-# resource "azurerm_role_assignment" "aksacrrole" {
-#   scope                = azurerm_container_registry.aksacr.id
-#   role_definition_name = "Reader"
-#   principal_id         = var.client_id
+resource "azurerm_role_assignment" "aksacrrole" {
+  scope                = azurerm_container_registry.aksacr.id
+  role_definition_name = "Reader"
+  principal_id         = var.client_id
   
-#   depends_on = [azurerm_container_registry.aksacr]
-# }
+  depends_on = [azurerm_container_registry.aksacr]
+}
 
 # https://www.terraform.io/docs/providers/azurerm/r/container_registry.html
 
 resource "azurerm_container_registry" "aksacr" {
-  name                     = "${var.dns_prefix}acr"
+  name                     = "${var.dns_prefix}-${random_integer.random_int.result}-acr"
   resource_group_name      = azurerm_resource_group.aksrg.name
   location                 = azurerm_resource_group.aksrg.location
   sku                      = "Standard"
@@ -207,14 +281,6 @@ resource "null_resource" "set-env-vars" {
     command = "export KUBE_GROUP=${azurerm_resource_group.aksrg.name}; export KUBE_NAME=${azurerm_kubernetes_cluster.akstf.name}; export LOCATION=${var.location}"
   }
   depends_on = [azurerm_kubernetes_cluster.akstf]
-}
-
-output "KUBE_NAME" {
-    value = var.cluster_name
-}
-
-output "KUBE_GROUP" {
-    value = azurerm_resource_group.aksrg.name
 }
 
 output "NODE_GROUP" {
