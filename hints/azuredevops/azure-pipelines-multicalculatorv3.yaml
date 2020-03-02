@@ -24,3 +24,10 @@ steps:
     azureSubscription: 'defaultAzure'
     scriptPath: scripts/build_multicalculatorv3.sh
     workingDirectory: '$(Build.SourcesDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: scripts'
+  inputs:
+    PathtoPublish: scripts/deploy_multicalulatorv3.sh
+    ArtifactName: scripts
+
