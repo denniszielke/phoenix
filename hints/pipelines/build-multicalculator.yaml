@@ -6,7 +6,6 @@ pool:
 
 variables:
   azureSubscriptionConnectionName: 'defaultAzure'
-  azureKeyVaultName: 'dzphoenix'
   helmVersion: 3.1.0
 
 stages:
@@ -25,7 +24,7 @@ stages:
       displayName: 'Retrieve secrets from Azure KeyVault'
       inputs:
         azureSubscription: 
-        keyVaultName: $(azureKeyVaultName)
+        KeyVaultName: $(azureKeyVaultName)
         secretsFilter: 'phoenixacrname'
     - task: Bash@3
       displayName: set executable bit
