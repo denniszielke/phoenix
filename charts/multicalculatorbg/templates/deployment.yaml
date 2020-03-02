@@ -98,7 +98,7 @@ spec:
       volumes:
       - name: version
         configMap:
-          name: {{ include "multicalculatorv3.fullname" . }}
+          name: {{ include "multicalculatorv3.fullname" . }}-{{ .Values.production }}  
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -184,7 +184,7 @@ spec:
       volumes:
       - name: version
         configMap:
-          name: {{ include "multicalculatorv3.fullname" . }}  
+          name: {{ include "multicalculatorv3.fullname" . }}-{{ .Values.production }}  
     {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
