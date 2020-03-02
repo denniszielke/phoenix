@@ -4,30 +4,53 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
+variables:
+  azureSubscriptionConnectionName: 'defaultAzure'
+  azureKeyVaultName: 'dzphoenix'
+  helmVersion: 3.1.0
 
-- task: HelmInstaller@0
-  displayName: 'Install Helm 3.1.0'
-  inputs:
-    helmVersion: 3.1.0
-    checkLatestHelmVersion: false
+stages:
+- stage: Build
+  displayName: Build containers, package helm chart, push all
+  jobs:
+  - job: Build
+    displayName: Run build script from repo
+    steps:
+    - task: HelmInstaller@0
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersion: $(helmVersion)
+        checkLatestHelmVersion: false
+    - task: Bash@3
+      displayName: set executable bit
+      inputs:
+        targetType: 'inline'
+        script: chmod +x scripts/build_multicalculator.sh
+    - task: AzureCLI@1
+      displayName: 'run build script'
+      inputs:
+        azureSubscription: $(azureSubscriptionConnectionName)
+        scriptPath: scripts/build_multicalculator.sh
+        workingDirectory: '$(Build.SourcesDirectory)'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: scripts'
+      inputs:
+        PathtoPublish: scripts/deploy_multicalulator.sh
+        ArtifactName: scripts
 
-- task: Bash@3
-  displayName: set executable bit
-  inputs:
-    targetType: 'inline'
-    script: chmod +x scripts/build_multicalculator.sh
-
-- task: AzureCLI@1
-  displayName: 'run build script'
-  inputs:
-    azureSubscription: 'defaultAzure'
-    scriptPath: scripts/build_multicalculator.sh
-    workingDirectory: '$(Build.SourcesDirectory)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: scripts'
-  inputs:
-    PathtoPublish: scripts/deploy_multicalulator.sh
-    ArtifactName: scripts
-
+- stage: Deploy
+  displayName: Deploy containers using helm chart and containers from ACR
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy everything using the deployment script
+    environment: 'DevEnvironment1'
+    strategy:
+     runOnce:
+         deploy:
+            steps:
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)''
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
