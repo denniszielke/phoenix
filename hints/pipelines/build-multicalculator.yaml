@@ -21,6 +21,12 @@ stages:
       inputs:
         helmVersion: $(helmVersion)
         checkLatestHelmVersion: false
+    - task: AzureKeyVault@1
+      displayName: 'Retrieve secrets from Azure KeyVault'
+      inputs:
+        azureSubscription: 
+        keyVaultName: $(azureKeyVaultName)
+        secretsFilter: 'phoenix-acr-name'
     - task: Bash@3
       displayName: set executable bit
       inputs:
