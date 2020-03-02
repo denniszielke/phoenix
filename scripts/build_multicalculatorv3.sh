@@ -7,7 +7,7 @@ echo "AGENT_BUILDDIRECTORY is $AGENT_BUILDDIRECTORY"
 echo "AGENT_BUILDDIRECTORY contents:"
 ls -1 $AGENT_BUILDDIRECTORY
 echo "SYSTEM_HOSTTYPE is $SYSTEM_HOSTTYPE"
-echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_ID"
+echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_BUILDID"
 echo "Build Sources Folder is $BUILD_SOURCESDIRECTORY"
 echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY.azurecr.io
@@ -39,7 +39,7 @@ echo "Completed pusing js-calc-frontend container"
 
 echo "Startig packaging helm chart"
 cd $BUILD_SOURCESDIRECTORY/charts/
-helm package multicalculatorv3 --app-version 3.0.$BUILD_ID
+helm package multicalculatorv3 --app-version 3.0.$BUILD_BUILDID
 echo "Pushing helm chart to $AZURE_CONTAINER_REGISTRY"
 az acr helm repo add
 az acr helm push multicalculatorv3-*.tgz --force
