@@ -3,4 +3,4 @@ data:
   info.txt: "{{ .Chart.AppVersion }}"
 kind: ConfigMap
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}
+  name: {{ include "multicalculator.fullname" . }}

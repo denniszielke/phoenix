@@ -60,7 +60,7 @@ helm search
 az acr helm list -o table
 ```
 
-## Deploy the existing multicalculator v3
+## Deploy the existing multicalculator 
 
 1. Dry run the chart and override parameters
 ```
@@ -68,14 +68,14 @@ cd /phoenix/charts
 APP_NS=calculator
 APP_IN=calc1
 kubectl create ns $APP_NS
-helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install --dry-run --debug
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install --dry-run --debug
 ```
 
 You should see the dry run yaml output that would have been sent to Kubernetes
 
 1. Now install the helm chart for real
 ```
-helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install
 ```
 
 1. verify
@@ -86,14 +86,14 @@ helm get values $APP_IN $APP_IN
 
 1. Change config and perform an upgrade (change the backend image to to the go version and/or add application insights)
 ```
-helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install
 ```
 
 1. Change config and perform an upgrade (add application insights to your app)
 ```
 
 APPINSIGHTS_KEY=
-helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
 ```
 
 1. Check the values
@@ -114,15 +114,15 @@ az redis create --location $LOCATION --name myownredis --resource-group $KUBE_GR
 ```
 REDIS_HOST=myownredis.redis.cache.windows.net
 REDIS_AUTH=Idfsdfsd+Bs=
-helm upgrade $APP_IN ./multicalculatorv3 --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true
 --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH
 ```
 
 1. You can introduce faults, delays and errors in the backend by using the following config:
 ```
-helm upgrade $APP_IN multicalculatorv3 --install --set backendReplicaCount=3 --set frontendReplicaCount=3 --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set introduceRandomResponseLag=false --set introduceRandomResponseLagValue=0 --namespace $APP_NS
+helm upgrade $APP_IN multicalculator --install --set backendReplicaCount=3 --set frontendReplicaCount=3 --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set introduceRandomResponseLag=false --set introduceRandomResponseLagValue=0 --namespace $APP_NS
 
-helm upgrade $APP_IN multicalculatorv3 --install --set backendReplicaCount=3 --set frontendReplicaCount=3 --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set introduceRandomResponseLag=true --set introduceRandomResponseLagValue=3 --namespace $APP_NS --dry-run --debug
+helm upgrade $APP_IN multicalculator --install --set backendReplicaCount=3 --set frontendReplicaCount=3 --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set introduceRandomResponseLag=true --set introduceRandomResponseLagValue=3 --namespace $APP_NS --dry-run --debug
 ```
 
 ## Rollout history and rollbacks

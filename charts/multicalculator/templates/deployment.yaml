@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}-frontend
+  name: {{ include "multicalculator.fullname" . }}-frontend
   labels:
-    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    {{- include "multicalculator.labels" . | nindent 4 }}
     role: frontend
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -15,15 +15,15 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      {{- include "multicalculatorv3.selectorLabels" . | nindent 6 }}
+      {{- include "multicalculator.selectorLabels" . | nindent 6 }}
       role: frontend
   template:
     metadata:
       labels:
-        {{- include "multicalculatorv3.selectorLabels" . | nindent 8 }}
+        {{- include "multicalculator.selectorLabels" . | nindent 8 }}
         role: frontend
     spec:
-      serviceAccountName: {{ include "multicalculatorv3.serviceAccountName" . }}
+      serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
         - name: calc-frontend
           securityContext:
@@ -47,7 +47,7 @@ spec:
               port: http
           env: 
             - name: "ENDPOINT"
-              value: "{{ include "multicalculatorv3.fullname" . }}-backend-svc"
+              value: "{{ include "multicalculator.fullname" . }}-backend-svc"
 {{- if .Values.introduceRandomResponseLag }}
             - name: "LAGGY"
               value: "{{ .Values.introduceRandomResponseLagValue }}"
@@ -98,7 +98,7 @@ spec:
       volumes:
       - name: version
         configMap:
-          name: {{ include "multicalculatorv3.fullname" . }}
+          name: {{ include "multicalculator.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -115,9 +115,9 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}-backend
+  name: {{ include "multicalculator.fullname" . }}-backend
   labels:
-    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -129,15 +129,15 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      {{- include "multicalculatorv3.selectorLabels" . | nindent 6 }}
+      {{- include "multicalculator.selectorLabels" . | nindent 6 }}
       role: backend
   template:
     metadata:
       labels:
-        {{- include "multicalculatorv3.selectorLabels" . | nindent 8 }}
+        {{- include "multicalculator.selectorLabels" . | nindent 8 }}
         role: backend
     spec:
-      serviceAccountName: {{ include "multicalculatorv3.serviceAccountName" . }}
+      serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
         - name: calc-backend
           securityContext:
@@ -184,7 +184,7 @@ spec:
       volumes:
       - name: version
         configMap:
-          name: {{ include "multicalculatorv3.fullname" . }}  
+          name: {{ include "multicalculator.fullname" . }}  
     {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

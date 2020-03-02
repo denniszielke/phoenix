@@ -2,9 +2,9 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}-backend-hpa
+  name: {{ include "multicalculator.fullname" . }}-backend-hpa
   labels:
-    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
 spec:
   maxReplicas: 5
@@ -12,15 +12,15 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: {{ include "multicalculatorv3.fullname" . }}-backend
+    name: {{ include "multicalculator.fullname" . }}-backend
   targetCPUUtilizationPercentage: 40
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}-frontend-hpa
+  name: {{ include "multicalculator.fullname" . }}-frontend-hpa
   labels:
-    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    {{- include "multicalculator.labels" . | nindent 4 }}
     role: frontend
 spec:
   maxReplicas: 5
@@ -28,6 +28,6 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: {{ include "multicalculatorv3.fullname" . }}-frontend
+    name: {{ include "multicalculator.fullname" . }}-frontend
   targetCPUUtilizationPercentage: 40
 {{- end }}

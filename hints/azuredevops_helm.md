@@ -26,7 +26,7 @@ helm version
 4. Modify the `upgrade` task to your pipeline and set the connection to your Kubernetes cluster.
 5. Set the upgrade task to load the chart from your packaged helm chart. It makes sense to adjust it to use a wildcard to ensure versioning support
 ```
-$(System.DefaultWorkingDirectory)/_phoenix_ws-aci-helloworld-helm/chart/multicalculatorv3-*.tgz
+$(System.DefaultWorkingDirectory)/_phoenix_ws-aci-helloworld-helm/chart/multicalculator-*.tgz
 ```
 6. It is recommended to always deploy into a namespace and give the release a unique name. In this case we use the buildid for this
 ```

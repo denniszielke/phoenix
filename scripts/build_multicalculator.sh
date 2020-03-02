@@ -39,8 +39,8 @@ echo "Completed pusing js-calc-frontend container"
 
 echo "Startig packaging helm chart"
 cd $BUILD_SOURCESDIRECTORY/charts/
-helm package multicalculatorv3 --app-version 3.0.$BUILD_BUILDID --version 0.1.$BUILD_BUILDID
+helm package multicalculator --app-version 3.0.$BUILD_BUILDID --version 0.1.$BUILD_BUILDID
 echo "Pushing helm chart to $AZURE_CONTAINER_REGISTRY"
 az acr helm repo add
-az acr helm push multicalculatorv3-*.tgz --force
+az acr helm push multicalculator-*.tgz --force
 echo "Pushed helm chart"

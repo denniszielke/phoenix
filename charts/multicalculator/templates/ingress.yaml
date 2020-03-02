@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "multicalculatorv3.fullname" . }}
+  name: {{ include "multicalculator.fullname" . }}
   labels:
-    {{- include "multicalculatorv3.labels" . | nindent 4 }}
+    {{- include "multicalculator.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -14,7 +14,7 @@ spec:
   tls:
     - hosts:
       - {{ .Values.ingress.host | quote }}
-      secretName: {{ include "multicalculatorv3.fullname" . }}-tls
+      secretName: {{ include "multicalculator.fullname" . }}-tls
 {{- end }}
   rules:
     - host: {{ .Values.ingress.host | quote }}
@@ -22,6 +22,6 @@ spec:
         paths:
           - path:
             backend:
-              serviceName: {{ include "multicalculatorv3.fullname" . }}-frontend-svc
+              serviceName: {{ include "multicalculator.fullname" . }}-frontend-svc
               servicePort: {{ .Values.service.port }}
 {{- end }}

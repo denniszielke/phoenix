@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "multicalculatorv3.name" -}}
+{{- define "multicalculator.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "multicalculatorv3.fullname" -}}
+{{- define "multicalculator.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "multicalculatorv3.chart" -}}
+{{- define "multicalculator.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "multicalculatorv3.labels" -}}
-helm.sh/chart: {{ include "multicalculatorv3.chart" . }}
-{{ include "multicalculatorv3.selectorLabels" . }}
+{{- define "multicalculator.labels" -}}
+helm.sh/chart: {{ include "multicalculator.chart" . }}
+{{ include "multicalculator.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "multicalculatorv3.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "multicalculatorv3.name" . }}
+{{- define "multicalculator.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "multicalculator.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "multicalculatorv3.serviceAccountName" -}}
+{{- define "multicalculator.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "multicalculatorv3.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "multicalculator.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

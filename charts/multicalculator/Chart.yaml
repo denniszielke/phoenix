@@ -1,5 +1,5 @@
 apiVersion: v2
-name: multicalculatorv3
+name: multicalculator
 description: Multicalculator helm chart for helm3
 
 # A chart can be either an 'application' or a 'library' chart.

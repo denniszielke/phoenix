@@ -8,3 +8,9 @@ echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_ID"
 echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
+
+az acr login --name $AZURE_CONTAINER_REGISTRY
+az configure --defaults acr=$AZURE_CONTAINER_REGISTRY
+az acr helm list --name $ACR_NAME
+
+helm search repo -l $ACR_NAME/multicalculator
