@@ -27,6 +27,11 @@ stages:
         KeyVaultName: $(AZURE_KEYVAULT_NAME)
         secretsFilter: 'phoenixacrname'
     - task: Bash@3
+      displayName: echo secret value
+      inputs:
+        targetType: 'inline'
+        script: echo $phoenixacrname
+    - task: Bash@3
       displayName: set executable bit
       inputs:
         targetType: 'inline'
@@ -36,6 +41,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscriptionConnectionName)
         scriptPath: scripts/build_multicalculator.sh
+        arguments: '$(phoenixacrname)'
         workingDirectory: '$(Build.SourcesDirectory)'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: scripts'
