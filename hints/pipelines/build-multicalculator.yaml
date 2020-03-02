@@ -24,7 +24,7 @@ stages:
       displayName: 'Retrieve secrets from Azure KeyVault'
       inputs:
         azureSubscription: 
-        KeyVaultName: $(azureKeyVaultName)
+        KeyVaultName: $(AZURE_KEYVAULT_NAME)
         secretsFilter: 'phoenixacrname'
     - task: Bash@3
       displayName: set executable bit
