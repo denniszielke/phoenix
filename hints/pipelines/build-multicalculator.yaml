@@ -23,7 +23,7 @@ stages:
     - task: AzureKeyVault@1
       displayName: 'Retrieve secrets from Azure KeyVault'
       inputs:
-        azureSubscription: 
+        azureSubscription: $(azureSubscriptionConnectionName)
         KeyVaultName: $(AZURE_KEYVAULT_NAME)
         secretsFilter: 'phoenixacrname'
     - task: Bash@3
