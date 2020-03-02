@@ -1,0 +1,26 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: HelmInstaller@0
+  displayName: 'Install Helm 3.1.0'
+  inputs:
+    helmVersion: 3.1.0
+    checkLatestHelmVersion: false
+
+- task: Bash@3
+  displayName: set executable bit
+  inputs:
+    targetType: 'inline'
+    script: chmod +x scripts/build_multicalculatorv3.sh
+
+- task: AzureCLI@1
+  displayName: 'run build script'
+  inputs:
+    azureSubscription: 'defaultAzure'
+    scriptPath: scripts/build_multicalculatorv3.sh
+    workingDirectory: '$(Build.SourcesDirectory)'
