@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Starting build"
+echo "Argument is $1"
 echo "AGENT_WORKFOLDER is $AGENT_WORKFOLDER"
 echo "AGENT_WORKFOLDER contents:"
 ls -1 $AGENT_WORKFOLDER
