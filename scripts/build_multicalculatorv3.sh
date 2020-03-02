@@ -28,7 +28,7 @@ docker build -t $AZURE_CONTAINER_REGISTRY_URL/js-calc-frontend:$BUILD_BUILDNUMBE
 echo "Completed building js-calc-frontend container"
 
 echo "Pushing images to $AZURE_CONTAINER_REGISTRY_URL"
-az acr login --name $REGISTRY_NAME
+az acr login --name $AZURE_CONTAINER_REGISTRY
 az configure --defaults acr=$AZURE_CONTAINER_REGISTRY
 docker push $AZURE_CONTAINER_REGISTRY_URL/go-calc-backend:$BUILD_BUILDNUMBER
 echo "Completed pusing go-calc-backend container"
