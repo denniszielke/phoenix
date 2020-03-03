@@ -9,7 +9,7 @@ echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY_NAME"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
-
+echo "Namespace is $KUBERNETES_NAMESPACE"
 
 REDIS_HOST=$(az keyvault secret show --name "redis-host" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 REDIS_AUTH=$(az keyvault secret show --name "redis-access" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
@@ -28,4 +28,7 @@ az acr helm repo add
 helm repo update
 helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculator
 
-#helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.usePodRedis=true --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH
+kubectl get namespace
+kubectl create namespace $KUBERNETES_NAMESPACE
+
+helm upgrade $AZURE_CONTAINER_REGISTRY_NAME/multicalculator --namespace $KUBERNETES_NAMESPACE --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY 

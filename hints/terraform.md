@@ -11,7 +11,7 @@ cd terraform
 You need a service principal for Kubernetes to use - if you do not have, use the following command to creat one, get a secret and your azure tenant id and subscription id by running the following azure cli commands:
 
 ```
-DEPLOYMENT_NAME=dzphoenix
+DEPLOYMENT_NAME=dzphprod
 
 SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --role="Contributor" --name $DEPLOYMENT_NAME -o json | jq -r '.appId')
 SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
@@ -26,8 +26,7 @@ echo "Your subscription_id should be $AZURE_SUBSCRIPTION_ID"
 
 1. Your can replace these values in the variable file by running the following
 ```
-sed -e "s/CLIENT_ID_PLACEHOLDER/$SERVICE_PRINCIPAL_ID/ ; s/CLIENT_SECRET_PLACEHOLDER/$SERVICE_PRINCIPAL_SECRET/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/" variables.template > variables_mod.tf
-mv variables.tf variables.template
+sed -e "s/CLIENT_ID_PLACEHOLDER/$SERVICE_PRINCIPAL_ID/ ; s/CLIENT_SECRET_PLACEHOLDER/$SERVICE_PRINCIPAL_SECRET/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/" variables.tf.template > variables_mod.tf
 ```
 
 
@@ -51,6 +50,7 @@ terraform plan -out out.plan
 - Azure Container Insights
 - Azure KeyVault
 - Variables for Azure Container Registry, Application Insights and Azure Redis inside the Azure KeyVault as secrets
+- Nginx Ingress Controller in AKS
 
 1. trigger the deployment
 apply the execution plan

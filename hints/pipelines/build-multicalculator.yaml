@@ -10,7 +10,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build containers, package helm chart, push all
+  displayName: Build containers, package chart, push all
   jobs:
   - job: Build
     displayName: Run build script from repo
@@ -37,13 +37,17 @@ stages:
         PathtoPublish: scripts/*.sh
         ArtifactName: scripts
 
-- stage: Deploy
-  displayName: Deploy containers using helm chart and containers from ACR
+- stage: DevDeploy
+  displayName: Deploy multicalchart to dev environment
   dependsOn: Build
   jobs:
   - deployment: Deploy
     displayName: Deploy everything using the deployment script
-    environment: $(envName).$(resourceName)
+    environment: dev1
+    variables:
+      AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
+      KUBERNETES_NAMESPACE: 'calc1'
+      KUBERNETES_ENDPOINT: 'dev1-dzphoenix-84-default-1583248111529'
     strategy:
      runOnce:
          deploy:
@@ -56,6 +60,11 @@ stages:
             - task: KubectlInstaller@0
               inputs:
                 kubectlVersion: 'latest'
+            - task: Kubernetes@1
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceEndpoint: $(KUBERNETES_ENDPOINT)
+                command: 'cluster-info'
             - task: AzureCLI@1
               displayName: 'run deploy script'
               inputs:
