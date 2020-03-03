@@ -9,6 +9,9 @@ provider "azurerm" {
     features {}
 }
 
+data "azurerm_client_config" "current" {
+}
+
 # random value
 resource "random_integer" "random_int" {
   min = 10
@@ -109,12 +112,19 @@ resource "azurerm_key_vault" "aksvault" {
     tenant_id = var.tenant_id
     object_id = var.client_id
 
-    key_permissions = [
+    secret_permissions = [
       "get",
     ]
+  }
+
+  access_policy {
+    tenant_id = var.tenant_id
+    object_id = data.azurerm_client_config.current.client_id
 
     secret_permissions = [
       "get",
+      "list",
+      "set",
     ]
   }
 
@@ -282,7 +292,7 @@ resource "azurerm_role_assignment" "aksacrrole" {
 # https://www.terraform.io/docs/providers/azurerm/r/container_registry.html
 
 resource "azurerm_container_registry" "aksacr" {
-  name                     = "${var.dns_prefix}-${random_integer.random_int.result}-acr"
+  name                     = "${var.dns_prefix}${random_integer.random_int.result}acr"
   resource_group_name      = azurerm_resource_group.aksrg.name
   location                 = azurerm_resource_group.aksrg.location
   sku                      = "Standard"
