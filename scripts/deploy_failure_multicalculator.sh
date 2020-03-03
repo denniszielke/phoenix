@@ -10,6 +10,10 @@ AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 
+KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 

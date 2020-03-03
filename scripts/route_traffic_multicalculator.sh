@@ -9,8 +9,8 @@ echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY_NAME"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
-echo "Namespace is $KUBERNETES_NAMESPACE"
 
 INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
+echo "curl http://$INGRESS_FQDN/ping"
 curl http://$INGRESS_FQDN/ping
