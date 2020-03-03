@@ -13,4 +13,4 @@ echo "Namespace is $KUBERNETES_NAMESPACE"
 
 INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
-curl http://$INGRESS_FQDN/pig
+curl http://$INGRESS_FQDN1/ping
