@@ -60,9 +60,15 @@ stages:
                 script: 'echo $(System.ArtifactsDirectory) "-" $(System.DefaultWorkingDirectory) "-" $(Build.ArtifactStagingDirectory) "-" $(Pipeline.Workspace)'
                 workingDirectory: '$(Pipeline.Workspace)'
             - task: AzureCLI@1
-              displayName: 'run build script'
+              displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
                 scriptPath: 'scripts/deploy_multicalulator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+            - task: AzureCLI@1
+              displayName: 'run build script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/deploy_multicalulator.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
 
