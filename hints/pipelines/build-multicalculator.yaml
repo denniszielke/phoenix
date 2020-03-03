@@ -38,11 +38,11 @@ stages:
         ArtifactName: scripts
 
 - stage: DevDeploy
-  displayName: Deploy multicalchart to dev environment
+  displayName: Deploy multicalchart to dev1
   dependsOn: Build
   jobs:
   - deployment: Deploy
-    displayName: Deploy everything using the deployment script
+    displayName: Deploy to dev1
     environment: dev1
     variables:
       AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
