@@ -20,17 +20,6 @@ stages:
       inputs:
         helmVersion: $(helmVersion)
         checkLatestHelmVersion: false
-    - task: AzureKeyVault@1
-      displayName: 'Retrieve secrets from Azure KeyVault'
-      inputs:
-        azureSubscription: $(azureSubscriptionConnectionName)
-        KeyVaultName: $(AZURE_KEYVAULT_NAME)
-        secretsFilter: 'phoenixacrname'
-    - task: Bash@3
-      displayName: echo secret value
-      inputs:
-        targetType: 'inline'
-        script: echo $phoenixacrname
     - task: Bash@3
       displayName: set executable bit
       inputs:
@@ -41,7 +30,6 @@ stages:
       inputs:
         azureSubscription: $(azureSubscriptionConnectionName)
         scriptPath: scripts/build_multicalculator.sh
-        arguments: '$(phoenixacrname)'
         workingDirectory: '$(Build.SourcesDirectory)'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: scripts'
@@ -74,7 +62,8 @@ stages:
                 inlineScript: |
                     az --version
                     az account show
-                    ls -l
+                    ls -R -l
+                    pwd 
             - task: AzureCLI@1
               displayName: 'run build script'
               inputs:
