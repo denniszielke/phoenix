@@ -66,6 +66,8 @@ stages:
                 workingDirectory: '$(Pipeline.Workspace)'
          routeTraffic:
             steps:
+            - download: current
+              artifact: scripts
             - task: AzureCLI@1
               displayName: 'run deploy script'
               inputs:
@@ -75,6 +77,8 @@ stages:
          on:
            failure:
             steps:
+            - download: current
+              artifact: scripts
             - task: AzureCLI@1
               displayName: 'run deploy script'
               inputs:
