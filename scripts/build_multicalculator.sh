@@ -39,7 +39,7 @@ echo "Pushing images to $AZURE_CONTAINER_REGISTRY_URL"
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
 az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
 #build_push_container "go-calc-backend"
-#build_push_container "js-calc-backend"
-#build_push_container "js-calc-frontend"
+build_push_container "js-calc-backend"
+build_push_container "js-calc-frontend"
 
 package_push_helmchart "multicalculator"

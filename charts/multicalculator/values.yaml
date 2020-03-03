@@ -36,7 +36,7 @@ service:
 
 ingress:
   enabled: true
-  tls: true
+  tls: false
   class: nginx # traefik
   host: devapis1.westeurope.cloudapp.azure.com
   annotations: {

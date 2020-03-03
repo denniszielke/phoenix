@@ -18,4 +18,4 @@ kubectl get namespace
 kubectl create namespace $KUBERNETES_NAMESPACE
 
 echo "Rollback helm release to previous release"
-helm rollback calculator 0 --namespace $KUBERNETES_NAMESPACE
+helm rollback calculator --namespace $KUBERNETES_NAMESPACE 0
