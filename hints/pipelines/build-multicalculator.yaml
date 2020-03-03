@@ -68,5 +68,4 @@ stages:
               displayName: 'run build script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: $(System.DefaultWorkingDirectory)/_denniszielke.phoenix/scripts/deploy_multicalulator.sh
-                workingDirectory: '$(Build.SourcesDirectory)'
+                scriptPath: scripts/deploy_multicalulator.sh
