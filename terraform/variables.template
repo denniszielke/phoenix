@@ -1,0 +1,59 @@
+# Guid of your azure subscription
+variable "subscription_id" {
+    default = "SUBSCRIPTION_ID_PLACEHOLDER"
+}
+
+# Directory id of your azure ad account
+variable "tenant_id" {
+    default = "TENANT_ID_PLACEHOLDER"
+}
+
+# # Terraform client id
+# variable "terraform_client_id" {
+#     default = ""
+# }
+
+# # Terraform client secret
+# variable "terraform_client_secret" {
+#     default = ""
+# }
+
+# Kubernetes service principal id
+variable "client_id" {
+    default = "CLIENT_ID_PLACEHOLDER"
+}
+
+# Kubernetes service principal secret
+variable "client_secret" {
+    default = "CLIENT_SECRET_PLACEHOLDER"
+}
+
+# Name your environment
+variable "environment" {
+    default = "dennis"
+}
+
+# Kubernetes Version
+variable "kubernetes_version" {
+    default = "1.15.7"
+}
+
+# Public key
+variable "ssh_public_key" {
+    default = "~/.ssh/id_rsa.pub"
+}
+
+# Your dns prefix
+variable "dns_prefix" {
+    default = "DEPLOYMENT_NAME"
+}
+
+# Kubernetes Resource group
+variable "resource_group_name" {
+    default = "phoenix"
+}
+
+# Deployment location
+variable "location" {
+    default = "WestEurope"
+}

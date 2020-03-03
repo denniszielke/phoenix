@@ -4,5 +4,4 @@ prep.md
 terraform/variables_mod.tf
 terraform/.terraform*
 terraform/out.plan
-terraform/variables.template
 terraform/terraform.tfstate
