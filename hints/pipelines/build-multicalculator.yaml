@@ -63,7 +63,7 @@ stages:
             - task: Kubernetes@1
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceEndpoint: $(KUBERNETES_ENDPOINT)
+                kubernetesServiceEndpoint: 'dev1-dzphoenix-84-default-1583248111529'
                 command: 'cluster-info'
             - task: AzureCLI@1
               displayName: 'run deploy script'
