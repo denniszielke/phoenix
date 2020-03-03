@@ -22,13 +22,19 @@ echo "Redis Key $REDIS_AUTH"
 echo "Appinsights $APPINSIGHTS_KEY"
 echo "Ingress $INGRESS_FQDN"
 
+echo "Authenticating with azure container registry..."
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
 az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
 az acr helm repo add
 helm repo update
 helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculator
 
+echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
+az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
+
+echo "Ensuring kubernetes namespace $KUBERNETES_NAMESPACE"
 kubectl get namespace
 kubectl create namespace $KUBERNETES_NAMESPACE
 
+echo "Deploying helm release"
 helm upgrade $AZURE_CONTAINER_REGISTRY_NAME/multicalculator --namespace $KUBERNETES_NAMESPACE --install  --set replicaCount=4  --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY 

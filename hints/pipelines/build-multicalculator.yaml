@@ -34,7 +34,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: scripts'
       inputs:
-        PathtoPublish: scripts/*.sh
+        PathtoPublish: scripts
         ArtifactName: scripts
 
 - stage: DevDeploy
@@ -47,7 +47,8 @@ stages:
     variables:
       AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
       KUBERNETES_NAMESPACE: 'calc1'
-      KUBERNETES_ENDPOINT: 'dev1-dzphoenix-84-default-1583248111529'
+      AKS_NAME: 'dzphoenix-84'
+      AKS_GROUP: 'phoenix-84'
     strategy:
      runOnce:
          deploy:
@@ -57,14 +58,6 @@ stages:
               inputs:
                 helmVersion: $(helmVersion)
                 checkLatestHelmVersion: false
-            - task: KubectlInstaller@0
-              inputs:
-                kubectlVersion: 'latest'
-            - task: Kubernetes@1
-              inputs:
-                connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceEndpoint: 'dev1-dzphoenix-84-default-1583248111529'
-                command: 'cluster-info'
             - task: AzureCLI@1
               displayName: 'run deploy script'
               inputs:
