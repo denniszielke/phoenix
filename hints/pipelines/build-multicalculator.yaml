@@ -53,17 +53,16 @@ stages:
               inputs:
                 helmVersion: $(helmVersion)
                 checkLatestHelmVersion: false
-            - task: AzureCLI@2
-              displayName: Azure CLI
+            - task: AzureCLI@1
+              displayName: 'set executable bit on scripts'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptType: bash
                 scriptLocation: inlineScript
                 inlineScript: |
                     az --version
                     az account show
-                    ls -R -l
                     pwd 
+                    chmod +x scripts/deploy_multicalulator.sh
             - task: AzureCLI@1
               displayName: 'run build script'
               inputs:
