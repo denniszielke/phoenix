@@ -53,16 +53,9 @@ stages:
               inputs:
                 helmVersion: $(helmVersion)
                 checkLatestHelmVersion: false
-            - task: Bash@3
-              displayName: show vars
-              inputs:
-                targetType: 'inline'
-                script: 'echo $(System.ArtifactsDirectory) "-" $(System.DefaultWorkingDirectory) "-" $(Build.ArtifactStagingDirectory) "-" $(Pipeline.Workspace)'
-                workingDirectory: '$(Pipeline.Workspace)'
             - task: AzureCLI@1
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
                 scriptPath: '../scripts/deploy_multicalulator.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
-

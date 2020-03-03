@@ -125,7 +125,7 @@ resource "azurerm_key_vault" "aksvault" {
 
 # https://www.terraform.io/docs/providers/azurerm/r/key_vault_secret.html
 resource "azurerm_key_vault_secret" "appinsights_secret" {
-  name         = "phoenix-appinsights-key"
+  name         = "appinsights-key"
   value        = azurerm_application_insights.aksainsights.instrumentation_key
   key_vault_id = azurerm_key_vault.aksvault.id
   
@@ -136,7 +136,7 @@ resource "azurerm_key_vault_secret" "appinsights_secret" {
 }
 
 resource "azurerm_key_vault_secret" "redis_host_secret" {
-  name         = "phoenix-redis-host"
+  name         = "redis-host"
   value        = azurerm_redis_cache.aksredis.hostname
   key_vault_id = azurerm_key_vault.aksvault.id
   
@@ -147,7 +147,7 @@ resource "azurerm_key_vault_secret" "redis_host_secret" {
 }
 
 resource "azurerm_key_vault_secret" "redis_access_secret" {
-  name         = "phoenix-redis-access"
+  name         = "redis-access"
   value        = azurerm_redis_cache.aksredis.primary_access_key
   key_vault_id = azurerm_key_vault.aksvault.id
   
@@ -158,7 +158,7 @@ resource "azurerm_key_vault_secret" "redis_access_secret" {
 }
 
 resource "azurerm_key_vault_secret" "acrname_secret" {
-  name         = "phoenix-acr-name"
+  name         = "acr-name"
   value        = azurerm_container_registry.aksacr.name
   key_vault_id = azurerm_key_vault.aksvault.id
   
@@ -169,7 +169,7 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
 }
 
 resource "azurerm_key_vault_secret" "public_ip" {
-  name         = "phoenix-ip"
+  name         = "phoenix-fqdn"
   value        = azurerm_public_ip.nginx_ingress.fqdn
   key_vault_id = azurerm_key_vault.aksvault.id
   
@@ -180,7 +180,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 }
 
 resource "azurerm_key_vault_secret" "public_ip_stage" {
-  name         = "phoenix-ip-stage"
+  name         = "phoenix-fqdn-stage"
   value        = azurerm_public_ip.nginx_ingress-stage.fqdn
   key_vault_id = azurerm_key_vault.aksvault.id
   
