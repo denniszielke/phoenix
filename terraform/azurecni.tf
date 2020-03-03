@@ -168,6 +168,28 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
   }
 }
 
+resource "azurerm_key_vault_secret" "public_ip" {
+  name         = "phoenix-ip"
+  value        = azurerm_public_ip.nginx_ingress.fqdn
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+  }
+}
+
+resource "azurerm_key_vault_secret" "public_ip_stage" {
+  name         = "phoenix-ip-stage"
+  value        = azurerm_public_ip.nginx_ingress-stage.fqdn
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    source      = "terraform"
+    Environment = var.environment
+  }
+}
+
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-lga"
@@ -267,6 +289,75 @@ resource "azurerm_container_registry" "aksacr" {
   admin_enabled            = true
 }
 
+# Create Static Public IP Address to be used by Nginx Ingress
+resource "azurerm_public_ip" "nginx_ingress" {
+  name                         = "nginx-ingress-pip"
+  location                     = azurerm_kubernetes_cluster.akstf.location
+  resource_group_name          = azurerm_kubernetes_cluster.akstf.node_resource_group
+  allocation_method            = "Static"
+  sku                          = "Standard"
+  domain_name_label            = "${var.dns_prefix}-${random_integer.random_int.result}"
+
+  depends_on = [azurerm_kubernetes_cluster.akstf]
+}
+
+resource "azurerm_public_ip" "nginx_ingress-stage" {
+  name                         = "nginx-ingress-pip-stage"
+  location                     = azurerm_kubernetes_cluster.akstf.location
+  resource_group_name          = azurerm_kubernetes_cluster.akstf.node_resource_group
+  allocation_method            = "Static"
+  sku                          = "Standard"
+  domain_name_label            = "${var.dns_prefix}-${random_integer.random_int.result}-stage"
+
+  depends_on = [azurerm_kubernetes_cluster.akstf]
+}
+
+resource "kubernetes_namespace" "nginx-ns" {
+  metadata {
+    name = "nginx"
+  }
+
+  depends_on = [azurerm_kubernetes_cluster.akstf]
+}
+
+# Install Nginx Ingress using Helm Chart
+# https://www.terraform.io/docs/providers/helm/release.html
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress"
+  repository = data.helm_repository.stable.metadata.0.name
+  chart      = "nginx-ingress"
+  namespace  = "nginx"
+  force_update = "true"
+  timeout = "500"
+
+  set {
+    name  = "controller.service.externalTrafficPolicy"
+    value = "Local"
+  }
+
+  set {
+    name  = "controller.service.loadBalancerIP"
+    value = azurerm_public_ip.nginx_ingress.ip_address
+  }
+  
+  set {
+    name  = "controller.replicaCount"
+    value = "2"
+  }
+
+  set {
+    name  = "controller.metrics.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.stats.enabled"
+    value = "true"
+  }
+
+  depends_on = [azurerm_kubernetes_cluster.akstf, kubernetes_namespace.nginx-ns, azurerm_public_ip.nginx_ingress]
+}
+
 # merge kubeconfig from the cluster
 resource "null_resource" "get-credentials" {
   provisioner "local-exec" {
@@ -289,6 +380,14 @@ output "NODE_GROUP" {
 
 output "ID" {
     value = azurerm_kubernetes_cluster.akstf.id
+}
+
+output "PUBLIC_IP" {
+    value = azurerm_public_ip.nginx_ingress.fqdn
+}
+
+output "PUBLIC_IP_STAGE" {
+    value = azurerm_public_ip.nginx_ingress-stage.fqdn
 }
 
 output "instrumentation_key" {
