@@ -63,12 +63,6 @@ stages:
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: 'scripts/deploy_multicalulator.sh'
-                workingDirectory: '$(Pipeline.Workspace)'
-            - task: AzureCLI@1
-              displayName: 'run build script'
-              inputs:
-                azureSubscription: $(azureSubscriptionConnectionName)
                 scriptPath: '../scripts/deploy_multicalulator.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
 
