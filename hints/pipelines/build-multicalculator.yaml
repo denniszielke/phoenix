@@ -57,7 +57,8 @@ stages:
               displayName: show vars
               inputs:
                 targetType: 'inline'
-                script: 'echo $(System.ArtifactsDirectory) "-" $(Build.ArtifactStagingDirectory) "-" $(Pipeline.Workspace)'
+                script: 'echo $(System.ArtifactsDirectory) "-" $(System.DefaultWorkingDirectory) "-" $(Build.ArtifactStagingDirectory) "-" $(Pipeline.Workspace)'
+                workingDirectory: '$(Pipeline.Workspace)'
             - task: AzureCLI@1
               displayName: 'run build script'
               inputs:
