@@ -37,5 +37,5 @@ kubectl get namespace
 kubectl create namespace $KUBERNETES_NAMESPACE
 
 echo "Deploying helm release"
-helm upgrade calculator $AZURE_CONTAINER_REGISTRY_NAME/multicalculator --namespace $KUBERNETES_NAMESPACE --install --set replicaCount=4 --set frontendTag=$BUILD_BUILDNUMBER --set backendTag=$BUILD_BUILDNUMBER --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set ingress.host=$INGRESS_FQDN --wait --timeout 30
+helm upgrade calculator $AZURE_CONTAINER_REGISTRY_NAME/multicalculator --namespace $KUBERNETES_NAMESPACE --install --set replicaCount=4 --set frontendTag=$BUILD_BUILDNUMBER --set backendTag=$BUILD_BUILDNUMBER --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set ingress.host=$INGRESS_FQDN --wait --timeout 30s
 
