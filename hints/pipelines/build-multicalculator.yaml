@@ -63,5 +63,5 @@ stages:
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
                 scriptPath: 'scripts/deploy_multicalulator.sh'
-                workingDirectory: '$(System.ArtifactsDirectory)'
+                workingDirectory: '$(Pipeline.Workspace)'
 
