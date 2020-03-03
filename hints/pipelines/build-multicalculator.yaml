@@ -10,10 +10,10 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build containers, package chart, push all
+  displayName: Build all
   jobs:
   - job: Build
-    displayName: Run build script from repo
+    displayName: Run build script
     steps:
     - task: HelmInstaller@0
       displayName: 'Install Helm $(helmVersion)'
@@ -38,11 +38,11 @@ stages:
         ArtifactName: scripts
 
 - stage: DevDeploy
-  displayName: Deploy multicalchart to dev1
+  displayName: Deploy dev1
   dependsOn: Build
   jobs:
   - deployment: Deploy
-    displayName: Deploy to dev1
+    displayName: run dev1
     environment: dev1
     variables:
       AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
@@ -89,11 +89,11 @@ stages:
                 workingDirectory: '$(Pipeline.Workspace)'
 
 - stage: ProdDeploy
-  displayName: Deploy multicalchart to prod1
+  displayName: Deploy prod1
   dependsOn: DevDeploy
   jobs:
   - deployment: Deploy
-    displayName: Deploy to prod1
+    displayName: run prod1
     environment: prod1
     variables:
       AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
