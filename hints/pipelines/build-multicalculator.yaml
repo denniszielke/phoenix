@@ -79,6 +79,11 @@ stages:
             steps:
             - download: current
               artifact: scripts
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
             - task: AzureCLI@1
               displayName: 'run rollback script'
               inputs:
