@@ -15,3 +15,6 @@ INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE
 
 curl http://$INGRESS_FQDN
 
+sleep 10
+
+curl http://$INGRESS_FQDN
