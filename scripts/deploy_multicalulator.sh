@@ -18,11 +18,6 @@ KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vaul
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
-echo "Redis Host $REDIS_HOST"
-echo "Redis Key $REDIS_AUTH"
-echo "Appinsights $APPINSIGHTS_KEY"
-echo "Ingress $INGRESS_FQDN"
-
 echo "Authenticating with azure container registry..."
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
 az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
