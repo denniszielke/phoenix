@@ -111,7 +111,7 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_app" {
   key_vault_id = azurerm_key_vault.aksvault.id
 
   tenant_id = var.tenant_id
-  object_id = var.client_id
+  object_id = var.azdo_service_principal_objectid
 
   secret_permissions = [
     "get"
@@ -299,8 +299,8 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 
   service_principal {
-    client_id     = var.client_id
-    client_secret = var.client_secret
+    client_id     = var.service_principal_id
+    client_secret = var.service_principal_secret
   }
 
   addon_profile {

@@ -3,8 +3,8 @@
 
 provider "azurerm" {
     subscription_id = var.subscription_id
-    #client_id       = var.terraform_client_id
-    #client_secret   = var.terraform_client_secret
+    #client_id       = var.terraform_serviceprincipal_id
+    #client_secret   = var.terraform_serviceprincipal_secret
     tenant_id       = var.tenant_id
     features {}
 }
@@ -33,8 +33,16 @@ resource "azurerm_resource_group" "acrrg" {
 # https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
 resource "azurerm_role_assignment" "aksacrrole" {
   scope                = azurerm_container_registry.aksacr.id
-  role_definition_name = "Reader"
-  principal_id         = var.client_objectid
+  role_definition_name = "AcrPull"
+  principal_id         = var.service_principal_objectid
+  
+  depends_on = [azurerm_container_registry.aksacr]
+}
+
+resource "azurerm_role_assignment" "azdoacrrole" {
+  scope                = azurerm_container_registry.aksacr.id
+  role_definition_name = "AcrPush"
+  principal_id         = var.azdo_service_principal_objectid
   
   depends_on = [azurerm_container_registry.aksacr]
 }

@@ -11,23 +11,31 @@ cd terraform
 You need a service principal for Kubernetes to use - if you do not have, use the following command to creat one, get a secret and your azure tenant id and subscription id by running the following azure cli commands:
 
 ```
-DEPLOYMENT_NAME=dphoenix
+DEPLOYMENT_NAME=dzphoenix
 
-SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --role="Contributor" --name $DEPLOYMENT_NAME -o json | jq -r '.appId')
-SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
-SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $SERVICE_PRINCIPAL_ID -o json | jq '.objectId' -r)
+AKS_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-aks -o json | jq -r '.appId')
+AKS_SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
+AKS_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.objectId' -r)
+AZDO_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-azdo -o json | jq -r '.appId')
+AZDO_SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $AZDO_SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
+AZDO_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AZDO_SERVICE_PRINCIPAL_ID -o json | jq '.objectId' -r)
 AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
+AZURE_SUBSCRIPTION_NAME=$(az account show --query name -o tsv)
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
-echo "Your client_id should be $SERVICE_PRINCIPAL_ID"
-echo "Your client_secret should be $SERVICE_PRINCIPAL_SECRET"
-echo "Your tenant_id should be $AZURE_TENANT_ID"
-echo "Your subscription_id should be $AZURE_SUBSCRIPTION_ID"
+echo "Your Kubernetes service_principal_id should be $AKS_SERVICE_PRINCIPAL_ID"
+echo "Your Kubernetes service_principal_secret should be $AKS_SERVICE_PRINCIPAL_SECRET"
+echo "Your Azure DevOps service_principal_id should be $AZDO_SERVICE_PRINCIPAL_ID"
+echo "Your Azure DevOps service_principal_secret should be $AZDO_SERVICE_PRINCIPAL_SECRET"
+echo "Your Azure tenant_id should be $AZURE_TENANT_ID"
+echo "Your Azure subscription_id should be $AZURE_SUBSCRIPTION_ID"
+echo "Your Azure subscription_name should be $AZURE_SUBSCRIPTION_NAME"
+echo "Your Azure DevOps Service Connection name should be defaultAzure"
 ```
 
 1. Your can replace these values in the variable file by running the following
 ```
-sed -e "s/CLIENT_ID_PLACEHOLDER/$SERVICE_PRINCIPAL_ID/ ; s/CLIENT_SECRET_PLACEHOLDER/$SERVICE_PRINCIPAL_SECRET/ ; s/CLIENT_OBJECTID_PLACEHOLDER/$SERVICE_PRINCIPAL_OBJECTID/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/" variables.tf.template > variables_mod.tf
+sed -e "s/SERVICE_PRINCIPAL_ID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_ID/ ; s/SERVICE_PRINCIPAL_SECRET_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_SECRET/ ; s/SERVICE_PRINCIPAL_OBJECTID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_OBJECTID/ ; s/AZDO_OBJECTID_PLACEHOLDER/$AZDO_SERVICE_PRINCIPAL_OBJECTID/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/" variables.tf.template > variables_mod.tf
 ```
 
 
@@ -84,17 +92,17 @@ rm out.plan
 echo "retrieving existing azure container registry"
 ACR_RG_ID=$(az group show -n $DEPLOYMENT_NAME --query id -o tsv)
 ACR_ID=$(az acr list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
-ACR_PM_ID=$(az role assignment list --scope $ACR_ID --assignee $SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
+ACR_AKS_ID=$(az role assignment list --scope $ACR_ID --assignee $AKS_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
+ACR_AZDO_ID=$(az role assignment list --scope $ACR_ID --assignee $AZDO_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
 
 terraform init
 echo "importing existing azure container registry"
 terraform import azurerm_resource_group.acrrg $ACR_RG_ID
 terraform import azurerm_container_registry.aksacr $ACR_ID
-terraform import azurerm_role_assignment.aksacrrole $ACR_PM_ID
+terraform import azurerm_role_assignment.aksacrrole $ACR_AKS_ID
+terraform import azurerm_role_assignment.azdoacrrole $ACR_AZDO_ID
 
 echo "redeploying"
 terraform plan -out out.plan
 terraform apply out.plan
 ```
-
-

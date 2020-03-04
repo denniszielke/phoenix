@@ -9,28 +9,33 @@ variable "tenant_id" {
 }
 
 # Terraform client id
-variable "terraform_client_id" {
-    default = "CLIENT_ID_PLACEHOLDER"
+variable "terraform_serviceprincipal_id" {
+    default = "SERVICE_PRINCIPAL_ID_PLACEHOLDER"
 }
 
 # Terraform client secret
-variable "terraform_client_secret" {
-    default = "CLIENT_SECRET_PLACEHOLDER"
+variable "terraform_serviceprincipal_secret" {
+    default = "SERVICE_PRINCIPAL_SECRET_PLACEHOLDER"
 }
 
 # Kubernetes service principal id
-variable "client_id" {
-    default = "CLIENT_ID_PLACEHOLDER"
+variable "service_principal_id" {
+    default = "SERVICE_PRINCIPAL_ID_PLACEHOLDER"
 }
 
 # Kubernetes service principal secret
-variable "client_secret" {
-    default = "CLIENT_SECRET_PLACEHOLDER"
+variable "service_principal_secret" {
+    default = "SERVICE_PRINCIPAL_SECRET_PLACEHOLDER"
 }
 
 # Kubernetes service principal objectid
-variable "client_objectid" {
-    default = "CLIENT_OBJECTID_PLACEHOLDER"
+variable "service_principal_objectid" {
+    default = "SERVICE_PRINCIPAL_OBJECTID_PLACEHOLDER"
+}
+
+# Azure DevOps service principal objectid
+variable "azdo_service_principal_objectid" {
+    default = "AZDO_OBJECTID_PLACEHOLDER"
 }
 
 # Name your environment
