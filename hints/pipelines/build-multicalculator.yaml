@@ -7,6 +7,7 @@ pool:
 variables:
   azureSubscriptionConnectionName: 'defaultAzure'
   helmVersion: 3.1.0
+  AZURE_CONTAINER_REGISTRY_NAME: 'dphoenixacr'
 
 stages:
 - stage: Build

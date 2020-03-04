@@ -30,7 +30,7 @@ resource "azurerm_resource_group" "acrrg" {
   }
 }
 
-# # https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
+# https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
 resource "azurerm_role_assignment" "aksacrrole" {
   scope                = azurerm_container_registry.aksacr.id
   role_definition_name = "Reader"

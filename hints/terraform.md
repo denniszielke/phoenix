@@ -60,6 +60,18 @@ apply the execution plan
 terraform apply out.plan
 ```
 
+1. Assign your azure devops service principals in the service connection to your azure keyvauls
+```
+az keyvault list --query '[].{Id:id}' -o tsv
+```
+
+open up all your keyvauls in a browser
+```
+for f in $(az keyvault list --query '[].{Id:id}' -o tsv); do
+  open "https://portal.azure.com/#resource$f/access_policies"
+done
+```
+
 1. optionally you can create another environment using the following process:
 
 ```
@@ -72,13 +84,17 @@ rm out.plan
 echo "retrieving existing azure container registry"
 ACR_RG_ID=$(az group show -n $DEPLOYMENT_NAME --query id -o tsv)
 ACR_ID=$(az acr list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
+ACR_PM_ID=$(az role assignment list --scope $ACR_ID --assignee $SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
 
 terraform init
 echo "importing existing azure container registry"
 terraform import azurerm_resource_group.acrrg $ACR_RG_ID
 terraform import azurerm_container_registry.aksacr $ACR_ID
+terraform import azurerm_role_assignment.aksacrrole $ACR_PM_ID
 
 echo "redeploying"
 terraform plan -out out.plan
 terraform apply out.plan
 ```
+
+
