@@ -1,0 +1,141 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureSubscriptionConnectionName: 'defaultAzure'
+  helmVersion: 3.1.0
+  AZURE_CONTAINER_REGISTRY_NAME: 'dzphoenixacr'
+
+stages:
+- stage: Build
+  displayName: Build all
+  jobs:
+  - job: Build
+    displayName: Run build script
+    steps:
+    - task: HelmInstaller@0
+      displayName: 'Install Helm $(helmVersion)'
+      inputs:
+        helmVersion: $(helmVersion)
+        checkLatestHelmVersion: false
+    - task: Bash@3
+      displayName: set executable bit
+      inputs:
+        targetType: 'inline'
+        script: chmod +x scripts/build_multicalculator.sh
+    - task: AzureCLI@1
+      displayName: 'run build script'
+      inputs:
+        azureSubscription: $(azureSubscriptionConnectionName)
+        scriptPath: scripts/build_multicalculator.sh
+        workingDirectory: '$(Build.SourcesDirectory)'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: scripts'
+      inputs:
+        PathtoPublish: scripts
+        ArtifactName: scripts
+
+- stage: DevDeploy
+  displayName: Deploy dev1
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: run dev1
+    environment: dev1
+    variables:
+      AZURE_KEYVAULT_NAME: 'dzphoenix-180-vault'
+    strategy:
+     runOnce:
+         deploy:
+            steps:
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
+            - task: AzureCLI@1
+              displayName: 'run deploy script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/deploy_multicalulator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+         routeTraffic:
+            steps:
+            - download: current
+              artifact: scripts
+            - task: AzureCLI@1
+              displayName: 'run traffic script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/route_traffic_multicalculator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+         on:
+           failure:
+            steps:
+            - download: current
+              artifact: scripts
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
+            - task: AzureCLI@1
+              displayName: 'run rollback script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/deploy_failure_multicalculator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+
+- stage: ProdDeploy
+  displayName: Deploy prod1
+  dependsOn: DevDeploy
+  jobs:
+  - deployment: Deploy
+    displayName: run prod1
+    environment: prod1
+    variables:
+      AZURE_KEYVAULT_NAME: 'dzphoenix-760-vault'
+    strategy:
+     runOnce:
+         deploy:
+            steps:
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
+            - task: AzureCLI@1
+              displayName: 'run deploy script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/deploy_multicalulator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+         routeTraffic:
+            steps:
+            - download: current
+              artifact: scripts
+            - task: AzureCLI@1
+              displayName: 'run traffic script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/route_traffic_multicalculator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
+         on:
+           failure:
+            steps:
+            - download: current
+              artifact: scripts
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
+            - task: AzureCLI@1
+              displayName: 'run rollback script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/deploy_failure_multicalculator.sh'
+                workingDirectory: '$(Pipeline.Workspace)'
