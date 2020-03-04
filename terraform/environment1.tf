@@ -179,7 +179,7 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
 
 resource "azurerm_key_vault_secret" "public_ip" {
   name         = "phoenix-fqdn"
-  value        = azurerm_public_ip.nginx_ingress.ip_address
+  value        = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -190,7 +190,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 
 resource "azurerm_key_vault_secret" "public_ip_stage" {
   name         = "phoenix-fqdn-stage"
-  value        = azurerm_public_ip.nginx_ingress-stage.ip_address
+  value        = "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -231,8 +231,6 @@ resource "azurerm_key_vault_secret" "aks-group" {
     project     = "phoenix"
   }
 }
-
-
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
@@ -448,4 +446,12 @@ output "PUBLIC_IP_STAGE" {
 
 output "instrumentation_key" {
   value = azurerm_application_insights.aksainsights.instrumentation_key
+}
+
+output "AZURE_CONTAINER_REGISTRY_NAME" {
+  value = azurerm_container_registry.aksacr.name
+}
+
+output "AZURE_KEYVAULT_NAME" {
+  value = azurerm_key_vault.aksvault.name
 }
