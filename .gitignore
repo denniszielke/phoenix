@@ -5,3 +5,4 @@ terraform/variables_mod.tf
 terraform/.terraform*
 terraform/out.plan
 terraform/terraform.tfstate
+terraform/terraform.tfstate.backup

@@ -45,7 +45,7 @@ stages:
     displayName: run dev1
     environment: dev1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
+      AZURE_KEYVAULT_NAME: 'dphoenix-588'
     strategy:
      runOnce:
          deploy:
@@ -96,7 +96,7 @@ stages:
     displayName: run prod1
     environment: prod1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzphoenix-vault'
+      AZURE_KEYVAULT_NAME: 'dphoenix-588'
     strategy:
      runOnce:
          deploy:

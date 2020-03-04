@@ -8,15 +8,15 @@ variable "tenant_id" {
     default = "TENANT_ID_PLACEHOLDER"
 }
 
-# # Terraform client id
-# variable "terraform_client_id" {
-#     default = ""
-# }
+# Terraform client id
+variable "terraform_client_id" {
+    default = "CLIENT_ID_PLACEHOLDER"
+}
 
-# # Terraform client secret
-# variable "terraform_client_secret" {
-#     default = ""
-# }
+# Terraform client secret
+variable "terraform_client_secret" {
+    default = "CLIENT_SECRET_PLACEHOLDER"
+}
 
 # Kubernetes service principal id
 variable "client_id" {
@@ -26,6 +26,11 @@ variable "client_id" {
 # Kubernetes service principal secret
 variable "client_secret" {
     default = "CLIENT_SECRET_PLACEHOLDER"
+}
+
+# Kubernetes service principal objectid
+variable "client_objectid" {
+    default = "CLIENT_OBJECTID_PLACEHOLDER"
 }
 
 # Name your environment
@@ -50,7 +55,7 @@ variable "dns_prefix" {
 
 # Kubernetes Resource group
 variable "resource_group_name" {
-    default = "phoenix"
+    default = "DEPLOYMENT_NAME"
 }
 
 # Deployment location

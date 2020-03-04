@@ -1,30 +1,11 @@
-# Configure the Azure Provider
-# https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/terraform/terraform-create-k8s-cluster-with-tf-and-aks.md
-
-provider "azurerm" {
-    subscription_id = var.subscription_id
-    # client_id       = var.terraform_client_id
-    # client_secret   = var.terraform_client_secret
-    tenant_id       = var.tenant_id
-    features {}
-}
-
-data "azurerm_client_config" "current" {
-}
-
-# random value
-resource "random_integer" "random_int" {
-  min = 10
-  max = 99
-}
-
 # https://www.terraform.io/docs/providers/azurerm/d/resource_group.html
 resource "azurerm_resource_group" "aksrg" {
   name     = "${var.resource_group_name}-${random_integer.random_int.result}"
   location = var.location
     
   tags = {
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -36,7 +17,8 @@ resource "azurerm_virtual_network" "kubevnet" {
   resource_group_name = azurerm_resource_group.aksrg.name
 
   tags = {
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -83,6 +65,11 @@ resource "azurerm_application_insights" "aksainsights" {
   application_type    = "Node.JS"
   location            = "West Europe"
   resource_group_name = azurerm_resource_group.aksrg.name
+
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/redis_cache.html
@@ -96,6 +83,11 @@ resource "azurerm_redis_cache" "aksredis" {
   enable_non_ssl_port = true
   redis_configuration {
   }
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/key_vault.html
@@ -108,29 +100,36 @@ resource "azurerm_key_vault" "aksvault" {
 
   sku_name = "standard"
 
-  access_policy {
-    tenant_id = var.tenant_id
-    object_id = var.client_id
-
-    secret_permissions = [
-      "get",
-    ]
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
   }
+}
 
-  access_policy {
-    tenant_id = var.tenant_id
-    object_id = data.azurerm_client_config.current.client_id
+# https://www.terraform.io/docs/providers/azurerm/r/key_vault_access_policy.html
+resource "azurerm_key_vault_access_policy" "aksvault_policy_app" {
+  key_vault_id = azurerm_key_vault.aksvault.id
 
-    secret_permissions = [
+  tenant_id = var.tenant_id
+  object_id = var.client_id
+
+  secret_permissions = [
+    "get"
+  ]
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/key_vault_access_policy.html
+resource "azurerm_key_vault_access_policy" "aksvault_policy_forme" {
+  key_vault_id = azurerm_key_vault.aksvault.id
+
+  tenant_id = var.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+
+  secret_permissions = [
       "get",
       "list",
-      "set",
-    ]
-  }
-
-  tags = {
-    Environment = var.environment
-  }
+      "set"
+  ]
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/key_vault_secret.html
@@ -140,8 +139,8 @@ resource "azurerm_key_vault_secret" "appinsights_secret" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -151,8 +150,8 @@ resource "azurerm_key_vault_secret" "redis_host_secret" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -162,8 +161,8 @@ resource "azurerm_key_vault_secret" "redis_access_secret" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -173,8 +172,8 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -184,8 +183,8 @@ resource "azurerm_key_vault_secret" "public_ip" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
 
@@ -195,10 +194,45 @@ resource "azurerm_key_vault_secret" "public_ip_stage" {
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
-    source      = "terraform"
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
 }
+
+resource "azurerm_key_vault_secret" "phoenix-namespace" {
+  name         = "phoenix-namespace"
+  value        = "calculator"
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+resource "azurerm_key_vault_secret" "aks-name" {
+  name         = "aks-name"
+  value        = azurerm_kubernetes_cluster.akstf.name
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+resource "azurerm_key_vault_secret" "aks-group" {
+  name         = "aks-group"
+  value        = azurerm_resource_group.aksrg.name
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+
 
 # https://www.terraform.io/docs/providers/azurerm/d/log_analytics_workspace.html
 resource "azurerm_log_analytics_workspace" "akslogs" {
@@ -206,6 +240,11 @@ resource "azurerm_log_analytics_workspace" "akslogs" {
   location            = azurerm_resource_group.aksrg.location
   resource_group_name = azurerm_resource_group.aksrg.name
   sku                 = "PerGB2018"
+
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
 }
 
 resource "azurerm_log_analytics_solution" "akslogs" {
@@ -276,27 +315,9 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   }
 
   tags = {
-    Environment = var.environment
+    environment = var.environment
+    project     = "phoenix"
   }
-}
-
-# # https://www.terraform.io/docs/providers/azurerm/r/role_assignment.html
-resource "azurerm_role_assignment" "aksacrrole" {
-  scope                = azurerm_container_registry.aksacr.id
-  role_definition_name = "Reader"
-  principal_id         = var.client_id
-  
-  depends_on = [azurerm_container_registry.aksacr]
-}
-
-# https://www.terraform.io/docs/providers/azurerm/r/container_registry.html
-
-resource "azurerm_container_registry" "aksacr" {
-  name                     = "${var.dns_prefix}${random_integer.random_int.result}acr"
-  resource_group_name      = azurerm_resource_group.aksrg.name
-  location                 = azurerm_resource_group.aksrg.location
-  sku                      = "Standard"
-  admin_enabled            = true
 }
 
 # Create Static Public IP Address to be used by Nginx Ingress
