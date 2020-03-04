@@ -179,7 +179,7 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
 
 resource "azurerm_key_vault_secret" "public_ip" {
   name         = "phoenix-fqdn"
-  value        = azurerm_public_ip.nginx_ingress.fqdn
+  value        = azurerm_public_ip.nginx_ingress.ip_address
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -190,7 +190,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 
 resource "azurerm_key_vault_secret" "public_ip_stage" {
   name         = "phoenix-fqdn-stage"
-  value        = azurerm_public_ip.nginx_ingress-stage.fqdn
+  value        = azurerm_public_ip.nginx_ingress-stage.ip_address
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -439,11 +439,11 @@ output "ID" {
 }
 
 output "PUBLIC_IP" {
-    value = azurerm_public_ip.nginx_ingress.fqdn
+    value = azurerm_public_ip.nginx_ingress.ip_address
 }
 
 output "PUBLIC_IP_STAGE" {
-    value = azurerm_public_ip.nginx_ingress-stage.fqdn
+    value = azurerm_public_ip.nginx_ingress-stage.ip_address
 }
 
 output "instrumentation_key" {
