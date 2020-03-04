@@ -46,7 +46,7 @@ stages:
     displayName: run dev1
     environment: dev1
     variables:
-      AZURE_KEYVAULT_NAME: 'dphoenix-588'
+      AZURE_KEYVAULT_NAME: 'dphoenix-524'
     strategy:
      runOnce:
          deploy:
