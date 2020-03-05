@@ -14,3 +14,5 @@ INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE
 
 echo "curl http://$INGRESS_FQDN/ping"
 curl http://$INGRESS_FQDN/ping
+
+echo "Your app is publicly reachable under http://$INGRESS_FQDN"
