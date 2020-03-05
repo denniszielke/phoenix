@@ -123,7 +123,7 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_forme" {
   key_vault_id = azurerm_key_vault.aksvault.id
 
   tenant_id = var.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
+  object_id = var.object_id
 
   secret_permissions = [
       "get",

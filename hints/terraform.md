@@ -16,7 +16,7 @@ You need a service principal for Kubernetes to use - if you do not have, use the
 Try to define a unique but short deployment name - it will be used to define  dns names
 
 ```
-DEPLOYMENT_NAME=dzphoenix
+DEPLOYMENT_NAME=dzenix
 
 AKS_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-aks -o json | jq -r '.appId')
 AKS_SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
@@ -27,6 +27,7 @@ AZDO_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AZDO_SERVICE_PRINCIPAL_ID 
 AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
 AZURE_SUBSCRIPTION_NAME=$(az account show --query name -o tsv)
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+AZURE_MYOWN_OBJECT_ID=$(az ad signed-in-user show --query objectId --output tsv)
 
 echo -e "\n\n Remember these outputs:"
 echo -e "Your Kubernetes service_principal_id should be \e[7m$AKS_SERVICE_PRINCIPAL_ID\e[0m"
@@ -42,7 +43,7 @@ echo -e "\n\n"
 
 1. Your can replace these values in the variable file by running the following
 ```
-sed -e "s/SERVICE_PRINCIPAL_ID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_ID/ ; s/SERVICE_PRINCIPAL_SECRET_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_SECRET/ ; s/SERVICE_PRINCIPAL_OBJECTID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_OBJECTID/ ; s/AZDO_OBJECTID_PLACEHOLDER/$AZDO_SERVICE_PRINCIPAL_OBJECTID/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/" variables.tf.template > variables_mod.tf
+sed -e "s/SERVICE_PRINCIPAL_ID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_ID/ ; s/SERVICE_PRINCIPAL_SECRET_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_SECRET/ ; s/SERVICE_PRINCIPAL_OBJECTID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_OBJECTID/ ; s/AZDO_OBJECTID_PLACEHOLDER/$AZDO_SERVICE_PRINCIPAL_OBJECTID/ ; s/TENANT_ID_PLACEHOLDER/$AZURE_TENANT_ID/ ; s/DEPLOYMENT_NAME/$DEPLOYMENT_NAME/ ; s/SUBSCRIPTION_ID_PLACEHOLDER/$AZURE_SUBSCRIPTION_ID/ ; s/MYOBJECT_ID_PLACEHOLDER/$AZURE_MYOWN_OBJECT_ID/ " variables.tf.template > variables_mod.tf
 ```
 
 

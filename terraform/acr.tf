@@ -9,10 +9,6 @@ provider "azurerm" {
     features {}
 }
 
-# https://www.terraform.io/docs/providers/azurerm/d/client_config.html
-data "azurerm_client_config" "current" {
-}
-
 # random value
 resource "random_integer" "random_int" {
   min = 100
