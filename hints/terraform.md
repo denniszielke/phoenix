@@ -2,12 +2,16 @@
 
 1. prepare terraform execution
 
-navigate to the terraform folder and ensure that all variables have been correctly configured in `variables.tf`
+open up an shell.azure.com
+
 ```
-cd terraform
+git clone https://github.com/denniszielke/phoenix.git
+cd phoenix/terraform
+code .
 ```
 
-1. Create a sp for terraform
+1. Create the service principals for AKS and Azure DevOps.
+You need a service principal for your azure devops service connection that it can use to authenticate to your azure subscription.
 You need a service principal for Kubernetes to use - if you do not have, use the following command to creat one, get a secret and your azure tenant id and subscription id by running the following azure cli commands:
 
 ```
@@ -41,7 +45,7 @@ sed -e "s/SERVICE_PRINCIPAL_ID_PLACEHOLDER/$AKS_SERVICE_PRINCIPAL_ID/ ; s/SERVIC
 ```
 
 
-1. initialize the terraform state storage account
+1. initialize the terraform state
 ```
 terraform init
 ```
@@ -61,25 +65,13 @@ terraform plan -out out.plan
 - Azure Container Insights
 - Azure KeyVault
 - Variables for Azure Container Registry, Application Insights and Azure Redis inside the Azure KeyVault as secrets
-- Permission assignments on ACR, Keyvault (your terratorm app needs owner permissions on the subscription for that)
+- Permission assignments on ACR, Keyvault (your azure devops service principals needs permissions on these resources for that)
 - Nginx Ingress Controller in AKS
 
 1. trigger the deployment
 apply the execution plan
 ```
 terraform apply out.plan
-```
-
-1. Assign your azure devops service principals in the service connection to your azure keyvauls
-```
-az keyvault list --query '[].{Id:id}' -o tsv
-```
-
-open up all your keyvauls in a browser
-```
-for f in $(az keyvault list --query '[].{Id:id}' -o tsv); do
-  open "https://portal.azure.com/#resource$f/access_policies"
-done
 ```
 
 1. optionally you can create another environment using the following process:
