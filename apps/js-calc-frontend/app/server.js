@@ -86,11 +86,13 @@ app.post('/api/calculation', function(req, res) {
                 }
                 console.log("cache hit");
 
-                reply.frontendHost = OS.hostname();
-                reply.frontendVersion = config.version;
+                var calcResult = JSON.parse(reply); 
 
-                res.send(reply);            
-                console.log(reply);                
+                var response = { host: OS.hostname(), version: config.version, 
+                    backend: { host: calcResult.host, version: calcResult.version, value: calcResult.value, remote: calcResult.remote, timestamp: calcResult.timestamp } };
+    
+                console.log(response);
+                res.send(response);              
             }else{
                 console.log(err);
                 console.log("cache miss");
@@ -127,11 +129,13 @@ app.post('/api/calculation', function(req, res) {
                         console.log(reply);
                     });
 
-                    body.frontendHost = OS.hostname();
-                    body.frontendVersion = config.version;
-                            
-                    console.log(body);
-                    res.send(body);
+                    var calcResult = JSON.parse(body); 
+
+                    var response = { host: OS.hostname(), version: config.version, 
+                        backend: { host: calcResult.host, version: calcResult.version, value: calcResult.value, remote: calcResult.remote, timestamp: calcResult.timestamp } };
+        
+                    console.log(response);
+                    res.send(response);
                 });    
             }
         });

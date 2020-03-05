@@ -23,14 +23,16 @@ AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
 AZURE_SUBSCRIPTION_NAME=$(az account show --query name -o tsv)
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 
-echo "Your Kubernetes service_principal_id should be $AKS_SERVICE_PRINCIPAL_ID"
-echo "Your Kubernetes service_principal_secret should be $AKS_SERVICE_PRINCIPAL_SECRET"
-echo "Your Azure DevOps service_principal_id should be $AZDO_SERVICE_PRINCIPAL_ID"
-echo "Your Azure DevOps service_principal_secret should be $AZDO_SERVICE_PRINCIPAL_SECRET"
-echo "Your Azure tenant_id should be $AZURE_TENANT_ID"
-echo "Your Azure subscription_id should be $AZURE_SUBSCRIPTION_ID"
-echo "Your Azure subscription_name should be $AZURE_SUBSCRIPTION_NAME"
-echo "Your Azure DevOps Service Connection name should be defaultAzure"
+echo -e "\n\n Remember these outputs:"
+echo -e "Your Kubernetes service_principal_id should be \e[7m$AKS_SERVICE_PRINCIPAL_ID\e[0m"
+echo -e "Your Kubernetes service_principal_secret should be \e[7m$AKS_SERVICE_PRINCIPAL_SECRET\e[0m"
+echo -e "Your Azure DevOps service_principal_id should be \e[7m$AZDO_SERVICE_PRINCIPAL_ID\e[0m"
+echo -e "Your Azure DevOps service_principal_secret should be \e[7m$AZDO_SERVICE_PRINCIPAL_SECRET\e[0m"
+echo -e "Your Azure tenant_id should be \e[7m$AZURE_TENANT_ID\e[0m"
+echo -e "Your Azure subscription_id should be \e[7m$AZURE_SUBSCRIPTION_ID\e[0m"
+echo -e "Your Azure subscription_name should be \e[7m$AZURE_SUBSCRIPTION_NAME\e[0m"
+echo -e "Your Azure DevOps Service Connection name should be \e[7mdefaultAzure\e[0m"
+echo -e "\n\n"
 ```
 
 1. Your can replace these values in the variable file by running the following
