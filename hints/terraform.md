@@ -13,6 +13,7 @@ code .
 1. Create the service principals for AKS and Azure DevOps.
 You need a service principal for your azure devops service connection that it can use to authenticate to your azure subscription.
 You need a service principal for Kubernetes to use - if you do not have, use the following command to creat one, get a secret and your azure tenant id and subscription id by running the following azure cli commands:
+Try to define a unique but short deployment name - it will be used to define  dns names
 
 ```
 DEPLOYMENT_NAME=dzphoenix
