@@ -9,7 +9,7 @@ check_canary_slot () {
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
         if [ "$CANARY_SLOT" == "blue" ]; then 
             PRODUCTION_SLOT="green"
-        elif [ "$CANARY_SLOT" == "green" ];
+        elif [ "$CANARY_SLOT" == "green" ]; then
             PRODUCTION_SLOT="blue"
         else
             PRODUCTION_SLOT="none"
@@ -53,23 +53,6 @@ CANARY_SLOT="none"
 PRODUCTION_SLOT="none"
 
 check_canary_slot "blue"
-check_canary_slot "green"
-
-if [ "$CANARY_SLOT" !=  "none" ]; then 
-echo "Canary $CANARY_SLOT will be promoted to production"
-DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
-RELEASE=$CANARY_SLOT-calculator
-helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=false --wait --timeout 45s
-
-if [ "$PRODUCTION_SLOT" !=  "none" ]; then 
-echo "Production $PRODUCTION_SLOT will be deleted"
-DEPLOY_NAMESPACE=$PRODUCTION_SLOT-$KUBERNETES_NAMESPACE
-RELEASE=$PRODUCTION_SLOT-calculator
-helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
-fi
-
-fi
-
 check_canary_slot "green"
 
 if [ "$CANARY_SLOT" !=  "none" ]; then 
