@@ -42,4 +42,4 @@ az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
 build_push_container "js-calc-backend"
 build_push_container "js-calc-frontend"
 
-package_push_helmchart "multicalculatorbg"
+package_push_helmchart "multicalculatorcanary"

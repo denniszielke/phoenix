@@ -5,9 +5,19 @@ metadata:
   name: {{ include "multicalculatorcanary.fullname" . }}
   labels:
     {{- include "multicalculatorcanary.labels" . | nindent 4 }}
+  {{- if .Values.ingress.canary }}
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "canary"
+    nginx.ingress.kubernetes.io/canary-weight: "{{ .Values.ingress.weight }}"
+  {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
 {{- if .Values.ingress.tls }}
