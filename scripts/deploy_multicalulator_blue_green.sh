@@ -88,11 +88,23 @@ else
     SLOT="green"
 fi
 
+if [ "$GREEN_VERSION" == "0" ]; then 
+    NOCANARY="true"
+fi
+
+if [ "$BLUE_VERSION" == "0" ]; then 
+    NOCANARY="true"
+fi
+
 DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$SLOT-calculator
 kubectl create ns $DEPLOY_NAMESPACE
 
+if [ "$NOCANARY" == "true" ]; then 
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --wait --timeout 45s
+else
 helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=true --set ingress.weigth=0  --wait --timeout 45s
+fi
 
 echo "check canary under $INGRESS_FQDN"
 curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping

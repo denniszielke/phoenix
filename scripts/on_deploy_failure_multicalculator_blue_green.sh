@@ -33,6 +33,13 @@ KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vaul
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
+echo "Authenticating with azure container registry..."
+az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
+az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
+az acr helm repo add
+helm repo update
+helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary
+
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
