@@ -63,10 +63,12 @@ check_canary_slot "blue"
 check_canary_slot "green"
 
 if [ "$CANARY_SLOT" != "none" ]; then 
-echo "Canary $CANARY_SLOT will be deleted to production"
+echo "Looks good!"
+echo "Canary $CANARY_SLOT will be promoted to production"
 fi
 
 if [ "$PRODUCTION_SLOT" != "none" ]; then 
+echo "Looks good!"
 echo "Production $PRODUCTION_SLOT will be deleted to production"
 fi
 
