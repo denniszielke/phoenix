@@ -1,0 +1,195 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "multicalculatorcanary.fullname" . }}-frontend
+  labels:
+    {{- include "multicalculatorcanary.labels" . | nindent 4 }}
+    role: frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "multicalculatorcanary.selectorLabels" . | nindent 6 }}
+      role: frontend
+  template:
+    metadata:
+      labels:
+        {{- include "multicalculatorcanary.selectorLabels" . | nindent 8 }}
+        role: frontend
+    spec:
+      serviceAccountName: {{ include "multicalculatorcanary.serviceAccountName" . }}
+      containers:
+        - name: calc-frontend
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.frontendImage }}:{{ .Values.image.frontendTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+          - name: version
+            mountPath: /home/node/app/version
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          env: 
+            - name: "ENDPOINT"
+              value: "{{ include "multicalculatorcanary.fullname" . }}-backend-svc"
+{{- if .Values.introduceRandomResponseLag }}
+            - name: "LAGGY"
+              value: "{{ .Values.introduceRandomResponseLagValue }}"
+            - name: "BUGGY"
+              value: "true"
+{{- end }}
+{{- if .Values.dependencies.useAppInsights }}
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multicalculatorcanary.fullname" . }}-appin-secret
+                  key: appinsightskey
+{{- end }}
+            - name: "PORT"
+              value: "8080"
+{{- if .Values.dependencies.usePodRedis }}
+            - name: "REDIS_HOST"
+              value: "localhost"
+            - name: "REDIS_AUTH"
+              value: "MySuperSecretRedis"
+{{- else }}
+{{- if .Values.dependencies.useAzureRedis }}
+            - name: "REDIS_HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multicalculatorcanary.fullname" . }}-redis-secret
+                  key: redishostkey
+            - name: "REDIS_AUTH"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multicalculatorcanary.fullname" . }}-redis-secret
+                  key: redisauthkey
+{{- end }}
+{{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+{{- if .Values.dependencies.usePodRedis }}
+        - name: redis
+          image: redis:4.0.11-alpine
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--requirepass", "MySuperSecretRedis"]
+          ports:
+            - containerPort: 6379
+              name: redis
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}          
+      volumes:
+      - name: version
+        configMap:
+          name: {{ include "multicalculatorcanary.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "multicalculatorcanary.fullname" . }}-backend
+  labels:
+    {{- include "multicalculatorcanary.labels" . | nindent 4 }}
+    role: backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "multicalculatorcanary.selectorLabels" . | nindent 6 }}
+      role: backend
+  template:
+    metadata:
+      labels:
+        {{- include "multicalculatorcanary.selectorLabels" . | nindent 8 }}
+        role: backend
+    spec:
+      serviceAccountName: {{ include "multicalculatorcanary.serviceAccountName" . }}
+      containers:
+        - name: calc-backend
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.backendImage }}:{{ .Values.image.backendTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+          - name: version
+            mountPath: /home/node/app/version
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          env: 
+{{- if .Values.introduceRandomResponseLag }}
+            - name: "LAGGY"
+              value: "{{ .Values.introduceRandomResponseLagValue }}"
+            - name: "BUGGY"
+              value: "true"
+{{- end }}
+{{- if .Values.dependencies.useAppInsights }}
+            - name: "INSTRUMENTATIONKEY"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "multicalculatorcanary.fullname" . }}-appin-secret
+                  key: appinsightskey
+{{- end }}
+            - name: "PORT"
+              value: "8080"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}           
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: version
+        configMap:
+          name: {{ include "multicalculatorcanary.fullname" . }}  
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

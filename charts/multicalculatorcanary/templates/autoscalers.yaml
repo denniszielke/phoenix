@@ -1,0 +1,33 @@
+{{- if .Values.horizonalPodAutoscaler }}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "multicalculatorcanary.fullname" . }}-backend-hpa
+  labels:
+    {{- include "multicalculatorcanary.labels" . | nindent 4 }}
+    role: backend
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ include "multicalculatorcanary.fullname" . }}-backend
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "multicalculatorcanary.fullname" . }}-frontend-hpa
+  labels:
+    {{- include "multicalculatorcanary.labels" . | nindent 4 }}
+    role: frontend
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ include "multicalculatorcanary.fullname" . }}-frontend
+  targetCPUUtilizationPercentage: 40
+{{- end }}

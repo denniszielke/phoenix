@@ -29,7 +29,9 @@ app.use(express.static(publicDir));
 // Routes
 app.get('/ping', function(req, res) {
     console.log('received ping');
-    res.send('Pong');
+    var pong = { response: "pong!", host: OS.hostname(), version: config.version };
+    console.log(pong);
+    res.send(pong);
 });
 
 app.get('/healthz', function(req, res) {
