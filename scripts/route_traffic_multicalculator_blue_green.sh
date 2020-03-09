@@ -55,11 +55,11 @@ PRODUCTION_SLOT="none"
 check_canary_slot "blue"
 check_canary_slot "green"
 
-if [ "$CANARY_SLOT" -ne "none" ]; then 
+if [ "$CANARY_SLOT" != "none" ]; then 
 echo "Canary $CANARY_SLOT will be deleted to production"
 fi
 
-if [ "$PRODUCTION_SLOT" -ne "none" ]; then 
+if [ "$PRODUCTION_SLOT" != "none" ]; then 
 echo "Production $PRODUCTION_SLOT will be deleted to production"
 fi
 

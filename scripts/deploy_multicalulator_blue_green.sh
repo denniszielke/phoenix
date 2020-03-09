@@ -29,6 +29,9 @@ check_canary_slot () {
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
         echo -e "Found $SLOT canary release in $1"
+        echo "Canary $CANARY_SLOT will be deleted"
+        helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
+        sleep 10
     else 
         echo -e "Found no canary release in $1"
     fi 
@@ -63,17 +66,8 @@ helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
-CANARY_SLOT="none"
-
 check_canary_slot "blue"
 check_canary_slot "green"
-
-if [ "$CANARY_SLOT" !=  "none" ]; then 
-echo "Canary $CANARY_SLOT will be deleted"
-DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
-RELEASE=$CANARY_SLOT-calculator
-helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
-fi
 
 BLUE_VERSION=0
 GREEN_VERSION=0
