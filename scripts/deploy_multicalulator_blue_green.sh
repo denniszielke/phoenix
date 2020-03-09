@@ -4,7 +4,7 @@ get_release_version () {
     DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
-    
+    helm list -n $DEPLOY_NAMESPACE -o table
     DEPLOYMENT=$(helm list -n $DEPLOY_NAMESPACE -o json | jq -r)
     VERSION="0"
     if [ "$DEPLOYMENT" == "[]" ]; then 
@@ -17,6 +17,20 @@ get_release_version () {
             VERSION=$(echo $DEPLOYMENT | jq -r ".[0].app_version" | cut -d. -f3)
             echo -e "deployment version for $1 is $VERSION"
         fi
+    fi 
+}
+
+check_canary_slot () {
+    DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
+    RELEASE=$1-calculator
+    echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
+    helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary')
+    if [ "$CANARY" == "true" ]; then 
+        CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
+        echo -e "Found $SLOT canary release in $1"
+    else 
+        echo -e "Found no canary release in $1"
     fi 
 }
 
@@ -49,6 +63,18 @@ helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
+CANARY_SLOT="none"
+
+check_canary_slot "blue"
+check_canary_slot "green"
+
+if [ "$CANARY_SLOT" !=  "none" ]; then 
+echo "Canary $CANARY_SLOT will be deleted"
+DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
+RELEASE=$CANARY_SLOT-calculator
+helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
+fi
+
 BLUE_VERSION=0
 GREEN_VERSION=0
 get_release_version "blue"
@@ -74,7 +100,7 @@ kubectl create ns $DEPLOY_NAMESPACE
 
 helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=true --set ingress.weigth=0  --wait --timeout 45s
 
-
+echo "check canary under $INGRESS_FQDN"
 curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
 curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
 

@@ -3,7 +3,7 @@ check_canary_slot () {
     DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
-    
+    helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
     CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary')
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
@@ -37,6 +37,7 @@ INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
+echo "waiting for 10 seconds to allow deployment to settle"
 sleep 10
 
 echo "Checking production curl http://$INGRESS_FQDN/ping"
