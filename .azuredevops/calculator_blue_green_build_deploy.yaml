@@ -144,3 +144,18 @@ stages:
                 azureSubscription: $(azureSubscriptionConnectionName)
                 scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
+           success:
+            steps:
+            - download: current
+              artifact: scripts
+            - task: HelmInstaller@0
+              displayName: 'Install Helm $(helmVersion)'
+              inputs:
+                helmVersion: $(helmVersion)
+                checkLatestHelmVersion: false
+            - task: AzureCLI@1
+              displayName: 'run cleanup script'
+              inputs:
+                azureSubscription: $(azureSubscriptionConnectionName)
+                scriptPath: '../scripts/on_deploy_success_multicalculator_blue_green.sh'
+                workingDirectory: '$(Pipeline.Workspace)'

@@ -45,9 +45,12 @@ check_canary_slot "blue"
 check_canary_slot "green"
 
 if [ "$CANARY_SLOT" -ne "none" ]; then 
-echo "Canary $CANARY_SLOT will be promoted to production"
+echo "Canary $CANARY_SLOT will be deleted"
+DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
+RELEASE=$CANARY_SLOT-calculator
+helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
 fi
 
 if [ "$PRODUCTION_SLOT" -ne "none" ]; then 
-echo "Production $PRODUCTION_SLOT will be deleted to production"
+echo "Production $PRODUCTION_SLOT will be kept"
 fi

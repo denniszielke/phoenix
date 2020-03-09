@@ -32,21 +32,11 @@ echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
 sleep 10
-
-echo "Checking production curl http://$INGRESS_FQDN/ping"
-curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
-
-echo "Checking staging slot curl http://$INGRESS_FQDN/ping"
-curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
-
-echo "Your app is publicly reachable under http://$INGRESS_FQDN"
-
 
 CANARY_SLOT="none"
 PRODUCTION_SLOT="none"
@@ -55,11 +45,15 @@ check_canary_slot "blue"
 check_canary_slot "green"
 
 if [ "$CANARY_SLOT" -ne "none" ]; then 
-echo "Canary $CANARY_SLOT will be deleted to production"
+echo "Canary $CANARY_SLOT will be promoted to production"
+DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
+RELEASE=$CANARY_SLOT-calculator
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=false --wait --timeout 45s
 fi
 
 if [ "$PRODUCTION_SLOT" -ne "none" ]; then 
-echo "Production $PRODUCTION_SLOT will be deleted to production"
+echo "Production $PRODUCTION_SLOT will be deleted"
+DEPLOY_NAMESPACE=$PRODUCTION_SLOT-$KUBERNETES_NAMESPACE
+RELEASE=$PRODUCTION_SLOT-calculator
+helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
 fi
-
-
