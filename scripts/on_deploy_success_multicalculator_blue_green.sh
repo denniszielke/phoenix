@@ -56,7 +56,6 @@ echo "Canary $CANARY_SLOT will be promoted to production"
 DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$CANARY_SLOT-calculator
 helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=false --wait --timeout 45s
-fi
 
 if [ "$PRODUCTION_SLOT" !=  "none" ]; then 
 echo "Production $PRODUCTION_SLOT will be deleted"
@@ -64,3 +63,7 @@ DEPLOY_NAMESPACE=$PRODUCTION_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$PRODUCTION_SLOT-calculator
 helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
 fi
+
+fi
+
+
