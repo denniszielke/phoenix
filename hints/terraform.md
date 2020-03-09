@@ -16,7 +16,7 @@ You need a service principal for Kubernetes to use - if you do not have, use the
 Try to define a unique but short deployment name - it will be used to define  dns names
 
 ```
-DEPLOYMENT_NAME=dzenix
+DEPLOYMENT_NAME=dztenix
 
 AKS_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-aks -o json | jq -r '.appId')
 AZDO_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-azdo -o json | jq -r '.appId')
