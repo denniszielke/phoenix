@@ -1,4 +1,23 @@
 #!/bin/bash
+check_canary_slot () {
+    DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
+    RELEASE=$1-calculator
+    echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
+    
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary')
+    if [ "$CANARY" == "true" ]; then 
+        CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
+        if [ "$CANARY_SLOT" == "blue" ]; then 
+            PRODUCTION_SLOT="green"
+        else
+            PRODUCTION_SLOT="blue"
+        fi
+        echo -e "Found $SLOT canary release in $1"
+    else 
+        echo -e "Found no canary release in $1"
+    fi 
+}
+
 echo "Starting failure cleanup"
 echo "AGENT_WORKFOLDER is $AGENT_WORKFOLDER"
 echo "AGENT_WORKFOLDER contents:"
@@ -17,9 +36,18 @@ AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVA
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
-echo "Ensuring kubernetes namespace $KUBERNETES_NAMESPACE"
-kubectl get namespace
-kubectl create namespace $KUBERNETES_NAMESPACE
+sleep 10
 
-echo "Rollback helm release to previous release"
-helm rollback calculator --namespace $KUBERNETES_NAMESPACE 0
+CANARY_SLOT="none"
+PRODUCTION_SLOT="none"
+
+check_canary_slot "blue"
+check_canary_slot "green"
+
+if [ "$CANARY_SLOT" -ne "none" ]; then 
+echo "Canary $CANARY_SLOT will be promoted to production"
+fi
+
+if [ "$PRODUCTION_SLOT" -ne "none" ]; then 
+echo "Production $PRODUCTION_SLOT will be deleted to production"
+fi
