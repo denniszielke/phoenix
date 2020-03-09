@@ -12,7 +12,7 @@ get_release_version () {
         VERSION="0"
     else 
         echo "Found $DEPLOYMENT"
-        STATUS=$(echo $DEPLOYMENT | jq -r ".[0].status")
+        STATUS=$(helm list -n $DEPLOY_NAMESPACE -o json | jq -r ".[0].status")
         echo -e "deployment status for $1 is $STATUS"
         if [ "$STATUS" == "deployed" ]; then 
             VERSION=$(echo $DEPLOYMENT | jq -r ".[0].app_version" | cut -d. -f3)
