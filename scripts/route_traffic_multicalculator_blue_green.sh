@@ -12,7 +12,10 @@ echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 
 INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
-echo "curl http://$INGRESS_FQDN/ping"
-curl http://$INGRESS_FQDN/ping
+echo "Checking production curl http://$INGRESS_FQDN/ping"
+curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
+
+echo "Checking staging slot curl http://$INGRESS_FQDN/ping"
+curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
 
 echo "Your app is publicly reachable under http://$INGRESS_FQDN"

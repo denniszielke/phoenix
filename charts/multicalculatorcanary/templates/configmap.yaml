@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  info.txt: "{{ .Chart.AppVersion }}"
+  info.txt: "{{ .Values.slot }} - {{ .Chart.AppVersion }}"
 kind: ConfigMap
 metadata:
   name: {{ include "multicalculatorcanary.fullname" . }}

@@ -1,5 +1,6 @@
 replicaCount: 2
 horizonalPodAutoscaler: false
+slot: default
 
 image:
   repository: denniszielke

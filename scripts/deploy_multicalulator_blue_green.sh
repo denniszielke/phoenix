@@ -3,23 +3,21 @@
 get_release_version () {
     DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
     RELEASE=$1-calculator
-    echo "Starting checking release $1 in $DEPLOY_NAMESPACE ..."
+    echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
     
     DEPLOYMENT=$(helm list -n $DEPLOY_NAMESPACE -o json | jq -r)
-    VERSION=0
-    if [ $DEPLOYMENT = "[]" ]; then 
-        echo "Found no release for $1"
-        VERSION=0
+    VERSION="0"
+    if [ "$DEPLOYMENT" == "[]" ]; then 
+        echo -e "Found no release for $1"
+        VERSION="0"
     else 
         STATUS=$(echo $DEPLOYMENT | jq -r ".[0].status")
-        echo "deployment status for $1 is $STATUS"
-        if [ $STATUS == "deployed"]; then 
+        echo -e "deployment status for $1 is $STATUS"
+        if [ "$STATUS" == "deployed" ]; then 
             VERSION=$(echo $DEPLOYMENT | jq -r ".[0].app_version" | cut -d. -f3)
-            echo "deployment version for $1 is $VERSION"
+            echo -e "deployment version for $1 is $VERSION"
         fi
     fi 
-
-   return $VERSION
 }
 
 echo "Starting release"
@@ -33,44 +31,49 @@ AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 
-# REDIS_HOST=$(az keyvault secret show --name "redis-host" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# REDIS_AUTH=$(az keyvault secret show --name "redis-access" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# APPINSIGHTS_KEY=$(az keyvault secret show --name "appinsights-key" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-# AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+REDIS_HOST=$(az keyvault secret show --name "redis-host" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+REDIS_AUTH=$(az keyvault secret show --name "redis-access" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+APPINSIGHTS_KEY=$(az keyvault secret show --name "appinsights-key" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
-# echo "Authenticating with azure container registry..."
-# az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
-# az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
-# az acr helm repo add
-# helm repo update
-# helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorbg
+echo "Authenticating with azure container registry..."
+az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
+az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME
+az acr helm repo add
+helm repo update
+helm search repo -l $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary
 
-# echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
-# az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
+echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
+az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
-BLUE_VERSION=get_release_version "blue"
-echo $BLUE_VERSION
-GREEN_VERSION=get_release_version "green"
-echo $GREEN_VERSION
+BLUE_VERSION=0
+GREEN_VERSION=0
+get_release_version "blue"
+BLUE_VERSION=$VERSION
 
-# echo "Ensuring kubernetes namespace $KUBERNETES_NAMESPACE"
-# kubectl get namespace
-# kubectl create namespace $KUBERNETES_NAMESPACE
+get_release_version "green"
+GREEN_VERSION=$VERSION
 
-# echo "Deploying helm release"
-# helm upgrade calculator $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorbg --namespace $KUBERNETES_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set blue.enabled=true --set production=blue --set ingress.host=$INGRESS_FQDN --wait --timeout 45s
+echo "Green is $GREEN_VERSION"
+echo "Blue is $BLUE_VERSION"
 
-# echo "Checking blue release slot"
-# SLOT=green
-# DEPLOY_NAMESPACE=calc-$KUBERNETES_NAMESPACE
-# RELEASE=$SLOT-calculator
+if [ "$GREEN_VERSION" -gt "$BLUE_VERSION" ]; then 
+    echo "Green is higher than blue - deploying blue"
+    SLOT="blue"
+else
+    echo "Blue is higher than green - deploying green"
+    SLOT="green"
+fi
+
+DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
+RELEASE=$SLOT-calculator
+kubectl create ns $DEPLOY_NAMESPACE
+
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=1 --set slot=$SLOT --set ingress.host=$INGRESS_FQDN --set ingress.canary=true --set ingress.weigth=0  --wait --timeout 45s
 
 
-
-
-#--set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set ingress.host=$INGRESS_FQDN --wait --timeout 45s
-
-#helm upgrade calculator multicalculatorcanary --namespace $KUBERNETES_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set blue.enabled=true --set production=blue --set ingress.host=$INGRESS_FQDN --wait --timeout 45s
+curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
+curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
