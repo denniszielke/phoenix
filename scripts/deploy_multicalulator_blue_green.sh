@@ -89,11 +89,9 @@ else
 fi
 
 if [ "$GREEN_VERSION" == "0" ]; then 
-    NOCANARY="true"
-fi
-
 if [ "$BLUE_VERSION" == "0" ]; then 
     NOCANARY="true"
+fi
 fi
 
 DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
