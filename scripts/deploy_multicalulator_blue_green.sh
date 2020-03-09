@@ -11,6 +11,7 @@ get_release_version () {
         echo -e "Found no release for $1"
         VERSION="0"
     else 
+        echo "Found $DEPLOYMENT"
         STATUS=$(echo $DEPLOYMENT | jq -r ".[0].status")
         echo -e "deployment status for $1 is $STATUS"
         if [ "$STATUS" == "deployed" ]; then 
