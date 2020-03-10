@@ -25,7 +25,7 @@ check_canary_slot () {
     DEPLOY_NAMESPACE=$1-$KUBERNETES_NAMESPACE
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
-    helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
+    #helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
     CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary')
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
