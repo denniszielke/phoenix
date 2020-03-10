@@ -46,15 +46,15 @@ az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
 echo "waiting for 10 seconds to allow deployment to settle"
 sleep 10
-
+echo ""
 echo "Checking production curl http://$INGRESS_FQDN/ping"
 curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
-
+echo ""
 echo "Checking staging slot curl http://$INGRESS_FQDN/ping"
 curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping
-
+echo ""
 echo "Your app is publicly reachable under http://$INGRESS_FQDN"
-
+echo ""
 
 CANARY_SLOT="none"
 PRODUCTION_SLOT="none"
