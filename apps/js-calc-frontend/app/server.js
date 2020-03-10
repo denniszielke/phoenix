@@ -10,6 +10,9 @@ if (config.instrumentationKey){
     appInsights.start();
 }
 var client = appInsights.defaultClient;
+client.commonProperties = {
+	version: config.version
+};
 
 const express = require('express');
 const app = express();
