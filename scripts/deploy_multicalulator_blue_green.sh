@@ -105,6 +105,7 @@ fi
 
 echo "check canary under $INGRESS_FQDN"
 echo "INGRESS_FQDN=$INGRESS_FQDN"
+echo "done"
 # echo $("curl -s -H "canary: never" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping")
 # echo $('curl -s -H "canary: always" -H "Host: $INGRESS_FQDN" http://$INGRESS_FQDN/ping')
 
