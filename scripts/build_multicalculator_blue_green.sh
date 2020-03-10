@@ -20,13 +20,8 @@ package_push_helmchart () {
 }
 
 echo "Starting build"
-echo "Argument is $1"
 echo "AGENT_WORKFOLDER is $AGENT_WORKFOLDER"
-echo "AGENT_WORKFOLDER contents:"
-ls -1 $AGENT_WORKFOLDER
 echo "AGENT_BUILDDIRECTORY is $AGENT_BUILDDIRECTORY"
-echo "AGENT_BUILDDIRECTORY contents:"
-ls -1 $AGENT_BUILDDIRECTORY
 echo "SYSTEM_HOSTTYPE is $SYSTEM_HOSTTYPE"
 echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_BUILDID"
 echo "Build Sources Folder is $BUILD_SOURCESDIRECTORY"
@@ -34,7 +29,6 @@ echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY_NAME"
 AZURE_CONTAINER_REGISTRY_URL=$AZURE_CONTAINER_REGISTRY_NAME.azurecr.io
 echo "Azure Container Registry Url is $AZURE_CONTAINER_REGISTRY_URL"
 cd $BUILD_SOURCESDIRECTORY
-ls -l
 echo "Pushing images to $AZURE_CONTAINER_REGISTRY_URL"
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
 az configure --defaults acr=$AZURE_CONTAINER_REGISTRY_NAME

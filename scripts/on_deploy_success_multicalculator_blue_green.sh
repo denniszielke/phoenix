@@ -11,21 +11,15 @@ check_canary_slot () {
             PRODUCTION_SLOT="green"
         elif [ "$CANARY_SLOT" == "green" ]; then
             PRODUCTION_SLOT="blue"
-        else
-            PRODUCTION_SLOT="none"
         fi
         echo -e "Found $CANARY_SLOT canary release in $1"
     else 
-        CANARY_SLOT="none"
-        PRODUCTION_SLOT="none"
         echo -e "Found no canary release in $1"
     fi 
 }
 
 echo "Starting failure cleanup"
 echo "AGENT_WORKFOLDER is $AGENT_WORKFOLDER"
-echo "AGENT_WORKFOLDER contents:"
-ls -1 $AGENT_WORKFOLDER
 echo "SYSTEM_HOSTTYPE is $SYSTEM_HOSTTYPE"
 echo "Build Id is $BUILD_BUILDNUMBER and $BUILD_BUILDID"
 echo "Azure Container Registry is $AZURE_CONTAINER_REGISTRY_NAME"

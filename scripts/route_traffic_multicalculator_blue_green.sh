@@ -9,10 +9,10 @@ check_canary_slot () {
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot')
         if [ "$CANARY_SLOT" == "blue" ]; then 
             PRODUCTION_SLOT="green"
-        else
+        elif [ "$CANARY_SLOT" == "green" ]; then
             PRODUCTION_SLOT="blue"
         fi
-        echo -e "Found $SLOT canary release in $1"
+        echo -e "Found $CANARY_SLOT canary release in $1"
     else 
         echo -e "Found no canary release in $1"
     fi 
