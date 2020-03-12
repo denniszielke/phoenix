@@ -72,6 +72,7 @@ terraform plan -out out.plan
 - Variables for Azure Container Registry, Application Insights and Azure Redis inside the Azure KeyVault as secrets
 - Permission assignments on ACR, Keyvault (your azure devops service principals needs permissions on these resources for that)
 - Nginx Ingress Controller in AKS
+- Traffic Manager Profile
 
 1. trigger the deployment
 apply the execution plan
@@ -93,6 +94,9 @@ ACR_RG_ID=$(az group show -n $DEPLOYMENT_NAME --query id -o tsv)
 ACR_ID=$(az acr list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
 ACR_AKS_ID=$(az role assignment list --scope $ACR_ID --assignee $AKS_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
 ACR_AZDO_ID=$(az role assignment list --scope $ACR_ID --assignee $AZDO_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
+ATF_ID=$(az role assignment list --scope $ACR_ID --assignee $AZDO_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
+-g $DEPLOYMENT_NAME
+ATF_ID=$(az network traffic-manager profile list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
 
 terraform init
 echo "importing existing azure container registry"
@@ -100,6 +104,7 @@ terraform import azurerm_resource_group.acrrg $ACR_RG_ID
 terraform import azurerm_container_registry.aksacr $ACR_ID
 terraform import azurerm_role_assignment.aksacrrole $ACR_AKS_ID
 terraform import azurerm_role_assignment.azdoacrrole $ACR_AZDO_ID
+terraform import azurerm_traffic_manager_profile.shared_traffic $ATF_ID
 
 echo "redeploying"
 terraform plan -out out.plan

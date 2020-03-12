@@ -59,6 +59,84 @@ resource "azurerm_subnet" "aksnet" {
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 
+resource "azurerm_public_ip" "appgw_ip" {
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-appgwpip"
+  resource_group_name = azurerm_resource_group.aksrg.name
+  location            = azurerm_resource_group.aksrg.location
+  allocation_method   = "Dynamic"
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/application_gateway.html
+resource "azurerm_application_gateway" "appgw" {
+  name                = "${var.dns_prefix}-${random_integer.random_int.result}-appgw"
+  resource_group_name = azurerm_resource_group.aksrg.name
+  location            = azurerm_resource_group.aksrg.location
+
+  sku {
+    name     = "Standard_Small"
+    tier     = "Standard"
+    capacity = 2
+  }
+
+  gateway_ip_configuration {
+    name      = "my-gateway-ip-configuration"
+    subnet_id = azurerm_subnet.gwnet.id
+  }
+
+  frontend_port {
+    name = "frontend-port-name"
+    port = 80
+  }
+
+  frontend_ip_configuration {
+    name                 = "frontend-config-name"
+    public_ip_address_id = azurerm_public_ip.appgw_ip.id
+  }
+
+  backend_address_pool {
+    name = "backend-pool-name"
+    fqdns = ["${azurerm_public_ip.nginx_ingress.ip_address}.xip.io", "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"]
+  }
+
+  backend_http_settings {
+    name                  = "http-setting-name"
+    cookie_based_affinity = "Disabled"
+    path                  = "/"
+    port                  = 80
+    protocol              = "Http"
+    request_timeout       = 1
+    connection_draining {
+      enabled = true
+      drain_timeout_sec = 30
+    }
+  }
+
+  probe {
+    name                = "probe"
+    protocol            = "http"
+    path                = "/"
+    host                = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
+    interval            = "30"
+    timeout             = "30"
+    unhealthy_threshold = "3"
+  }
+
+  http_listener {
+    name                           = "listener-name"
+    frontend_ip_configuration_name = "frontend-config-name"
+    frontend_port_name             = "frontend-port-name"
+    protocol                       = "Http"
+  }
+
+  request_routing_rule {
+    name                       = "routing-rule"
+    rule_type                  = "Basic"
+    http_listener_name         = "listener-name"
+    backend_address_pool_name  = "backend-pool-name"
+    backend_http_settings_name = "http-setting-name"
+  }
+}
+
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-ai"
