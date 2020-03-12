@@ -3,7 +3,7 @@
 build_push_container () {
     echo "Starting to build container $1 ..."
     cd $BUILD_SOURCESDIRECTORY/apps/$1
-    docker build -t $AZURE_CONTAINER_REGISTRY_URL/$1:$BUILD_BUILDNUMBER .
+    docker build -t $AZURE_CONTAINER_REGISTRY_URL/$1:$BUILD_BUILDNUMBER --build-arg appversion="1.0.$BUILD_BUILDID" .
     echo "Completed building $1 container"
     docker push $AZURE_CONTAINER_REGISTRY_URL/$1:$BUILD_BUILDNUMBER
     echo "Completed pusing $1 container"
