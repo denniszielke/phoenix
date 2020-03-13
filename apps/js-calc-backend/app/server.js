@@ -12,7 +12,7 @@ if (config.instrumentationKey){
 }
 var client = appInsights.defaultClient;
 client.commonProperties = {
-	version: config.version
+	slot: config.version
 };
 
 const express = require('express');
