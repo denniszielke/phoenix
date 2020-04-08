@@ -1,0 +1,74 @@
+# Guid of your azure subscription
+variable "subscription_id" {
+    default = "SUBSCRIPTION_ID_PLACEHOLDER"
+}
+
+# Directory id of your azure ad account
+variable "tenant_id" {
+    default = "TENANT_ID_PLACEHOLDER"
+}
+
+# Object id of your ad account
+variable "object_id" {
+    default = "MYOBJECT_ID_PLACEHOLDER"
+}
+
+# Terraform client id
+variable "terraform_serviceprincipal_id" {
+    default = "SERVICE_PRINCIPAL_ID_PLACEHOLDER"
+}
+
+# Terraform client secret
+variable "terraform_serviceprincipal_secret" {
+    default = "SERVICE_PRINCIPAL_SECRET_PLACEHOLDER"
+}
+
+# Kubernetes service principal id
+variable "service_principal_id" {
+    default = "SERVICE_PRINCIPAL_ID_PLACEHOLDER"
+}
+
+# Kubernetes service principal secret
+variable "service_principal_secret" {
+    default = "SERVICE_PRINCIPAL_SECRET_PLACEHOLDER"
+}
+
+# Kubernetes service principal objectid
+variable "service_principal_objectid" {
+    default = "SERVICE_PRINCIPAL_OBJECTID_PLACEHOLDER"
+}
+
+# Azure DevOps service principal objectid
+variable "azdo_service_principal_objectid" {
+    default = "AZDO_OBJECTID_PLACEHOLDER"
+}
+
+# Name your environment
+variable "environment" {
+    default = "dennis"
+}
+
+# Kubernetes Version
+variable "kubernetes_version" {
+    default = "1.16.7"
+}
+
+# Public key
+variable "ssh_public_key" {
+    default = "~/.ssh/id_rsa.pub"
+}
+
+# Your dns prefix
+variable "dns_prefix" {
+    default = "DEPLOYMENT_NAME"
+}
+
+# Kubernetes Resource group
+variable "resource_group_name" {
+    default = "DEPLOYMENT_NAME"
+}
+
+# Deployment location
+variable "location" {
+    default = "WestEurope"
+}

@@ -6,7 +6,7 @@ pool:
 
 variables:
   azureSubscriptionConnectionName: 'defaultAzure'
-  helmVersion: 3.1.0
+  helmVersion: 3.1.2
   AZURE_CONTAINER_REGISTRY_NAME: 'dzenixacr'
 
 stages:

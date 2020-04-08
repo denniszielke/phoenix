@@ -1,12 +1,12 @@
 # Use terraform to deploy all resources
 
-1. prepare terraform execution
+1. prepare terraform execution for the simple deployment
 
 open up an shell.azure.com
 
 ```
 git clone https://github.com/denniszielke/phoenix.git
-cd phoenix/terraform
+cd phoenix/terraform/simple
 code .
 ```
 
@@ -43,6 +43,19 @@ echo -e "Your Azure subscription_name should be \e[7m$AZURE_SUBSCRIPTION_NAME\e[
 echo -e "Your Azure DevOps Service Connection name should be \e[7mdefaultAzure\e[0m"
 echo -e "\n\n"
 ```
+
+echo -e "\n This is the private output in case you want to set them later:"
+echo -e "AKS_SERVICE_PRINCIPAL_ID=$AKS_SERVICE_PRINCIPAL_ID"
+echo -e "AZDO_SERVICE_PRINCIPAL_ID=$AZDO_SERVICE_PRINCIPAL_ID"
+echo -e "AKS_SERVICE_PRINCIPAL_SECRET=$AKS_SERVICE_PRINCIPAL_SECRET"
+echo -e "AZDO_SERVICE_PRINCIPAL_SECRET=$AZDO_SERVICE_PRINCIPAL_SECRET"
+echo -e "AKS_SERVICE_PRINCIPAL_OBJECTID=$AKS_SERVICE_PRINCIPAL_OBJECTID"
+echo -e "AZDO_SERVICE_PRINCIPAL_OBJECTID=$AZDO_SERVICE_PRINCIPAL_OBJECTID"
+echo -e "AZURE_TENANT_ID=$AZURE_TENANT_ID"
+echo -e "AZURE_SUBSCRIPTION_NAME=$AZURE_SUBSCRIPTION_NAME"
+echo -e "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
+echo -e "AZURE_MYOWN_OBJECT_ID=$AZURE_MYOWN_OBJECT_ID"
+echo -e "\n"
 
 1. Your can replace these values in the variable file by running the following
 ```
@@ -94,8 +107,6 @@ ACR_RG_ID=$(az group show -n $DEPLOYMENT_NAME --query id -o tsv)
 ACR_ID=$(az acr list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
 ACR_AKS_ID=$(az role assignment list --scope $ACR_ID --assignee $AKS_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
 ACR_AZDO_ID=$(az role assignment list --scope $ACR_ID --assignee $AZDO_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
-ATF_ID=$(az role assignment list --scope $ACR_ID --assignee $AZDO_SERVICE_PRINCIPAL_OBJECTID --query '[0].id' -o tsv)
--g $DEPLOYMENT_NAME
 ATF_ID=$(az network traffic-manager profile list -g $DEPLOYMENT_NAME --query '[0].id' -o tsv)
 
 terraform init

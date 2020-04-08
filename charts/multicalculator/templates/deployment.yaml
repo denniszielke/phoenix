@@ -58,7 +58,7 @@ spec:
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
-                  name: appinsightsecret
+                  name: {{ include "multicalculator.fullname" . }}-appin-secret
                   key: appinsightskey
 {{- end }}
             - name: "PORT"
@@ -73,12 +73,12 @@ spec:
             - name: "REDIS_HOST"
               valueFrom:
                 secretKeyRef:
-                  name: rediscachesecret
+                  name: {{ include "multicalculator.fullname" . }}-redis-secret
                   key: redishostkey
             - name: "REDIS_AUTH"
               valueFrom:
                 secretKeyRef:
-                  name: rediscachesecret
+                  name: {{ include "multicalculator.fullname" . }}-redis-secret
                   key: redisauthkey
 {{- end }}
 {{- end }}
@@ -170,7 +170,7 @@ spec:
             - name: "INSTRUMENTATIONKEY"
               valueFrom:
                 secretKeyRef:
-                  name: appinsightsecret
+                  name: {{ include "multicalculator.fullname" . }}-appin-secret
                   key: appinsightskey
 {{- end }}
             - name: "PORT"

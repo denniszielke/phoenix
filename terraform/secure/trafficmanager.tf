@@ -4,7 +4,7 @@ resource "azurerm_traffic_manager_profile" "shared_traffic" {
   traffic_routing_method = "Weighted"
 
   dns_config {
-    relative_name = random_id.server.hex
+    relative_name = "${var.dns_prefix}tfm"
     ttl           = 100
   }
 
