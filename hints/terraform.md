@@ -42,7 +42,7 @@ echo -e "Your Azure subscription_id should be \e[7m$AZURE_SUBSCRIPTION_ID\e[0m"
 echo -e "Your Azure subscription_name should be \e[7m$AZURE_SUBSCRIPTION_NAME\e[0m"
 echo -e "Your Azure DevOps Service Connection name should be \e[7mdefaultAzure\e[0m"
 echo -e "\n\n"
-```
+
 
 echo -e "\n This is the private output in case you want to set them later:"
 echo -e "AKS_SERVICE_PRINCIPAL_ID=$AKS_SERVICE_PRINCIPAL_ID"
@@ -56,6 +56,7 @@ echo -e "AZURE_SUBSCRIPTION_NAME=$AZURE_SUBSCRIPTION_NAME"
 echo -e "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 echo -e "AZURE_MYOWN_OBJECT_ID=$AZURE_MYOWN_OBJECT_ID"
 echo -e "\n"
+```
 
 1. Your can replace these values in the variable file by running the following
 ```
