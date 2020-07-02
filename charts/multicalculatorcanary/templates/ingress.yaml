@@ -31,7 +31,7 @@ spec:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-  {{- if .Values.ingress.canary }}
+  {{- if and (.Values.ingress.canary) (eq .Values.ingress.class "azure/application-gateway") }}
           - path: /canary/*
             backend:
               serviceName: {{ include "multicalculatorcanary.fullname" . }}-frontend-svc

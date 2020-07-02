@@ -6,8 +6,8 @@ pool:
 
 variables:
   azureSubscriptionConnectionName: 'defaultAzure'
-  helmVersion: 3.1.2
-  AZURE_CONTAINER_REGISTRY_NAME: 'dztenixacr'
+  helmVersion: 3.2.4
+  AZURE_CONTAINER_REGISTRY_NAME: 'dzphixacr'
 
 stages:
 - stage: Build
@@ -25,12 +25,12 @@ stages:
       displayName: set executable bit
       inputs:
         targetType: 'inline'
-        script: chmod +x scripts/build_multicalculator_blue_green.sh
+        script: chmod +x scripts/build_multicalculator_blue_green_nginx.sh
     - task: AzureCLI@1
       displayName: 'run build script'
       inputs:
         azureSubscription: $(azureSubscriptionConnectionName)
-        scriptPath: scripts/build_multicalculator_blue_green.sh
+        scriptPath: scripts/build_multicalculator_blue_green_nginx.sh
         workingDirectory: '$(Build.SourcesDirectory)'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: scripts'
@@ -46,7 +46,7 @@ stages:
     displayName: run dev1
     environment: dev1
     variables:
-      AZURE_KEYVAULT_NAME: 'dztenix-472-vault'
+      AZURE_KEYVAULT_NAME: 'dzphix-461-vault'
     strategy:
      runOnce:
          deploy:
@@ -60,7 +60,7 @@ stages:
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/deploy_multicalulator_blue_green.sh'
+                scriptPath: '../scripts/deploy_multicalulator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          routeTraffic:
             steps:
@@ -75,7 +75,7 @@ stages:
               displayName: 'run traffic script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/route_traffic_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/route_traffic_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          on:
            failure:
@@ -91,7 +91,7 @@ stages:
               displayName: 'run rollback script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
            success:
             steps:
@@ -106,7 +106,7 @@ stages:
               displayName: 'run cleanup script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/on_deploy_success_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/on_deploy_success_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
 
 - stage: ProdDeploy
@@ -131,7 +131,7 @@ stages:
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/deploy_multicalulator_blue_green.sh'
+                scriptPath: '../scripts/deploy_multicalulator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          routeTraffic:
             steps:
@@ -146,7 +146,7 @@ stages:
               displayName: 'run traffic script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/route_traffic_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/route_traffic_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          on:
            failure:
@@ -162,7 +162,7 @@ stages:
               displayName: 'run rollback script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
            success:
             steps:
@@ -177,5 +177,5 @@ stages:
               displayName: 'run cleanup script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/on_deploy_success_multicalculator_blue_green.sh'
+                scriptPath: '../scripts/on_deploy_success_multicalculator_blue_green_nginx.sh'
                 workingDirectory: '$(Pipeline.Workspace)'

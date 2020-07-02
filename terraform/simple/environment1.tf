@@ -267,6 +267,17 @@ resource "azurerm_key_vault_secret" "public_ip" {
   }
 }
 
+resource "azurerm_key_vault_secret" "appgw_public_ip" {
+  name         = "appgw-fqdn"
+  value        = "${azurerm_public_ip.appgw_ip.id}.xip.io"
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
 resource "azurerm_key_vault_secret" "public_ip_stage" {
   name         = "phoenix-fqdn-stage"
   value        = "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"
