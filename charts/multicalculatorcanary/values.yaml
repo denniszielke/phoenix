@@ -34,6 +34,7 @@ serviceAccount:
 service:
   type: ClusterIP
   port: 80
+  dns: dzblue1
 
 ingress:
   enabled: true
@@ -41,7 +42,7 @@ ingress:
   weight: 0
   tls: false
   class: nginx #azure/application-gateway# traefik
-  host: devapis1.westeurope.cloudapp.azure.com
+  host: 123.3.4.5.xip.io
   annotations: {
     nginx.ingress.kubernetes.io/rewrite-target: /,
     cert-manager.io/cluster-issuer: letsencrypt,
