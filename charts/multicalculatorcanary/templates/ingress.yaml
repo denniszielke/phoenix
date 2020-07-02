@@ -5,8 +5,10 @@ metadata:
   name: {{ include "multicalculatorcanary.fullname" . }}
   labels:
     {{- include "multicalculatorcanary.labels" . | nindent 4 }}
-  {{- if .Values.ingress.canary }}
   annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
+  {{- if .Values.ingress.canary }}
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-by-header: "canary"
     nginx.ingress.kubernetes.io/canary-weight: "{{ .Values.ingress.weight }}"
@@ -15,7 +17,6 @@ metadata:
   {{- end }}
   {{- else }}
   {{- with .Values.ingress.annotations }}
-  annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
@@ -30,8 +31,15 @@ spec:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-          - path:
+  {{- if .Values.ingress.canary }}
+          - path: /canary/*
             backend:
               serviceName: {{ include "multicalculatorcanary.fullname" . }}-frontend-svc
               servicePort: {{ .Values.service.port }}
+  {{- else }}
+          - path: 
+            backend:
+              serviceName: {{ include "multicalculatorcanary.fullname" . }}-frontend-svc
+              servicePort: {{ .Values.service.port }}
+  {{- end }}
 {{- end }}

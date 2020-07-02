@@ -86,7 +86,7 @@ helm get values $APP_IN $APP_IN
 
 1. Change config and perform an upgrade (change the backend image to to the go version and/or add application insights)
 ```
-helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install
+helm upgrade $APP_IN ./multicalculator --namespace $APP_NS --install --set replicaCount=4  --set dependencies.useAppInsights=false --set dependencies.usePodRedis=true --set service.type=LoadBalancer 
 ```
 
 1. Change config and perform an upgrade (add application insights to your app)

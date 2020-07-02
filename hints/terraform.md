@@ -16,8 +16,8 @@ You need a service principal for Kubernetes to use - if you do not have, use the
 Try to define a unique but short deployment name - it will be used to define  dns names
 
 ```
-DEPLOYMENT_NAME=dztenix
-
+DEPLOYMENT_NAME=dzphix
+echo "creating service principals in azure"
 AKS_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-aks -o json | jq -r '.appId')
 AZDO_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-azdo -o json | jq -r '.appId')
 
@@ -92,6 +92,12 @@ terraform plan -out out.plan
 apply the execution plan
 ```
 terraform apply out.plan
+```
+
+1. configure the application gateway addon
+```
+appgwId=$(az network application-gateway list -g $KUBE_GROUP -o tsv --query "[].id") 
+az aks enable-addons -n $KUBE_NAME -g $KUBE_GROUP -a ingress-appgw --appgw-id $appgwId
 ```
 
 1. optionally you can create another environment using the following process:

@@ -27,35 +27,35 @@ resource "azurerm_subnet" "gwnet" {
   name                      = "gw-1-subnet"
   resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
-  address_prefix            = "10.0.1.0/24"
+  address_prefixes            = ["10.0.1.0/24"]
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "acinet" {
   name                      = "aci-2-subnet"
   resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
-  address_prefix            = "10.0.2.0/24"
+  address_prefixes            = ["10.0.2.0/24"]
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "fwnet" {
   name                      = "AzureFirewallSubnet"
   resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
-  address_prefix            = "10.0.6.0/24"
+  address_prefixes            = ["10.0.6.0/24"]
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "ingnet" {
   name                      = "ing-4-subnet"
   resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
-  address_prefix            = "10.0.4.0/24"
+  address_prefixes            = ["10.0.4.0/24"]
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 resource "azurerm_subnet" "aksnet" {
   name                      = "aks-5-subnet"
   resource_group_name       = azurerm_resource_group.aksrg.name
   #network_security_group_id = "${azurerm_network_security_group.aksnsg.id}"
-  address_prefix            = "10.0.5.0/24"
+  address_prefixes            = ["10.0.5.0/24"]
   virtual_network_name      = azurerm_virtual_network.kubevnet.name
 }
 
@@ -63,7 +63,8 @@ resource "azurerm_public_ip" "appgw_ip" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-appgwpip"
   resource_group_name = azurerm_resource_group.aksrg.name
   location            = azurerm_resource_group.aksrg.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 # https://www.terraform.io/docs/providers/azurerm/r/application_gateway.html
@@ -73,9 +74,9 @@ resource "azurerm_application_gateway" "appgw" {
   location            = azurerm_resource_group.aksrg.location
 
   sku {
-    name     = "Standard_Small"
-    tier     = "Standard"
-    capacity = 2
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
+    capacity = 1
   }
 
   gateway_ip_configuration {
@@ -342,7 +343,7 @@ resource "azurerm_kubernetes_cluster" "akstf" {
   location            = azurerm_resource_group.aksrg.location
   resource_group_name = azurerm_resource_group.aksrg.name
   dns_prefix          = var.dns_prefix
-  kubernetes_version  = var.kubernetes_version
+  # kubernetes_version  = var.kubernetes_version
   node_resource_group = "${azurerm_resource_group.aksrg.name}_nodes_${azurerm_resource_group.aksrg.location}"
   linux_profile {
     admin_username = "phoenix"

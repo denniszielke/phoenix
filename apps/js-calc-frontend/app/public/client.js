@@ -1,4 +1,4 @@
-﻿var apiUrl = '/api/';
+﻿var apiUrl = window.location.href + 'api/';
 
 function loopClick() {
     console.log(document.getElementById('triggerButton'));

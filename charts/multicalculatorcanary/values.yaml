@@ -40,10 +40,9 @@ ingress:
   canary: false
   weight: 0
   tls: false
-  class: nginx # traefik
+  class: nginx #azure/application-gateway# traefik
   host: devapis1.westeurope.cloudapp.azure.com
   annotations: {
-    kubernetes.io/ingress.class: nginx,
     nginx.ingress.kubernetes.io/rewrite-target: /,
     cert-manager.io/cluster-issuer: letsencrypt,
   }
