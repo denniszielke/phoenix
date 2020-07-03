@@ -1,6 +1,6 @@
 # https://www.terraform.io/docs/providers/azurerm/d/resource_group.html
 resource "azurerm_resource_group" "aksrg" {
-  name     = "${var.resource_group_name}-${random_integer.random_int.result}"
+  name     = "${var.resource_group_name}_${random_integer.random_int.result}"
   location = var.location
     
   tags = {
@@ -138,6 +138,44 @@ resource "azurerm_application_gateway" "appgw" {
   }
 }
 
+# https://www.terraform.io/docs/providers/azurerm/r/traffic_manager_profile.html
+resource "azurerm_traffic_manager_profile" "tfmprofile" {
+  name                   = "${var.dns_prefix}-${random_integer.random_int.result}tfm"
+  resource_group_name    = azurerm_resource_group.aksrg.name
+  traffic_routing_method = "Weighted"
+
+  dns_config {
+    relative_name = "${var.dns_prefix}-${random_integer.random_int.result}tfm"
+    ttl           = 100
+  }
+
+  monitor_config {
+    protocol                     = "http"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 9
+    tolerated_number_of_failures = 3
+  }
+
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+# https://www.terraform.io/docs/providers/azurerm/r/key_vault_secret.html
+resource "azurerm_key_vault_secret" "tfm_name" {
+  name         = "tfm-name"
+  value        = azurerm_traffic_manager_profile.tfmprofile.name
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
 #https://www.terraform.io/docs/providers/azurerm/r/application_insights.html
 resource "azurerm_application_insights" "aksainsights" {
   name                = "${var.dns_prefix}-${random_integer.random_int.result}-ai"
@@ -270,17 +308,6 @@ resource "azurerm_key_vault_secret" "public_ip" {
 resource "azurerm_key_vault_secret" "appgw_public_ip" {
   name         = "appgw-fqdn"
   value        = "${azurerm_public_ip.appgw_ip.id}.xip.io"
-  key_vault_id = azurerm_key_vault.aksvault.id
-  
-  tags = {
-    environment = var.environment
-    project     = "phoenix"
-  }
-}
-
-resource "azurerm_key_vault_secret" "public_ip_stage" {
-  name         = "phoenix-fqdn-stage"
-  value        = "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -458,17 +485,11 @@ provider "helm" {
   }
 }
 
-# https://www.terraform.io/docs/providers/helm/repository.html
-data "helm_repository" "stable" {
-    name = "stable"
-    url  = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 # Install Nginx Ingress using Helm Chart
 # https://www.terraform.io/docs/providers/helm/release.html
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
-  repository = data.helm_repository.stable.metadata.0.name
+  repository = "https://kubernetes-charts.storage.googleapis.com" 
   chart      = "nginx-ingress"
   namespace  = "nginx"
   force_update = "true"

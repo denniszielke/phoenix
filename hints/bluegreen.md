@@ -12,6 +12,7 @@ APPGW_FQDN=$(az keyvault secret show --name "appgw-fqdn" --vault-name $AZURE_KEY
 KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+ACR_NAME=$(az keyvault secret show --name "acr-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 
 ```
@@ -82,25 +83,25 @@ SLOT="blue"
 BUILD_BUILDNUMBER="latest"
 AZURE_CONTAINER_REGISTRY_NAME="."
 AZURE_CONTAINER_REGISTRY_URL="denniszielke"
-
+DNS_LABEL=$ACR_NAME$SLOT
 DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$SLOT-calculator
 kubectl create ns $DEPLOY_NAMESPACE
 
-helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=dzblue123 --wait --timeout 60s
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=$DNS_LABEL --wait --timeout 60s
 
 SLOT="green"
 BUILD_BUILDNUMBER="latest"
 AZURE_CONTAINER_REGISTRY_NAME="."
 AZURE_CONTAINER_REGISTRY_URL="denniszielke"
 APPGW_FQDN=20.50.173.182.xip.io
-
+DNS_LABEL=$ACR_NAME$SLOT
 DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$SLOT-calculator
 kubectl create ns $DEPLOY_NAMESPACE
 
 
-helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=dzgreen123 --wait --timeout 60s
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=$DNS_LABEL --wait --timeout 60s
 
 
 ```

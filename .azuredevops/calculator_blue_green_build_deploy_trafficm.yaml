@@ -6,7 +6,7 @@ pool:
 
 variables:
   azureSubscriptionConnectionName: 'defaultAzure'
-  helmVersion: 3.1.0
+  helmVersion: 3.2.4
   AZURE_CONTAINER_REGISTRY_NAME: 'dzenixacr'
 
 stages:
@@ -46,7 +46,7 @@ stages:
     displayName: run dev1
     environment: dev1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzenix-925-vault'
+      AZURE_KEYVAULT_NAME: 'dzphix-231-vault'
     strategy:
      runOnce:
          deploy:
@@ -97,7 +97,7 @@ stages:
     displayName: run prod1
     environment: prod1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzenix-940-vault'
+      AZURE_KEYVAULT_NAME: 'dzphix-231-vault'
     strategy:
      runOnce:
          deploy:
