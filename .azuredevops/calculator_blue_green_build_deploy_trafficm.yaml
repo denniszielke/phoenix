@@ -111,7 +111,7 @@ stages:
     displayName: run prod1
     environment: prod1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzphix-520-vault'
+      AZURE_KEYVAULT_NAME: 'dzphix-284-vault'
     strategy:
      runOnce:
          deploy:
