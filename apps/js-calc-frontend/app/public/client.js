@@ -78,12 +78,15 @@ angular.module('CalculatorApp', [])
                             }
                             $scope.looping = true;
                         }
-                    }
+                    })
                     .error( function (err) {
                         console.log("error");
                         console.log(err);
                         var response = {};
+                        response.result = {};
                         response.result.value="Error";
+                        response.backend = {};
+                        response.backend.version="red";
                         response.version="red";
                         var endDate = new Date();
                         response.duration = endDate - $scope.requeststartDate
@@ -103,7 +106,7 @@ angular.module('CalculatorApp', [])
                             }
                             $scope.looping = true;
                         }
-                    }));
+                    });
             };
             
             $scope.Init();
