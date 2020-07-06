@@ -80,6 +80,6 @@ fi
 echo "Canary $CANARY_SLOT will be promoted to production"
 az network traffic-manager endpoint update -g $AKS_GROUP --profile-name $TFM_NAME \
     -n $CANARY_SLOT --type azureEndpoints --target-resource-id $IP_RESOURCE_ID --endpoint-status enabled \
-    --weight 100 --custom-headers host=$DNS
+    --weight 1000 --custom-headers host=$DNS
 
 fi
