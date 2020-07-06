@@ -25,12 +25,12 @@ stages:
       displayName: set executable bit
       inputs:
         targetType: 'inline'
-        script: chmod +x scripts/build_multicalculator_tm.sh
+        script: chmod +x scripts/build_multicalculator_blue_green_tm.sh
     - task: AzureCLI@1
       displayName: 'run build script'
       inputs:
         azureSubscription: $(azureSubscriptionConnectionName)
-        scriptPath: scripts/build_multicalculator_tm.sh
+        scriptPath: scripts/build_multicalculator_blue_green_tm.sh
         workingDirectory: '$(Build.SourcesDirectory)'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: scripts'
@@ -60,7 +60,7 @@ stages:
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/deploy_multicalulator_tm.sh'
+                scriptPath: '../scripts/deploy_multicalulator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          routeTraffic:
             steps:
@@ -70,7 +70,7 @@ stages:
               displayName: 'run traffic script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/route_traffic_multicalculator_tm.sh'
+                scriptPath: '../scripts/route_traffic_multicalculator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          on:
            failure:
@@ -86,7 +86,7 @@ stages:
               displayName: 'run rollback script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/on_deploy_failure_multicalculator_tm.sh'
+                scriptPath: '../scripts/on_deploy_failure_multicalculator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
 
 - stage: ProdDeploy
@@ -111,7 +111,7 @@ stages:
               displayName: 'run deploy script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/deploy_multicalulator_tm.sh'
+                scriptPath: '../scripts/deploy_multicalulator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          routeTraffic:
             steps:
@@ -121,7 +121,7 @@ stages:
               displayName: 'run traffic script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/route_traffic_multicalculator_tm.sh'
+                scriptPath: '../scripts/route_traffic_multicalculator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
          on:
            failure:
@@ -137,5 +137,5 @@ stages:
               displayName: 'run rollback script'
               inputs:
                 azureSubscription: $(azureSubscriptionConnectionName)
-                scriptPath: '../scripts/deploy_failure_multicalculator_tm.sh'
+                scriptPath: '../scripts/deploy_failure_multicalculator_blue_green_tm.sh'
                 workingDirectory: '$(Pipeline.Workspace)'
