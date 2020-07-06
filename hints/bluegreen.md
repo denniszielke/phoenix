@@ -13,7 +13,8 @@ KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vaul
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 ACR_NAME=$(az keyvault secret show --name "acr-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-
+TFM_BLUE_IP=$(az keyvault secret show --name "tfm-blue-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_GREEN_IP=$(az keyvault secret show --name "tfm-green-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 ```
 
@@ -87,6 +88,7 @@ DNS_LABEL=$ACR_NAME$SLOT
 DEPLOY_NAMESPACE=$SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$SLOT-calculator
 kubectl create ns $DEPLOY_NAMESPACE
+LOADBALANCER_IP=$(echo ${SLOT^^})
 
 helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=$DNS_LABEL --wait --timeout 60s
 

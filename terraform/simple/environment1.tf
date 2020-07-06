@@ -138,6 +138,46 @@ resource "azurerm_application_gateway" "appgw" {
   }
 }
 
+resource "azurerm_key_vault_secret" "tfm-blue-ip" {
+  name         = "tfm-blue-ip"
+  value        = azurerm_public_ip.tfm-blue.ip_address
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+resource "azurerm_public_ip" "tfm-blue" {
+  name                         = "tfm-blue"
+  location                     = azurerm_kubernetes_cluster.akstf.location
+  resource_group_name          = azurerm_kubernetes_cluster.akstf.node_resource_group
+  allocation_method            = "Static"
+  sku                          = "Standard"
+  domain_name_label            = "${var.dns_prefix}-${random_integer.random_int.result}-blue"
+}
+
+resource "azurerm_key_vault_secret" "tfm-green-ip" {
+  name         = "tfm-green-ip"
+  value        = azurerm_public_ip.tfm-green.ip_address
+  key_vault_id = azurerm_key_vault.aksvault.id
+  
+  tags = {
+    environment = var.environment
+    project     = "phoenix"
+  }
+}
+
+resource "azurerm_public_ip" "tfm-green" {
+  name                         = "tfm-green"
+  location                     = azurerm_kubernetes_cluster.akstf.location
+  resource_group_name          = azurerm_kubernetes_cluster.akstf.node_resource_group
+  allocation_method            = "Static"
+  sku                          = "Standard"
+  domain_name_label            = "${var.dns_prefix}-${random_integer.random_int.result}-green"
+}
+
 # https://www.terraform.io/docs/providers/azurerm/r/traffic_manager_profile.html
 resource "azurerm_traffic_manager_profile" "tfmprofile" {
   name                   = "${var.dns_prefix}-${random_integer.random_int.result}tfm"
@@ -307,7 +347,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 
 resource "azurerm_key_vault_secret" "appgw_public_ip" {
   name         = "appgw-fqdn"
-  value        = "${azurerm_public_ip.appgw_ip.id}.xip.io"
+  value        = "${azurerm_public_ip.appgw_ip.ip_address}.xip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
