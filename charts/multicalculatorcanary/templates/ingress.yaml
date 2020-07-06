@@ -7,7 +7,7 @@ metadata:
     {{- include "multicalculatorcanary.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingress.class }}
-  {{- if .Values.ingress.canary }}
+  {{- if .Values.canary }}
     appgw.ingress.kubernetes.io/backend-path-prefix: "/"
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-by-header: "canary"
@@ -31,7 +31,7 @@ spec:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-  {{- if and (.Values.ingress.canary) (eq .Values.ingress.class "azure/application-gateway") }}
+  {{- if and (.Values.canary) (eq .Values.ingress.class "azure/application-gateway") }}
           - path: /canary/*
             backend:
               serviceName: {{ include "multicalculatorcanary.fullname" . }}-frontend-svc

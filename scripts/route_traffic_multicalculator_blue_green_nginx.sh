@@ -4,7 +4,7 @@ check_canary_slot () {
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
     helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
-    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary' -r)
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.canary' -r)
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot' -r)
         if [ "$CANARY_SLOT" == "blue" ]; then 

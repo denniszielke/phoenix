@@ -1,6 +1,7 @@
 replicaCount: 2
 horizonalPodAutoscaler: false
 slot: default
+canary: false
 
 image:
   repository: denniszielke
@@ -34,11 +35,11 @@ serviceAccount:
 service:
   type: ClusterIP
   port: 80
-  dns: dzblue1
+  dns: 
+  ip: 
 
 ingress:
   enabled: true
-  canary: false
   weight: 0
   tls: false
   class: nginx #azure/application-gateway# traefik

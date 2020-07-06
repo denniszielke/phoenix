@@ -4,7 +4,7 @@ check_canary_slot () {
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
     
-    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary' -r)
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.canary' -r)
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot' -r)
         if [ "$CANARY_SLOT" == "blue" ]; then 
@@ -34,6 +34,9 @@ INGRESS_FQDN=$(az keyvault secret show --name "phoenix-fqdn" --vault-name $AZURE
 KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_NAME=$(az keyvault secret show --name "tfm-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_BLUE_IP=$(az keyvault secret show --name "tfm-blue-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_GREEN_IP=$(az keyvault secret show --name "tfm-green-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 echo "Authenticating with azure container registry..."
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
@@ -45,8 +48,6 @@ helm repo update
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
-sleep 10
-
 CANARY_SLOT="none"
 PRODUCTION_SLOT="none"
 
@@ -54,26 +55,31 @@ check_canary_slot "blue"
 check_canary_slot "green"
 
 if [ "$CANARY_SLOT" !=  "none" ]; then 
+NODE_GROUP=$(az aks show --resource-group $AKS_GROUP --name $AKS_NAME --query nodeResourceGroup -o tsv)
+IP_RESOURCE_ID=$(az network public-ip show -g $NODE_GROUP -n tfm-$CANARY_SLOT --query id -o tsv)
+DNS_LABEL=$(az network public-ip show -g $NODE_GROUP -n tfm-$CANARY_SLOT --query dnsSettings.domainNameLabel -o tsv)
+DNS=$(az network public-ip show -g $NODE_GROUP -n tfm-$CANARY_SLOT --query dnsSettings.fqdn -o tsv)
+IP=$(az network public-ip show -g $NODE_GROUP -n tfm-$CANARY_SLOT --query ipAddress -o tsv)
+
 echo "Canary $CANARY_SLOT will be promoted to production"
 DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$CANARY_SLOT-calculator
 echo "running helm upgrade"
-echo $("helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set ingress.canary=true --set ingress.weigth=100 --wait --timeout 45s")
-helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=2 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set ingress.canary=true --set ingress.weigth=100 --wait --timeout 45s
+echo $("helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=$DNS_LABEL --set service.ip=$IP --wait --timeout 60s")
+helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$SLOT --set ingress.enabled=false --set service.type=LoadBalancer --set service.dns=$DNS_LABEL --set service.ip=$IP --set canary=false --wait --timeout 60s
 
 if [ "$PRODUCTION_SLOT" !=  "none" ]; then 
 echo "Production $PRODUCTION_SLOT will be deleted"
+az network traffic-manager endpoint delete -g $AKS_GROUP --profile-name $TFM_NAME -n $PRODUCTION_SLOT --type azureEndpoints
+sleep 10
 DEPLOY_NAMESPACE=$PRODUCTION_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$PRODUCTION_SLOT-calculator
 helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
 fi
 
 echo "Canary $CANARY_SLOT will be promoted to production"
-DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
-RELEASE=$CANARY_SLOT-calculator
-echo "running helm upgrade"
-echo $("helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set ingress.canary=false --wait --timeout 45s")
-helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set ingress.canary=false --wait --timeout 45s
-
+az network traffic-manager endpoint update -g $AKS_GROUP --profile-name $TFM_NAME \
+    -n $SLOT --type azureEndpoints --target-resource-id $IP_RESOURCE_ID --endpoint-status enabled \
+    --weight 100 --custom-headers host=$DNS
 
 fi

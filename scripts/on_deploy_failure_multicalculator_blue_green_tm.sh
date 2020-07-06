@@ -4,7 +4,7 @@ check_canary_slot () {
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
     
-    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary' -r)
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.canary' -r)
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot' -r)
         if [ "$CANARY_SLOT" == "blue" ]; then 
@@ -30,6 +30,7 @@ echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_NAME=$(az keyvault secret show --name "tfm-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 echo "Authenticating with azure container registry..."
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
@@ -51,6 +52,8 @@ check_canary_slot "green"
 
 if [ "$CANARY_SLOT" !=  "none" ]; then 
 echo "Canary $CANARY_SLOT will be deleted"
+az network traffic-manager endpoint delete -g $AKS_GROUP --profile-name $TFM_NAME -n $CANARY_SLOT --type azureEndpoints
+sleep 10
 DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$CANARY_SLOT-calculator
 helm delete $RELEASE --namespace $DEPLOY_NAMESPACE

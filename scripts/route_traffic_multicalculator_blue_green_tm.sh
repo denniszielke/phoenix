@@ -4,7 +4,7 @@ check_canary_slot () {
     RELEASE=$1-calculator
     echo -e "checking release $1 in $DEPLOY_NAMESPACE ..."
     helm get values $RELEASE -n $DEPLOY_NAMESPACE -o table
-    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.ingress.canary' -r)
+    CANARY=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.canary' -r)
     if [ "$CANARY" == "true" ]; then 
         CANARY_SLOT=$(helm get values $RELEASE -n $DEPLOY_NAMESPACE -o json | jq '.slot' -r)
         if [ "$CANARY_SLOT" == "blue" ]; then 
@@ -32,7 +32,9 @@ echo "Azure KeyVault is $AZURE_KEYVAULT_NAME"
 KUBERNETES_NAMESPACE=$(az keyvault secret show --name "phoenix-namespace" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_NAME=$(az keyvault secret show --name "aks-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 AKS_GROUP=$(az keyvault secret show --name "aks-group" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
-APPGW_FQDN=$(az keyvault secret show --name "appgw-fqdn" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_NAME=$(az keyvault secret show --name "tfm-name" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_BLUE_IP=$(az keyvault secret show --name "tfm-blue-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
+TFM_GREEN_IP=$(az keyvault secret show --name "tfm-green-ip" --vault-name $AZURE_KEYVAULT_NAME --query value -o tsv)
 
 echo "Authenticating with azure container registry..."
 az acr login --name $AZURE_CONTAINER_REGISTRY_NAME
@@ -44,16 +46,18 @@ helm repo update
 echo "Pulling kube-config for $AKS_NAME in $AKS_GROUP"
 az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 
+TFM_FQDN=$(az network traffic-manager profile show -g $AKS_GROUP --name $TFM_NAME --query dnsConfig.fqdn -o tsv)
+
 echo "waiting for 10 seconds to allow deployment to settle"
 sleep 10
 echo ""
-echo "Checking production curl http://$APPGW_FQDN/ping"
-curl -s -H "Host: $APPGW_FQDN" http://$APPGW_FQDN/ping
+echo "Checking blue curl http://$TFM_BLUE_IP/ping"
+curl -s -H "Host: $TFM_BLUE_IP" http://$TFM_BLUE_IP/ping
 echo ""
-echo "Checking staging slot curl http://$APPGW_FQDN/canary/ping"
-curl -s -H "Host: $APPGW_FQDN" http://$APPGW_FQDN/canary/ping
+echo "Checking green slot curl http://$TFM_GREEN_IP/ping"
+curl -s -H "Host: $APPGW_FQDN" http://$TFM_GREEN_IP/ping
 echo ""
-echo "Your app is publicly reachable under http://$APPGW_FQDN"
+echo "Your app is publicly reachable under http://$TFM_FQDN"
 echo ""
 
 CANARY_SLOT="none"
