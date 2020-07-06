@@ -49,7 +49,7 @@ az aks get-credentials --resource-group=$AKS_GROUP --name=$AKS_NAME
 TFM_FQDN=$(az network traffic-manager profile show -g $AKS_GROUP --name $TFM_NAME --query dnsConfig.fqdn -o tsv)
 
 echo "waiting for 10 seconds to allow deployment to settle"
-sleep 10
+sleep 5
 echo ""
 echo "Checking blue curl http://$TFM_BLUE_IP/ping"
 curl -s -H "Host: $TFM_BLUE_IP" http://$TFM_BLUE_IP/ping
@@ -58,6 +58,9 @@ echo "Checking green slot curl http://$TFM_GREEN_IP/ping"
 curl -s -H "Host: $APPGW_FQDN" http://$TFM_GREEN_IP/ping
 echo ""
 echo "Your app is publicly reachable under http://$TFM_FQDN"
+echo "Checking traffic manager curl http://$TFM_FQDN/ping"
+curl -s -H "Host: $TFM_FQDN" http://$TFM_FQDN/ping
+echo ""
 echo ""
 
 CANARY_SLOT="none"

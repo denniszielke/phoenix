@@ -53,7 +53,7 @@ check_canary_slot "green"
 if [ "$CANARY_SLOT" !=  "none" ]; then 
 echo "Canary $CANARY_SLOT will be deleted"
 az network traffic-manager endpoint delete -g $AKS_GROUP --profile-name $TFM_NAME -n $CANARY_SLOT --type azureEndpoints
-sleep 10
+sleep 30
 DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$CANARY_SLOT-calculator
 helm delete $RELEASE --namespace $DEPLOY_NAMESPACE

@@ -71,7 +71,7 @@ helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --nam
 if [ "$PRODUCTION_SLOT" !=  "none" ]; then 
 echo "Production $PRODUCTION_SLOT will be deleted"
 az network traffic-manager endpoint delete -g $AKS_GROUP --profile-name $TFM_NAME -n $PRODUCTION_SLOT --type azureEndpoints
-sleep 10
+sleep 30
 DEPLOY_NAMESPACE=$PRODUCTION_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$PRODUCTION_SLOT-calculator
 helm delete $RELEASE --namespace $DEPLOY_NAMESPACE
