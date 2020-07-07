@@ -8,6 +8,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: {{ .Values.ingress.class }}
   {{- if .Values.canary }}
+    appgw.ingress.kubernetes.io/connection-draining: "true"
+    appgw.ingress.kubernetes.io/connection-draining-timeout: "60"
     appgw.ingress.kubernetes.io/backend-path-prefix: "/"
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-by-header: "canary"
