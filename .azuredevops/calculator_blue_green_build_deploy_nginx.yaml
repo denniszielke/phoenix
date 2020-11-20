@@ -46,7 +46,7 @@ stages:
     displayName: run dev1
     environment: dev1
     variables:
-      AZURE_KEYVAULT_NAME: 'dzphix-231-vault'
+      AZURE_KEYVAULT_NAME: 'dzphix1-284-vault'
     strategy:
      runOnce:
          deploy:
