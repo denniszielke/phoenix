@@ -58,7 +58,6 @@ echo "Canary $CANARY_SLOT will be promoted to production"
 DEPLOY_NAMESPACE=$CANARY_SLOT-$KUBERNETES_NAMESPACE
 RELEASE=$CANARY_SLOT-calculator
 echo "running helm upgrade"
-echo $("helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=4 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set canary=true --set ingress.weigth=100 --wait --timeout 45s")
 helm upgrade $RELEASE $AZURE_CONTAINER_REGISTRY_NAME/multicalculatorcanary --namespace $DEPLOY_NAMESPACE --install --set replicaCount=2 --set image.frontendTag=$BUILD_BUILDNUMBER --set image.backendTag=$BUILD_BUILDNUMBER --set image.repository=$AZURE_CONTAINER_REGISTRY_URL --set dependencies.useAppInsights=true --set dependencies.appInsightsSecretValue=$APPINSIGHTS_KEY --set dependencies.useAzureRedis=true --set dependencies.redisHostValue=$REDIS_HOST --set dependencies.redisKeyValue=$REDIS_AUTH --set slot=$CANARY_SLOT --set ingress.class=nginx --set ingress.host=$INGRESS_FQDN --set canary=true --set ingress.weigth=100 --wait --timeout 45s
 
 if [ "$PRODUCTION_SLOT" !=  "none" ]; then 

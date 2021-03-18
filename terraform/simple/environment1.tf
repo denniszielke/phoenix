@@ -433,15 +433,19 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 
   default_node_pool {
     name               = "default"
-    node_count         = 1
+    node_count         = 2
     vm_size            = "Standard_DS2_v2" #"Standard_F4s" # Standard_DS2_v2
     os_disk_size_gb    = 120
     max_pods           = 30
     vnet_subnet_id     = azurerm_subnet.aksnet.id
     type               = "VirtualMachineScaleSets"
     enable_auto_scaling = true
-    min_count       = 1
+    min_count       = 2
     max_count       = 4
+  }
+
+  role_based_access_control {
+    enabled        = true
   }
 
   network_profile {
@@ -453,9 +457,8 @@ resource "azurerm_kubernetes_cluster" "akstf" {
       load_balancer_sku = "standard"
   }
 
-  service_principal {
-    client_id     = var.service_principal_id
-    client_secret = var.service_principal_secret
+  identity {
+    type = "SystemAssigned"
   }
 
   addon_profile {
@@ -465,7 +468,7 @@ resource "azurerm_kubernetes_cluster" "akstf" {
     }
 
     kube_dashboard {
-      enabled = true
+      enabled = false
     }
   }
 
@@ -577,6 +580,14 @@ resource "null_resource" "set-env-vars" {
     command = "export KUBE_GROUP=${azurerm_resource_group.aksrg.name}; export KUBE_NAME=${azurerm_kubernetes_cluster.akstf.name}; export LOCATION=${var.location}"
   }
   depends_on = [azurerm_kubernetes_cluster.akstf]
+}
+
+output "KUBE_NAME" {
+    value = azurerm_kubernetes_cluster.akstf.name
+}
+
+output "KUBE_GROUP" {
+    value = azurerm_resource_group.aksrg.name
 }
 
 output "NODE_GROUP" {

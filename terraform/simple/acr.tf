@@ -30,9 +30,9 @@ resource "azurerm_resource_group" "acrrg" {
 resource "azurerm_role_assignment" "aksacrrole" {
   scope                = azurerm_container_registry.aksacr.id
   role_definition_name = "AcrPull"
-  principal_id         = var.service_principal_objectid
+  principal_id         = azurerm_kubernetes_cluster.akstf.kubelet_identity[0].object_id
   
-  depends_on = [azurerm_container_registry.aksacr]
+  depends_on = [azurerm_container_registry.aksacr, azurerm_kubernetes_cluster.akstf]
 }
 
 resource "azurerm_role_assignment" "azdoacrrole" {

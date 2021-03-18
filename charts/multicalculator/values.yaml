@@ -14,6 +14,7 @@ fullnameOverride: ""
 
 introduceRandomResponseLag: true # if set to true there will be random response lags and faults in the backend
 introduceRandomResponseLagValue: 3 # seconds of the response lag
+noProbes: false
 dependencies:
   useAzureRedis: false # use azure redis cache - specify redisHostValue and redisKeyValue
   redisHostValue: xxx.redis.cache.windows.net # redis host (no ssl)
@@ -47,11 +48,11 @@ ingress:
 
 resources: 
   limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
     cpu: 100m
     memory: 128Mi
-  requests:
-    cpu: 20m
-    memory: 65Mi
 
 nodeSelector: {}
 

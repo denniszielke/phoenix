@@ -37,14 +37,16 @@ spec:
           volumeMounts:
           - name: version
             mountPath: /home/node/app/version
+{{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
               path: /ping
-              port: http
+              port: 8080
           readinessProbe:
             httpGet:
               path: /ping
-              port: http
+              port: 8080
+{{- end }}
           env: 
             - name: "ENDPOINT"
               value: "{{ include "multicalculator.fullname" . }}-backend-svc"
@@ -151,14 +153,16 @@ spec:
           volumeMounts:
           - name: version
             mountPath: /home/node/app/version
+{{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
               path: /ping
-              port: http
+              port: 8080
           readinessProbe:
             httpGet:
               path: /ping
-              port: http
+              port: 8080
+{{- end }}
           env: 
 {{- if .Values.introduceRandomResponseLag }}
             - name: "LAGGY"
