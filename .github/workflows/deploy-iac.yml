@@ -31,6 +31,6 @@ jobs:
           creds: ${{ secrets[github.event.inputs.azureSecretName] }}
       - name: Run Terraform Apply
         run: cd $GITHUB_WORKSPACE/terraform && chmod +x ./deploy_tf.sh && ./deploy_tf.sh ${{ github.event.inputs.deploymentName }} ${{ github.event.inputs.location }}
-        shell: sh
+        shell: bash
         env:
           AZURE_CREDENTIALS: ${{ secrets[github.event.inputs.azureSecretName] }}

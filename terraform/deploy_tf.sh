@@ -1,5 +1,5 @@
-#!/bin/sh
-set -e
+#!/usr/bin/env bash
+set -o pipefail
 
 DEPLOYMENT_NAME="$1"
 LOCATION="$2"
