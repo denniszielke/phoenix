@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-DEPLOYMENT_NAME="${1,,}"
-LOCATION="${2,,}"
+DEPLOYMENT_NAME="$1"
+LOCATION="$2"
 
 if [ "$DEPLOYMENT_NAME" == "" ]; then
 echo "No team_name provided - aborting"
