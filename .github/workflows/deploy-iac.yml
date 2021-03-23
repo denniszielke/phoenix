@@ -1,0 +1,36 @@
+name: Phoenix-IaC
+
+on:
+  workflow_dispatch:
+    inputs:
+      azureSecretName:
+        description: 'Azure Secret Name containing the Service Principal Details'
+        required: true
+        default: 'AZURE_PROD'
+      deploymentName:
+        description: 'The environment deployment name, e.g. dev, qa or prod'
+        required: true
+        default: 'prod23'
+      location:
+        description: 'The deployment location used for all Azure artefacts.'
+        required: true
+        default: 'northeurope'
+
+defaults:
+  run:
+    working-directory: terraform
+jobs:
+  deploy:
+    name: Deploy Phoenix infrastructure to Azure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets[github.event.inputs.azureSecretName] }}
+      - name: Run Terraform Apply
+        run: cd $GITHUB_WORKSPACE/terraform && chmod +x ./deploy_tf.sh && ./deploy_tf.sh ${{ github.event.inputs.deploymentName }} ${{ github.event.inputs.location }}
+        shell: bash
+        env:
+          AZURE_CREDENTIALS: ${{ secrets[github.event.inputs.azureSecretName] }}
