@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-set -o pipefail
-
 DEPLOYMENT_NAME="${1,,}"
 LOCATION="${2,,}"
 

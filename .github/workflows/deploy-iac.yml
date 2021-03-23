@@ -1,4 +1,4 @@
-name: Phoenix-IaC
+name: phoenix-iac
 
 on:
   workflow_dispatch:
