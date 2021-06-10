@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.AZ_ACR_PASSWORD }}
     - name: Build the Docker image
       env:
-        ACR_NAME: ${{ secrets.ACR_NAME }}
+        ACR_NAME: ${{ secrets.AZ_ACR_NAME }}
       run: |
         ls -l
         cd apps/aci-helloworld-scanner
