@@ -33,4 +33,7 @@ else
     echo "found the following azure credentials"
     echo "tenantid: $TENANT_ID"
     echo "subscriptionid: $SUBSCRIPTION_ID"
+    echo "clientid: $CLIENT_ID"
 fi
+
+

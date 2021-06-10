@@ -1,0 +1,54 @@
+name: acr-aci-helloworld-scanner
+
+on: 
+  push:
+    paths:
+      - 'apps/aci-helloworld-scanner/**'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_NAME }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    - name: Build the Docker image
+      env:
+        ACR_NAME: ${{ secrets.ACR_NAME }}
+      run: |
+        ls -l
+        cd apps/aci-helloworld-scanner
+        echo "github.sha=$GITHUB_SHA"
+        ls -l
+        echo "Running docker build "
+        docker build . --tag $ACR_NAME/aci-helloworld-scanner:${{ github.sha }}
+    - uses: Azure/container-scan@v0 
+      name: Scan image for vulnerabilities
+      env:
+        ACR_NAME: ${{ secrets.ACR_NAME }}
+      id: container-scan
+      continue-on-error: true
+      with:
+        image-name: $ACR_NAME/aci-helloworld-scanner:${{ github.sha }}
+    - name: Build the Docker image
+      env:
+        ACR_NAME: ${{ secrets.ACR_NAME }}
+      run: |
+        echo "Tagging with latest"
+        docker tag $ACR_NAME/aci-helloworld:${{ github.sha }} $ACR_NAME/aci-helloworld:latest
+        echo "Pushing image"
+        docker push $ACR_NAME/aci-helloworld:${{ github.sha }}
+        docker push $ACR_NAME/aci-helloworld:latest
+        echo "Done"
+    - name: Post logs to appinsights
+      uses: Azure/publish-security-assessments@v0
+      with: 
+        scan-results-path: ${{ steps.container-scan.outputs.scan-report-path }}
+        connection-string: ${{ secrets.AZ_APPINSIGHTS_CONNECTION_STRING }}
+        subscription-token: ${{ secrets.AZ_SUBSCRIPTION_TOKEN }} 
