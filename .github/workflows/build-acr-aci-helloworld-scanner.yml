@@ -41,10 +41,10 @@ jobs:
         ACR_NAME: ${{ secrets.ACR_NAME }}
       run: |
         echo "Tagging with latest"
-        docker tag $ACR_NAME/aci-helloworld:${{ github.sha }} $ACR_NAME/aci-helloworld:latest
+        docker tag $ACR_NAME/aci-helloworld-scanner:${{ github.sha }} $ACR_NAME/aci-helloworld-scanner:latest
         echo "Pushing image"
-        docker push $ACR_NAME/aci-helloworld:${{ github.sha }}
-        docker push $ACR_NAME/aci-helloworld:latest
+        docker push $ACR_NAME/aci-helloworld-scanner:${{ github.sha }}
+        docker push $ACR_NAME/aci-helloworld-scanner:latest
         echo "Done"
     - name: Post logs to appinsights
       uses: Azure/publish-security-assessments@v0
