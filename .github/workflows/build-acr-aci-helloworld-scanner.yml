@@ -35,7 +35,7 @@ jobs:
       id: container-scan
       continue-on-error: true
       with:
-        image-name: $ACR_NAME/aci-helloworld-scanner:${{ github.sha }}
+        image-name: ${{ secrets.ACR_NAME }}/aci-helloworld-scanner:${{ github.sha }}
     - name: Build the Docker image
       env:
         ACR_NAME: ${{ secrets.ACR_NAME }}
