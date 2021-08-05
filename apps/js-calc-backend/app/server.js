@@ -6,7 +6,9 @@ if (config.instrumentationKey){
     appInsights.setup(config.instrumentationKey)
     .setAutoDependencyCorrelation(true)
     .setAutoCollectDependencies(true)
-    .setAutoCollectPerformance(true);
+    .setAutoCollectPerformance(true)
+    .setSendLiveMetrics(true)
+    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C);
     appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-calcback";
     appInsights.start();
 }

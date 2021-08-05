@@ -12,8 +12,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "morgan": "^1.10.0",
-    "applicationinsights": "^1.8.10",
-    "dotenv-extended": "^2.8.0",
+    "applicationinsights": "^2.1.4",
+    "applicationinsights-native-metrics": "^0.0.6",
+    "dotenv-extended": "^2.9.0",
     "swagger-ui-express": "^4.1.4"
   }
 }
