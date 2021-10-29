@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "multicalculator.fullname" . }}
@@ -16,12 +16,16 @@ spec:
       - {{ .Values.ingress.host | quote }}
       secretName: {{ include "multicalculator.fullname" . }}-tls
 {{- end }}
+  ingressClassName: {{ .Values.ingress.class }}
   rules:
     - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-          - path:
+          - path: /
+            pathType: Prefix
             backend:
-              serviceName: {{ include "multicalculator.fullname" . }}-frontend-svc
-              servicePort: {{ .Values.service.port }}
+              service:
+                name: {{ include "multicalculator.fullname" . }}-frontend-svc
+                port:
+                  number: {{ .Values.service.port }}
 {{- end }}

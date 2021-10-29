@@ -11,11 +11,13 @@ if (config.instrumentationKey){
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C);
     appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-calcback";
     appInsights.start();
+    var client = appInsights.defaultClient;
+    client.commonProperties = {
+        slot: config.version
+    };
 }
+
 var client = appInsights.defaultClient;
-client.commonProperties = {
-	slot: config.version
-};
 
 const express = require('express');
 const app = express();
