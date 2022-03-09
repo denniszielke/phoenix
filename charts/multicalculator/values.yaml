@@ -1,13 +1,16 @@
 replicaCount: 2
 horizonalPodAutoscaler: false
+deployRequester: false
 
 image:
   repository: denniszielke
   pullPolicy: Always
   frontendImage: js-calc-frontend
   backendImage: js-calc-backend
+  requesterImage: java-calc-requester-jvm
   frontendTag: latest
   backendTag: latest
+  requesterTag: latest
 
 nameOverride: ""
 fullnameOverride: ""
@@ -47,11 +50,11 @@ ingress:
 
 resources: 
   limits:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 1000m
+    memory: 1024Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 500m
+    memory: 1024Mi
 
 nodeSelector: {}
 

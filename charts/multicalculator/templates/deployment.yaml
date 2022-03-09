@@ -197,3 +197,73 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+---
+{{- if .Values.deployRequester }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "multicalculator.fullname" . }}-requester
+  labels:
+    {{- include "multicalculator.labels" . | nindent 4 }}
+    role: backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "multicalculator.selectorLabels" . | nindent 6 }}
+      role: requester
+  template:
+    metadata:
+      labels:
+        {{- include "multicalculator.selectorLabels" . | nindent 8 }}
+        role: requester
+    spec:
+      serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
+      containers:
+        - name: calc-requester
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.requesterImage }}:{{ .Values.image.requesterTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+{{- if .Values.noProbes }}
+          livenessProbe:
+            httpGet:
+              path: /api/ping
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/ping
+              port: 8080
+{{- end }}
+          env: 
+            - name: "APPLICATIONINSIGHTS_CONNECTION_STRING"
+              value: "INSTRUMENTATIONKEY={{ .Values.dependencies.appInsightsSecretValue }}"
+            - name: "ENDPOINT_PORT"
+              value: "80"
+            - name: "ENDPOINT_HOST"
+              value: "{{ include "multicalculator.fullname" . }}-frontend-svc"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}           
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}

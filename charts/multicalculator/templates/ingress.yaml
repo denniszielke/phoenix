@@ -28,4 +28,27 @@ spec:
                 name: {{ include "multicalculator.fullname" . }}-frontend-svc
                 port:
                   number: {{ .Values.service.port }}
+          - path: /frontend
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "multicalculator.fullname" . }}-frontend-svc
+                port:
+                  number: {{ .Values.service.port }}
+          - path: /backend
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "multicalculator.fullname" . }}-backend-svc
+                port:
+                  number: {{ .Values.service.port }}
+          {{- if .Values.deployRequester }}
+          - path: /requester
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "multicalculator.fullname" . }}-requester-svc
+                port:
+                  number: {{ .Values.service.port }}
+          {{- end }}
 {{- end }}
