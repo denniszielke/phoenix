@@ -519,12 +519,12 @@ provider "kubernetes" {
 # https://www.terraform.io/docs/providers/helm/index.html
 provider "helm" {
   kubernetes {
-    load_config_file = false
+    
     host                   = azurerm_kubernetes_cluster.akstf.kube_config.0.host
     client_certificate     = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_certificate)
     client_key             = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_key)
     cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.cluster_ca_certificate)
-    config_path = "ensure-that-we-never-read-kube-config-from-home-dir"
+    config_path = "~/.kube/config"
   }
 }
 
@@ -532,7 +532,7 @@ provider "helm" {
 # https://www.terraform.io/docs/providers/helm/release.html
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
-  repository = "https://kubernetes-charts.storage.googleapis.com" 
+  repository = "https://charts.helm.sh/stable" 
   chart      = "nginx-ingress"
   namespace  = "nginx"
   force_update = "true"
@@ -607,6 +607,7 @@ output "PUBLIC_IP_STAGE" {
 }
 
 output "instrumentation_key" {
+  sensitive=true
   value = azurerm_application_insights.aksainsights.instrumentation_key
 }
 
