@@ -24,13 +24,13 @@ AZDO_SERVICE_PRINCIPAL_ID=$(az ad sp create-for-rbac --name $DEPLOYMENT_NAME-azd
 AKS_SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
 AZDO_SERVICE_PRINCIPAL_SECRET=$(az ad app credential reset --id $AZDO_SERVICE_PRINCIPAL_ID -o json | jq '.password' -r)
 
-AKS_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.objectId' -r)
+AKS_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AKS_SERVICE_PRINCIPAL_ID -o json | jq '.id' -r)
 AZDO_SERVICE_PRINCIPAL_OBJECTID=$(az ad sp show --id $AZDO_SERVICE_PRINCIPAL_ID -o json | jq '.objectId' -r)
 
 AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
 AZURE_SUBSCRIPTION_NAME=$(az account show --query name -o tsv)
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-AZURE_MYOWN_OBJECT_ID=$(az ad signed-in-user show --query objectId --output tsv)
+AZURE_MYOWN_OBJECT_ID=$(az ad signed-in-user show --query id --output tsv)
 
 echo -e "\n\n Remember these outputs:"
 echo -e "Your Kubernetes service_principal_id should be \e[7m$AKS_SERVICE_PRINCIPAL_ID\e[0m"

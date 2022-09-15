@@ -190,7 +190,7 @@ resource "azurerm_traffic_manager_profile" "tfmprofile" {
   }
 
   monitor_config {
-    protocol                     = "http"
+    protocol                     = "HTTP"
     port                         = 80
     path                         = "/"
     interval_in_seconds          = 30
@@ -271,7 +271,7 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_app" {
   object_id = var.azdo_service_principal_objectid
 
   secret_permissions = [
-    "get"
+    "Get"
   ]
 }
 
@@ -283,9 +283,9 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_forme" {
   object_id = var.object_id
 
   secret_permissions = [
-      "get",
-      "list",
-      "set"
+      "Get",
+      "List",
+      "Set"
   ]
 }
 
@@ -444,9 +444,10 @@ resource "azurerm_kubernetes_cluster" "akstf" {
     max_count       = 4
   }
 
-  role_based_access_control {
-    enabled        = true
-  }
+  role_based_access_control_enabled = true
+
+  log_analytics_workspace_enabled = true
+  log_analytics_workspace = azurerm_log_analytics_workspace.akslogs.id
 
   network_profile {
       network_plugin = "azure"
@@ -459,17 +460,6 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 
   identity {
     type = "SystemAssigned"
-  }
-
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.akslogs.id
-    }
-
-    kube_dashboard {
-      enabled = false
-    }
   }
 
   tags = {
