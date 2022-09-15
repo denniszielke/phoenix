@@ -446,8 +446,9 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 
   role_based_access_control_enabled = true
 
-  log_analytics_workspace_enabled = true
-  log_analytics_workspace = azurerm_log_analytics_workspace.akslogs.id
+  oms_agent {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.akslogs.id
+  }
 
   network_profile {
       network_plugin = "azure"
@@ -509,7 +510,6 @@ provider "kubernetes" {
 # https://www.terraform.io/docs/providers/helm/index.html
 provider "helm" {
   kubernetes {
-    load_config_file = false
     host                   = azurerm_kubernetes_cluster.akstf.kube_config.0.host
     client_certificate     = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_certificate)
     client_key             = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_key)

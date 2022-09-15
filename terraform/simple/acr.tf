@@ -6,6 +6,7 @@ provider "azurerm" {
     #client_id       = var.terraform_serviceprincipal_id
     #client_secret   = var.terraform_serviceprincipal_secret
     tenant_id       = var.tenant_id
+    environment     = "public"
     features {}
 }
 
