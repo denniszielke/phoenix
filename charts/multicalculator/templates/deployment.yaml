@@ -49,7 +49,7 @@ spec:
 {{- end }}
           env: 
             - name: "ENDPOINT"
-              value: "{{ include "multicalculator.fullname" . }}-backend-svc"
+              value: "http://{{ include "multicalculator.fullname" . }}-backend-svc"
 {{- if .Values.introduceRandomResponseLag }}
             - name: "LAGGY"
               value: "{{ .Values.introduceRandomResponseLagValue }}"
