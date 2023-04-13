@@ -40,11 +40,11 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
@@ -57,7 +57,7 @@ spec:
               value: "true"
 {{- end }}
 {{- if .Values.dependencies.useAppInsights }}
-            - name: "INSTRUMENTATIONKEY"
+            - name: "AIC_STRING"
               valueFrom:
                 secretKeyRef:
                   name: {{ include "multicalculator.fullname" . }}-appin-secret
@@ -88,7 +88,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
 {{- if .Values.dependencies.usePodRedis }}
         - name: redis
-          image: redis:4.0.11-alpine
+          image: redis:6.0
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: ["--requirepass", "MySuperSecretRedis"]
           ports:
@@ -171,7 +171,7 @@ spec:
               value: "true"
 {{- end }}
 {{- if .Values.dependencies.useAppInsights }}
-            - name: "INSTRUMENTATIONKEY"
+            - name: "AIC_STRING"
               valueFrom:
                 secretKeyRef:
                   name: {{ include "multicalculator.fullname" . }}-appin-secret
@@ -238,11 +238,11 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /api/ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /api/ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
