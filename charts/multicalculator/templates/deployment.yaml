@@ -156,11 +156,11 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
