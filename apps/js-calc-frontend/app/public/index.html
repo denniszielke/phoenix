@@ -42,7 +42,7 @@
                     </p>
                 </form>
                 <div class="row">
-                    <h2>Result: {{ result.result.value }}</h2>
+                    <h2>Result: {{ result.host }}</h2>
                     <p ng-class="CalculateCssClass(result.version)">Frontend: {{ result.host }}, {{ result.version }}</p>
                     <p ng-class="CalculateCssClass(result.backend.version)">Backend: {{ result.duration }}, {{ result.backend.host }}, {{ result.backend.remote }}, {{ result.backend.version }}</p>
                     <table class="table">
@@ -58,7 +58,7 @@
                         <tbody>
                         <tr ng-repeat="response in responses track by $index">
                           <td ng-class="CalculateCssClass(response.backend.version)">{{ response.duration }}</td>
-                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.value }}</td>
+                          <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.values }}</td>
                           <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.host }}</td>
                           <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.remote }}</td>
                           <td ng-class="CalculateCssClass(response.backend.version)">{{ response.backend.version }}</td>
@@ -70,7 +70,5 @@
         </div>
 
     </div><!-- /.container -->
-    <script src="http://www.atmrum.net/rum.js"></script>
-<script>rum.start("63a28adcf03b744f97a50e070ad24770");</script>
 </body>
 </html>

@@ -43,7 +43,7 @@ ingress:
   weight: 0
   tls: false
   class: nginx #azure/application-gateway# traefik
-  host: 123.3.4.5.xip.io
+  host: 123.3.4.5.nip.io
   annotations: {
     nginx.ingress.kubernetes.io/rewrite-target: /,
     cert-manager.io/cluster-issuer: letsencrypt,

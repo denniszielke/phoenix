@@ -1,0 +1,218 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a backend api for the prime factor calculator demo app.",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "title": "OpenAPI Calculator Backend",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/api/calculate": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A calculation request",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CalculationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CalculationResponse"
+            }
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "tags": [
+          "backend"
+        ],
+        "description": "",
+        "operationId": "calculalate",
+        "summary": "Calculates the prime factors for a given number"
+      }
+    },
+    "/healthz": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Health"
+            }
+          },
+          "500": {
+            "description": "Invalid Health"
+          }
+        },
+        "tags": [
+          "health"
+        ],
+        "description": "",
+        "summary": "Check application health status"
+      }
+    },
+    "/ping": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Ping"
+            }
+          },
+          "500": {
+            "description": "Invalid Ping"
+          }
+        },
+        "tags": [
+          "ping"
+        ],
+        "description": "",
+        "summary": "Ping the app for a response"
+      }
+    }
+  },
+  "definitions": {
+    "CalculationRequest": {
+      "description": "A prime factor calculation request",
+      "properties": {
+        "number": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "randomvictim": {
+          "type": "boolean"
+        }
+      },
+      "title": "Calculation Request",
+      "type": "object"
+    },
+    "CalculationResponse": {
+      "description": "A prime factor calculation result",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "correlation": {
+          "type": "string"
+        },
+        "forwarded": {
+          "type": "string"
+        },
+        "remote": {
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "values": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "title": "Calculation Response",
+      "type": "object"
+    },
+    "Health": {
+      "description": "A health probe response",
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "uptime": {
+          "type": "string"
+        }
+      },
+      "title": "Health",
+      "type": "object"
+    },
+    "Ping": {
+      "description": "A ping for application level response",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "correlation": {
+          "type": "string"
+        },
+        "forwarded": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "title": "Ping",
+      "type": "object"
+    }
+  },
+  "tags": [
+    {
+      "description": "Calculator app",
+      "name": "calculator"
+    },
+    {
+      "description": "Backend app",
+      "name": "backend"
+    }
+  ],
+  "x-components": {
+    "requestBodies": {
+      "CalculationRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/definitions/CalculationRequest"
+            }
+          }
+        },
+        "description": "A calculation request"
+      }
+    }
+  }
+}

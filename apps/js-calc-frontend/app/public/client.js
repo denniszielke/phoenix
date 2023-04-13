@@ -1,4 +1,4 @@
-﻿var apiUrl = window.location.href + 'api/';
+﻿var apiUrl = window.location.href;
 
 function loopClick() {
     console.log(document.getElementById('triggerButton'));
@@ -11,7 +11,7 @@ angular.module('CalculatorApp', [])
 
             $scope.Init = function () {
                 console.log("init");
-                var getUrl = apiUrl + 'getappinsightskey';
+                var getUrl = apiUrl + 'appInsightsConnectionString';
                 var config = {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
@@ -24,9 +24,9 @@ angular.module('CalculatorApp', [])
 
                 $http.get(getUrl, {}, config)
                     .success(function (response) { 
-                        $scope.appInsightsKey = response;
+                        $scope.appInsightsConnectionString = response;
                         console.log(response);
-                        initAppInsights($scope.appInsightsKey);
+                        initAppInsights($scope.appInsightsConnectionString);
                     });                
             };
 
@@ -44,11 +44,10 @@ angular.module('CalculatorApp', [])
             }
 
             $scope.Calculate = function () {
-                var postUrl = apiUrl + 'calculation';
+                var postUrl = apiUrl + 'api/calculate';
                 var config = {
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
-                        'number': $scope.id
+                        'Content-Type': 'application/json'
                     }
                 };
                 $scope.requeststartDate = new Date();

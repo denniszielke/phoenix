@@ -1,0 +1,135 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://calc-backend.swagger.io/'
+info:
+  description: >-
+    This is a backend api for the prime factor calculator demo app.
+  version: 1.0.0
+  title: OpenAPI Calculator Backend
+  license:
+    name: Apache-2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: calculator
+    description: Calculator app
+  - name: backend
+    description: Backend app
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      summary: Ping the app for a response
+      description: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ping'
+        '500':
+          description: Invalid Ping
+  /healthz:
+    get:
+      tags:
+        - health
+      summary: Check application health status
+      description: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '500':
+          description: Invalid Health
+  /api/calculate:
+    post:
+      tags:
+        - backend
+      summary: Calculates the prime factors for a given number
+      description: ''
+      operationId: calculalate
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResponse'
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/CalculationRequest'
+components:
+  requestBodies:
+    CalculationRequest:
+      description: A calculation request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CalculationRequest'
+  schemas:
+    Ping:
+      title: Ping
+      description: A ping for application level response
+      type: object
+      properties:
+        response:
+          type: string
+        correlation:
+          type: string
+        host:
+          type: string
+        source:
+          type: string
+        forwarded:
+          type: string
+        version:
+          type: string
+    Health:
+      title: Health
+      description: A health probe response
+      type: object
+      properties:
+        uptime:
+          type: string
+        message:
+          type: string
+        date:
+          type: string
+          format: date-time
+    CalculationResponse:
+      title: Calculation Response
+      description: A prime factor calculation result
+      type: object
+      properties:
+        host:
+          type: string
+        correlation:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        remote:
+          type: string
+        forwarded:
+          type: string
+        version:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+    CalculationRequest:
+      title: Calculation Request
+      description: A prime factor calculation request
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int32
+        randomvictim:
+          type: boolean

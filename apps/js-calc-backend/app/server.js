@@ -1,34 +1,32 @@
 require('dotenv-extended').load();
 const config = require('./config');
-var appInsights = require("applicationinsights");
 
-if (config.instrumentationKey){ 
-    appInsights.setup(config.instrumentationKey)
+const appInsights = require("applicationinsights");
+
+if (config.aicstring){ 
+    appInsights.setup(config.aicstring)
     .setAutoDependencyCorrelation(true)
+    .setAutoCollectRequests(true)
+    .setAutoCollectPerformance(true, true)
+    .setAutoCollectExceptions(true)
     .setAutoCollectDependencies(true)
-    .setAutoCollectPerformance(true)
+    .setAutoCollectConsole(true)
+    .setUseDiskRetryCaching(true)
     .setSendLiveMetrics(true)
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C);
-    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-calcback";
+    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = "http-backend";
     appInsights.start();
-    var client = appInsights.defaultClient;
-    client.commonProperties = {
+    appInsights.defaultClient.commonProperties = {
         slot: config.version
     };
 }
-
-var client = appInsights.defaultClient;
+const swaggerUi = require('swagger-ui-express'), swaggerDocument = require('./swagger.json');
+const OS = require('os');
 
 const express = require('express');
 const app = express();
+app.use(express.json())
 const morgan = require('morgan');
-
-var swaggerUi = require('swagger-ui-express'),
-    swaggerDocument = require('./swagger.json');
-
-const OS = require('os');
-
-// add logging middleware
 app.use(morgan('dev'));
 
 // Routes
@@ -40,12 +38,19 @@ app.get('/', function(req, res) {
 });
 app.get('/ping', function(req, res) {
     console.log('received ping');
-    var pong = { response: "pong!", host: OS.hostname(), version: config.version };
+    const sourceIp = req.connection.remoteAddress;
+    const forwardedFrom = (req.headers['x-forwarded-for'] || '').split(',').pop();
+    const pong = { response: "pong!", correlation: "", timestamp: new Date(), host: OS.hostname(), source: sourceIp, forwarded: forwardedFrom, version: config.version };
     console.log(pong);
-    res.send(pong);
+    res.status(200).send(pong);
 });
 app.get('/healthz', function(req, res) {
-    res.send('OK');
+    const data = {
+        uptime: process.uptime(),
+        message: 'Ok',
+        date: new Date()
+      }
+    res.status(200).send(data);
 });
 
 var primeFactors = function getAllFactorsFor(remainder) {
@@ -70,64 +75,50 @@ var primeFactors = function getAllFactorsFor(remainder) {
     return factors;
 }
 
-// curl -X POST --header "number: 3" --header "randomvictim: true" http://localhost:3002/api/calculation
-app.post('/api/calculation', function(req, res) {
+// curl -X POST --header "number: 3" --header "randomvictim: true" http://localhost:8082/api/calculate
+// curl -X POST --url http://localhost:8082/api/calculate --header 'content-type: application/json' --data '{"number": "42", "randomvictim": "true", "laggy": "true"}'
+app.post('/api/calculate', function(req, res) {
     console.log("received client request:");
     console.log(req.headers);
-    if (config.instrumentationKey){ 
-        var startDate = new Date();
-        client.trackEvent( { name: "calculation-js-backend-call"});
-    }
+    console.log(req.body);
+    console.log(req.body.number);
+    const requestId = req.headers['traceparent'] || '';
     var resultValue = [0];
     try{
-        resultValue = primeFactors(req.headers.number);
+        resultValue = primeFactors(req.body.number);
         console.log("calculated:"); 
         console.log(resultValue);
     }catch(e){
+        console.log("correlation: " + requestId);
         console.log(e);
-        if (config.instrumentationKey){ 
-            client.trackException(e);
-        }
         resultValue = [0];
     }
-    var endDate = new Date();
-    if (config.instrumentationKey){ 
-        var duration = endDate - startDate;
-        client.trackEvent({ name: "calculation-js-backend-result"});
-        client.trackMetric({ name:"calculation-js-backend-duration", value: duration });
-    }
-    if (req.headers.joker){
-        resultValue = "42";
-    }
+    const endDate = new Date();
 
-    var randomNumber = Math.floor((Math.random() * 20) + 1);
+    const randomNumber = Math.floor((Math.random() * 20) + 1);
+    const remoteAddress = req.connection.remoteAddress;
+    const forwardedFrom = (req.headers['x-forwarded-for'] || '').split(',').pop();
 
-    if ((req.headers.randomvictim && req.headers.randomvictim ===true ) || (config.buggy && randomNumber > 19)){
+    if ((req.body.randomvictim && req.body.randomvictim ===true ) || (config.buggy && randomNumber > 19)){
         console.log("looks like a 19 bug");
-        res.status(500).send({ value: "[ b, u, g]", error: "looks like a 19 bug", host: OS.hostname(), remote: remoteAddress, version: config.version });
+        res.status(500).send({ timestamp: endDate, correlation: requestId, values: [ 'b', 'u', 'g'], host: OS.hostname(), remote: remoteAddress, forwarded: forwardedFrom, version: config.version });
     }
     else{
-        var remoteAddress = req.connection.remoteAddress;
-        var serverResult = JSON.stringify({ timestamp: endDate, value: resultValue, host: OS.hostname(), remote: remoteAddress, version: config.version } );
+        const serverResult = { timestamp: endDate, correlation: requestId, values: resultValue, host: OS.hostname(), remote: remoteAddress, forwarded: forwardedFrom, version: config.version };
         console.log(serverResult);
-        res.send(serverResult.toString());
+        res.status(200).send(serverResult);
     }
 });
 
 app.post('/api/dummy', function(req, res) {
     console.log("received dummy request:");
-    console.log(req.headers)
-    if (config.instrumentationKey){ 
-        client.trackEvent({ name: "dummy-js-backend-call"});
-    }
+    console.log(req.headers);
+    console.log(req.body);
     res.send('42');
 });
 
 console.log(config);
 console.log(OS.hostname());
-// Listen
-if (config.instrumentationKey){ 
-    client.trackEvent({ name: "js-backend-initializing"});
-}
+
 app.listen(config.port);
 console.log('Listening on localhost:'+ config.port);
