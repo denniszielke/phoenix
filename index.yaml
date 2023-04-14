@@ -11,16 +11,6 @@ entries:
     urls:
     - multicalculator-1.0.0.tgz
     version: 1.0.0
-  - apiVersion: v2
-    appVersion: 3.0.0
-    created: "2023-04-14T07:41:22.47426+02:00"
-    description: Multicalculator helm chart for helm3
-    digest: e055e44221d875a0da17312bbe69d2c0aa90d7f61ece7d73d52cc5c227fd488e
-    name: multicalculator
-    type: application
-    urls:
-    - multicalculator-0.1.0.tgz
-    version: 0.1.0
   multicalculatorcanary:
   - apiVersion: v2
     appVersion: 3.1.0
