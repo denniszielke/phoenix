@@ -107,7 +107,9 @@ app.post('/api/calculate/:number?', async function(req, res) {
     const randomvictim = Math.floor((Math.random() * 20) + 1);
     if (config.buggy && randomvictim > 19){
         victim = true;
-        appInsights.defaultClient.trackEvent( { name: "calculation-js-frontend-victim"});
+        if (config.aicstring){ 
+            appInsights.defaultClient.trackEvent( { name: "calculation-js-frontend-victim"});
+        }
         console.log("request is randomly selected as victim");
     }
 
