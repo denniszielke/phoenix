@@ -76,7 +76,7 @@ var primeFactors = function getAllFactorsFor(remainder) {
 }
 
 // curl -X POST --header "number: 3" --header "randomvictim: true" http://localhost:8082/api/calculate
-// curl -X POST --url http://localhost:8082/api/calculate --header 'content-type: application/json' --data '{"number": "42", "randomvictim": "true", "laggy": "true"}'
+// curl -X POST --url http://calculator-multicalculator-frontend-svc/api/calculate --header 'content-type: application/json' --data '{"number": "42", "randomvictim": "true", "laggy": "true"}'
 app.post('/api/calculate', function(req, res) {
     console.log("received client request:");
     console.log(req.headers);
