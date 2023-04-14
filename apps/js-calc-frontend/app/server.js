@@ -196,7 +196,7 @@ app.post('/api/calculate/:number?', async function(req, res) {
                     }
                     
                     var cachedResult = redisClient.set(targetNumber, appResponse.backend.values.toString());
-                    redisClient.disconnect();
+                    // redisClient.disconnect();
                     res.status(200).send(appResponse);
 
                 }).catch(function (error) {
