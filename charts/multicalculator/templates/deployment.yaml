@@ -260,7 +260,7 @@ spec:
 {{- end }}
           env: 
             - name: "APPLICATIONINSIGHTS_CONNECTION_STRING"
-              value: "INSTRUMENTATIONKEY={{ .Values.dependencies.appInsightsSecretValue }}"
+              value: "{{ .Values.dependencies.appInsightsSecretValue }}"
             - name: "ENDPOINT_PORT"
               value: "80"
             - name: "ENDPOINT_HOST"
