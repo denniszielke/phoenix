@@ -160,7 +160,6 @@ app.post('/api/calculate/:number?', async function(req, res) {
                     remote: "cache", 
                     timestamp: endDate } 
             };
-            redisClient.disconnect();
             console.log(appResponse);
             res.status(200).send(appResponse);
         }else {
@@ -196,7 +195,6 @@ app.post('/api/calculate/:number?', async function(req, res) {
                     }
                     
                     var cachedResult = redisClient.set(targetNumber, appResponse.backend.values.toString());
-                    // redisClient.disconnect();
                     res.status(200).send(appResponse);
 
                 }).catch(function (error) {
@@ -266,6 +264,13 @@ app.post('/api/dummy', function(req, res) {
         client.trackEvent({ name: "dummy-js-frontend-call"});
     }
     res.send({ values: "[ 42 ]", host: OS.hostname(), version: config.version });
+});
+
+process.on("exit", function(){
+    if (redisClient != null)
+    {
+        redisClient.disconnect();
+    }
 });
 
 console.log(config);
