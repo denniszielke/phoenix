@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: frontend
+    app.kubernetes.io/name: frontend
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -16,12 +17,16 @@ spec:
   selector:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: frontend
       role: frontend
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: frontend
         role: frontend
+      annotations:
+        policy.cilium.io/proxy-visibility=: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -121,6 +126,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
+    app.kubernetes.io/name: backend
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -132,12 +138,16 @@ spec:
   selector:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: backend
       role: backend
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: backend
         role: backend
+      annotations:
+        policy.cilium.io/proxy-visibility=: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -206,6 +216,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
+    app.kubernetes.io/name: requester
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -218,11 +229,13 @@ spec:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
       role: requester
+      app.kubernetes.io/name: requester
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
         role: requester
+        app.kubernetes.io/name: requester
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
