@@ -269,6 +269,7 @@ app.post('/api/dummy', function(req, res) {
 process.on("exit", function(){
     if (redisClient != null)
     {
+        console.log("discconnecting redis");
         redisClient.disconnect();
     }
 });
