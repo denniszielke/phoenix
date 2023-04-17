@@ -3,17 +3,17 @@ entries:
   multicalculator:
   - apiVersion: v2
     appVersion: 3.0.0
-    created: "2023-04-17T14:23:22.196366+02:00"
+    created: "2023-04-17T14:28:58.092522+02:00"
     description: Multicalculator helm chart for helm3
-    digest: f6614a9c17c06c5790cae6e7810f081d9b5e74185d7e98da6c11fd2173b6d85d
+    digest: 89b49b5858a57ab2eded1853f9a1116c5217d04721636d013547271e339e47d6
     name: multicalculator
     type: application
     urls:
-    - multicalculator-1.1.0.tgz
-    version: 1.1.0
+    - multicalculator-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: 3.0.0
-    created: "2023-04-17T14:23:22.194723+02:00"
+    created: "2023-04-17T14:28:58.091001+02:00"
     description: Multicalculator helm chart for helm3
     digest: 001422092fe94b325b5a1a6de0b2096c686722d9dd7421ad650b09daa26aef1f
     name: multicalculator
@@ -23,7 +23,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: 3.0.0
-    created: "2023-04-17T14:23:22.192932+02:00"
+    created: "2023-04-17T14:28:58.089607+02:00"
     description: Multicalculator helm chart for helm3
     digest: e055e44221d875a0da17312bbe69d2c0aa90d7f61ece7d73d52cc5c227fd488e
     name: multicalculator
@@ -34,7 +34,7 @@ entries:
   multicalculatorcanary:
   - apiVersion: v2
     appVersion: 3.1.0
-    created: "2023-04-17T14:23:22.198327+02:00"
+    created: "2023-04-17T14:28:58.093989+02:00"
     description: Multicalculator canary helm chart for helm3
     digest: e10f97c0693dcb605d94aa604f812ca424510436c12cff2f89581c250facc319
     name: multicalculatorcanary
@@ -42,4 +42,4 @@ entries:
     urls:
     - multicalculatorcanary-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-17T14:23:22.189776+02:00"
+generated: "2023-04-17T14:28:58.086062+02:00"
