@@ -101,6 +101,7 @@ app.post('/api/calculate', function(req, res) {
 
     if ((req.body.randomvictim && req.body.randomvictim ===true ) || (config.buggy && randomNumber > 19)){
         console.log("looks like a 19 bug");
+        
         res.status(500).send({ timestamp: endDate, correlation: requestId, values: [ 'b', 'u', 'g'], host: OS.hostname(), remote: remoteAddress, forwarded: forwardedFrom, version: config.version });
     }
     else{

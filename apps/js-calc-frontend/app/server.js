@@ -104,12 +104,23 @@ app.post('/api/calculate/:number?', async function(req, res) {
         res.status(500).send({ timestamp: endDate, values: [ 'e', 'r', 'r'], host: OS.hostname(), remote: remoteAddress, forwarded: forwardedFrom, version: config.version });
     }
 
-    const randomvictim = Math.floor((Math.random() * 20) + 1);
+    var randomvictim = Math.floor((Math.random() * 20) + 1);
     if (config.buggy && randomvictim > 19){
         victim = true;
         if (config.aicstring){ 
             appInsights.defaultClient.trackEvent( { name: "calculation-js-frontend-victim"});
         }
+
+        axios({
+            method: 'get',
+            url: 'https://catfact.ninja/fact',
+            headers: {    
+                'Content-Type': 'application/json'
+            }}).then(function (response) { 
+                console.log("cat facts received");
+            }).catch(function (error) {
+                console.log("no cat fact");
+             });
         console.log("request is randomly selected as victim");
     }
 
