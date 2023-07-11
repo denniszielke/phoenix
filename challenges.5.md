@@ -20,16 +20,15 @@ Especially when running multiple applications in your cluster you want to contro
 ## 2. Deploy network policies
 - Learn about how to control traffic flows between containers https://docs.microsoft.com/de-de/azure/aks/use-network-policies
 
-Deploy the network policy daemonset
-```
-kubectl apply -f  https://github.com/Azure/acs-engine/blob/master/parts/k8s/addons/kubernetesmasteraddons-azure-npm-daemonset.yaml
-```
-
 ## 3. Configure a network security group
 - Learn about having Kubernetes manage your azure network security group. 
 - Can you whitelist so that only specific ip ranges are allowed to your ingress controller?
 https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
 
 ## 4. Move secrets to keyvault
-- Learn about moving secrets from your cluster to an azure keyvault
-- Check out what you need to do: https://github.com/Azure/kubernetes-keyvault-flexvol
+- Learn about moving secrets from your cluster to an azure keyvault using the managed identity of the nodes
+- Check out what you need to do: https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver
+
+## 5. Adopt Workload Identity
+- Learn about using different identities for different applications in the same cluster
+- Check out what you need to do: https://learn.microsoft.com/en-us/azure/aks/learn/tutorial-kubernetes-workload-identity

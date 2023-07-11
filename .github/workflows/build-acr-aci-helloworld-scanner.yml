@@ -1,9 +1,7 @@
 name: acr-aci-helloworld-scanner
 
-on: 
-  push:
-    paths:
-      - 'apps/aci-helloworld-scanner/**'
+on:
+  workflow_dispatch:
 
 jobs:
 

@@ -256,13 +256,24 @@ app.post('/api/calculate/:number?', async function(req, res) {
             }).catch(function (error) {
                 console.log("error:");
                 console.log(error);
-                const backend = { 
-                    host: error.response.data.host || "frontend", 
-                    version: error.response.data.version || "red", 
-                    values: error.response.data.values || [ 'b', 'u', 'g'], 
-                    timestamp: error.response.data.timestamp || ""
-                };
-                res.send({ backend: backend, correlation: requestId, host: OS.hostname(), version: config.version });
+                if ( error.response != null && error.response.data != null ){   
+                    const backend = { 
+                        host: error.response.data.host || "frontend", 
+                        version: error.response.data.version || "red", 
+                        values: error.response.data.values || [ 'b', 'u', 'g'], 
+                        timestamp: error.response.data.timestamp || ""
+                    };
+                    res.send({ backend: backend, correlation: requestId, host: OS.hostname(), version: config.version });
+                }
+                else {
+                    const backend = {
+                        host: "frontend",
+                        version: "red",
+                        values: [ '4', '0', '4'],
+                        timestamp: ""
+                    };
+                    res.send({ backend: backend, correlation: requestId, host: OS.hostname(), version: config.version });
+                }                
             });
     }
     

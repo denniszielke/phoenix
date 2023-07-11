@@ -1,6 +1,7 @@
 ignore
 apps/svcat
 prep.md
+**/package-lock.json
 terraform/**/variables_mod.tf
 terraform/**/.terraform*
 terraform/**/out.plan

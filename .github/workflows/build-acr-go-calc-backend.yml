@@ -1,9 +1,7 @@
 name: build-acr-go-calc-backend
 
-on: 
-  push:
-    paths:
-      - 'apps/go-calc-backend/**'
+on:
+  workflow_dispatch:
 
 jobs:
 

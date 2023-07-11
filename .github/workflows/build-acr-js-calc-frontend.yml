@@ -1,9 +1,7 @@
 name: build-acr-js-calc-frontend
 
-on: 
-  push:
-    paths:
-      - 'apps/js-calc-frontend/**'
+on:
+  workflow_dispatch:
 
 jobs:
 
