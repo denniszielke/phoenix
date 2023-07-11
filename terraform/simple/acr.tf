@@ -1,6 +1,13 @@
 # Configure the Azure Provider
 # https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/terraform/terraform-create-k8s-cluster-with-tf-and-aks.md
-
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.18.0"
+    }
+  }
+}
 provider "azurerm" {
     subscription_id = var.subscription_id
     #client_id       = var.terraform_serviceprincipal_id
