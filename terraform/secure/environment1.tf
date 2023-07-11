@@ -95,7 +95,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   backend_address_pool {
     name = "backend-pool-name"
-    fqdns = ["${azurerm_public_ip.nginx_ingress.ip_address}.xip.io", "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"]
+    fqdns = ["${azurerm_public_ip.nginx_ingress.ip_address}.nip.io", "${azurerm_public_ip.nginx_ingress-stage.ip_address}.nip.io"]
   }
 
   backend_http_settings {
@@ -115,7 +115,7 @@ resource "azurerm_application_gateway" "appgw" {
     name                = "probe"
     protocol            = "http"
     path                = "/"
-    host                = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
+    host                = "${azurerm_public_ip.nginx_ingress.ip_address}.nip.io"
     interval            = "30"
     timeout             = "30"
     unhealthy_threshold = "3"
@@ -257,7 +257,7 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
 
 resource "azurerm_key_vault_secret" "public_ip" {
   name         = "phoenix-fqdn"
-  value        = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
+  value        = "${azurerm_public_ip.nginx_ingress.ip_address}.nip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -268,7 +268,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 
 resource "azurerm_key_vault_secret" "public_ip_stage" {
   name         = "phoenix-fqdn-stage"
-  value        = "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"
+  value        = "${azurerm_public_ip.nginx_ingress-stage.ip_address}.nip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {

@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: frontend
+    app.kubernetes.io/name: frontend
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -16,12 +17,16 @@ spec:
   selector:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: frontend
       role: frontend
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: frontend
         role: frontend
+      annotations:
+        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -40,16 +45,16 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
             - name: "ENDPOINT"
-              value: "{{ include "multicalculator.fullname" . }}-backend-svc"
+              value: "http://{{ include "multicalculator.fullname" . }}-backend-svc"
 {{- if .Values.introduceRandomResponseLag }}
             - name: "LAGGY"
               value: "{{ .Values.introduceRandomResponseLagValue }}"
@@ -57,7 +62,7 @@ spec:
               value: "true"
 {{- end }}
 {{- if .Values.dependencies.useAppInsights }}
-            - name: "INSTRUMENTATIONKEY"
+            - name: "AIC_STRING"
               valueFrom:
                 secretKeyRef:
                   name: {{ include "multicalculator.fullname" . }}-appin-secret
@@ -88,7 +93,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
 {{- if .Values.dependencies.usePodRedis }}
         - name: redis
-          image: redis:4.0.11-alpine
+          image: redis:6.0
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: ["--requirepass", "MySuperSecretRedis"]
           ports:
@@ -121,6 +126,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
+    app.kubernetes.io/name: backend
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -132,12 +138,16 @@ spec:
   selector:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: backend
       role: backend
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: backend
         role: backend
+      annotations:
+        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -156,11 +166,11 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
@@ -171,7 +181,7 @@ spec:
               value: "true"
 {{- end }}
 {{- if .Values.dependencies.useAppInsights }}
-            - name: "INSTRUMENTATIONKEY"
+            - name: "AIC_STRING"
               valueFrom:
                 secretKeyRef:
                   name: {{ include "multicalculator.fullname" . }}-appin-secret
@@ -206,6 +216,7 @@ metadata:
   labels:
     {{- include "multicalculator.labels" . | nindent 4 }}
     role: backend
+    app.kubernetes.io/name: requester
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: 5
@@ -218,11 +229,13 @@ spec:
     matchLabels:
       {{- include "multicalculator.selectorLabels" . | nindent 6 }}
       role: requester
+      app.kubernetes.io/name: requester
   template:
     metadata:
       labels:
         {{- include "multicalculator.selectorLabels" . | nindent 8 }}
         role: requester
+        app.kubernetes.io/name: requester
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -238,16 +251,16 @@ spec:
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
-              path: /api/ping
+              path: /healthz
               port: 8080
           readinessProbe:
             httpGet:
-              path: /api/ping
+              path: /healthz
               port: 8080
 {{- end }}
           env: 
             - name: "APPLICATIONINSIGHTS_CONNECTION_STRING"
-              value: "INSTRUMENTATIONKEY={{ .Values.dependencies.appInsightsSecretValue }}"
+              value: "{{ .Values.dependencies.appInsightsSecretValue }}"
             - name: "ENDPOINT_PORT"
               value: "80"
             - name: "ENDPOINT_HOST"

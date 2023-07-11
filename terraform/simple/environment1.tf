@@ -96,7 +96,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   backend_address_pool {
     name = "backend-pool-name"
-    fqdns = ["${azurerm_public_ip.nginx_ingress.ip_address}.xip.io", "${azurerm_public_ip.nginx_ingress-stage.ip_address}.xip.io"]
+    fqdns = ["${azurerm_public_ip.nginx_ingress.ip_address}.nip.io", "${azurerm_public_ip.nginx_ingress-stage.ip_address}.nip.io"]
   }
 
   backend_http_settings {
@@ -116,7 +116,7 @@ resource "azurerm_application_gateway" "appgw" {
     name                = "probe"
     protocol            = "http"
     path                = "/"
-    host                = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
+    host                = "${azurerm_public_ip.nginx_ingress.ip_address}.nip.io"
     interval            = "30"
     timeout             = "30"
     unhealthy_threshold = "3"
@@ -190,7 +190,7 @@ resource "azurerm_traffic_manager_profile" "tfmprofile" {
   }
 
   monitor_config {
-    protocol                     = "http"
+    protocol                     = "HTTP"
     port                         = 80
     path                         = "/"
     interval_in_seconds          = 30
@@ -271,7 +271,7 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_app" {
   object_id = var.azdo_service_principal_objectid
 
   secret_permissions = [
-    "get"
+    "Get"
   ]
 }
 
@@ -283,9 +283,9 @@ resource "azurerm_key_vault_access_policy" "aksvault_policy_forme" {
   object_id = var.object_id
 
   secret_permissions = [
-      "get",
-      "list",
-      "set"
+      "Get",
+      "List",
+      "Set"
   ]
 }
 
@@ -336,7 +336,7 @@ resource "azurerm_key_vault_secret" "acrname_secret" {
 
 resource "azurerm_key_vault_secret" "public_ip" {
   name         = "phoenix-fqdn"
-  value        = "${azurerm_public_ip.nginx_ingress.ip_address}.xip.io"
+  value        = "${azurerm_public_ip.nginx_ingress.ip_address}.nip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -347,7 +347,7 @@ resource "azurerm_key_vault_secret" "public_ip" {
 
 resource "azurerm_key_vault_secret" "appgw_public_ip" {
   name         = "appgw-fqdn"
-  value        = "${azurerm_public_ip.appgw_ip.ip_address}.xip.io"
+  value        = "${azurerm_public_ip.appgw_ip.ip_address}.nip.io"
   key_vault_id = azurerm_key_vault.aksvault.id
   
   tags = {
@@ -444,8 +444,10 @@ resource "azurerm_kubernetes_cluster" "akstf" {
     max_count       = 4
   }
 
-  role_based_access_control {
-    enabled        = true
+  role_based_access_control_enabled = true
+
+  oms_agent {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.akslogs.id
   }
 
   network_profile {
@@ -459,17 +461,6 @@ resource "azurerm_kubernetes_cluster" "akstf" {
 
   identity {
     type = "SystemAssigned"
-  }
-
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.akslogs.id
-    }
-
-    kube_dashboard {
-      enabled = false
-    }
   }
 
   tags = {
@@ -519,7 +510,6 @@ provider "kubernetes" {
 # https://www.terraform.io/docs/providers/helm/index.html
 provider "helm" {
   kubernetes {
-    
     host                   = azurerm_kubernetes_cluster.akstf.kube_config.0.host
     client_certificate     = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_certificate)
     client_key             = base64decode(azurerm_kubernetes_cluster.akstf.kube_config.0.client_key)
@@ -547,6 +537,8 @@ resource "helm_release" "nginx_ingress" {
     name  = "controller.service.loadBalancerIP"
     value = azurerm_public_ip.nginx_ingress.ip_address
   }
+
+      --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz  \
   
   set {
     name  = "controller.replicaCount"
@@ -607,7 +599,7 @@ output "PUBLIC_IP_STAGE" {
 }
 
 output "instrumentation_key" {
-  sensitive=true
+  sensitive = true
   value = azurerm_application_insights.aksainsights.instrumentation_key
 }
 
