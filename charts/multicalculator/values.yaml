@@ -51,7 +51,7 @@ ingress:
   }
 
 gateway:
-  enabled: true
+  enabled: false
   name: gateway-01
   namespace: gateway
 
