@@ -1,6 +1,8 @@
 replicaCount: 2
 horizonalPodAutoscaler: false
 deployRequester: false
+slot: default
+canary: false
 
 image:
   repository: denniszielke
@@ -36,10 +38,10 @@ serviceAccount:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
-  enabled: true
+  enabled: false
   tls: false
   class: nginx # traefik
   host: devapis1.westeurope.cloudapp.azure.com
@@ -48,13 +50,18 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt
   }
 
+gateway:
+  enabled: true
+  name: gateway-01
+  namespace: gateway
+
 resources: 
   limits:
-    cpu: 1000m
-    memory: 1024Mi
+    cpu: 100m
+    memory: 128Mi
   requests:
-    cpu: 500m
-    memory: 1024Mi
+    cpu: 20m
+    memory: 65Mi
 
 nodeSelector: {}
 

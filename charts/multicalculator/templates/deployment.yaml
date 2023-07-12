@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/name: frontend
         role: frontend
       annotations:
-        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
+        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>,<Egress/8080/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -37,7 +37,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
           - name: version
@@ -46,15 +46,15 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
 {{- end }}
           env: 
             - name: "ENDPOINT"
-              value: "http://{{ include "multicalculator.fullname" . }}-backend-svc"
+              value: "http://{{ include "multicalculator.fullname" . }}-backend-svc:{{ .Values.service.port }}"
 {{- if .Values.introduceRandomResponseLag }}
             - name: "LAGGY"
               value: "{{ .Values.introduceRandomResponseLagValue }}"
@@ -69,7 +69,9 @@ spec:
                   key: appinsightskey
 {{- end }}
             - name: "PORT"
-              value: "8080"
+              value: "{{ .Values.service.port }}"
+            - name: "VERSION"
+              value: "{{ .Values.slot }} - {{ .Chart.AppVersion }}"
 {{- if .Values.dependencies.usePodRedis }}
             - name: "REDIS_HOST"
               value: "localhost"
@@ -147,7 +149,7 @@ spec:
         app.kubernetes.io/name: backend
         role: backend
       annotations:
-        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>"
+        policy.cilium.io/proxy-visibility: "<Egress/53/UDP/DNS>,<Egress/80/TCP/HTTP>,<Egress/8080/TCP/HTTP>"
     spec:
       serviceAccountName: {{ include "multicalculator.serviceAccountName" . }}
       containers:
@@ -158,7 +160,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
           - name: version
@@ -167,11 +169,11 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
 {{- end }}
           env: 
 {{- if .Values.introduceRandomResponseLag }}
@@ -188,7 +190,9 @@ spec:
                   key: appinsightskey
 {{- end }}
             - name: "PORT"
-              value: "8080"
+              value: "{{ .Values.service.port }}"
+            - name: "VERSION"
+              value: "{{ .Values.slot }} - {{ .Chart.AppVersion }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}           
       {{- with .Values.nodeSelector }}
@@ -246,25 +250,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
 {{- if .Values.noProbes }}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8080
+              port: {{ .Values.service.port }}
 {{- end }}
           env: 
             - name: "APPLICATIONINSIGHTS_CONNECTION_STRING"
               value: "{{ .Values.dependencies.appInsightsSecretValue }}"
             - name: "ENDPOINT_PORT"
-              value: "80"
+              value: "{{ .Values.service.port }}"
             - name: "ENDPOINT_HOST"
-              value: "{{ include "multicalculator.fullname" . }}-frontend-svc"
+              value: "{{ include "multicalculator.fullname" . }}-frontend-svc:{{ .Values.service.port }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}           
       {{- with .Values.nodeSelector }}
