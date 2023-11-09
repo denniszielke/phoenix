@@ -3,7 +3,6 @@ apiVersion: alb.networking.azure.io/v1
 kind: HealthCheckPolicy
 metadata:
   name: {{ include "multicalculator.fullname" . }}-gw-health
-  namespace: {{ .Values.gateway.namespace }}
 spec:
   targetRef:
     group: ""
