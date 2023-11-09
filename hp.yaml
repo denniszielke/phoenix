@@ -1,0 +1,45 @@
+apiVersion: v1
+items:
+- apiVersion: alb.networking.azure.io/v1
+  kind: HealthCheckPolicy
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: calculator
+      meta.helm.sh/release-namespace: calculator
+    creationTimestamp: "2023-11-09T08:38:04Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: calculator-multicalculator-gw-health
+    namespace: calculator
+    resourceVersion: "38301425"
+    uid: 5e257f1d-6325-4903-b74c-14b7a403e29d
+  spec:
+    default:
+      healthyThreshold: 1
+      http:
+        match:
+          statusCodes:
+          - end: 299
+            start: 200
+        path: /healthz
+      interval: 5s
+      protocol: HTTP
+      timeout: 3s
+      port: 8080
+      unhealthyThreshold: 3
+    targetRef:
+      group: ""
+      kind: Service
+      name: calculator-multicalculator-frontend-svc
+      namespace: calculator
+  status:
+    conditions:
+    - lastTransitionTime: "1970-01-01T00:00:00Z"
+      message: Waiting for controller
+      reason: Pending
+      status: Unknown
+      type: Accepted
+kind: List
+metadata:
+  resourceVersion: ""

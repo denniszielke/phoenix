@@ -1,25 +1,25 @@
-{{- if .Values.gateway.enabled -}}
-apiVersion: alb.networking.azure.io/v1
-kind: HealthCheckPolicy
-metadata:
-  name: {{ include "multicalculator.fullname" . }}-gw-health
-spec:
-  targetRef:
-    group: ""
-    kind: Service
-    name: {{ include "multicalculator.fullname" . }}-frontend-svc
-    namespace: {{ .Release.Namespace }}
-  default:
-    interval: 5s
-    timeout: 3s
-    healthyThreshold: 1
-    unhealthyThreshold: 3
-    protocol: HTTP
-    http:
-      host: 
-      path: /healthz
-      match:
-        statusCodes: 
-        - start: 200
-          end: 299
-{{- end }}
+# {{- if .Values.gateway.enabled -}}
+# apiVersion: alb.networking.azure.io/v1
+# kind: HealthCheckPolicy
+# metadata:
+#   name: {{ include "multicalculator.fullname" . }}-gw-health
+# spec:
+#   targetRef:
+#     group: ""
+#     kind: Service
+#     name: {{ include "multicalculator.fullname" . }}-frontend-svc
+#     namespace: {{ .Release.Namespace }}
+#   default:
+#     interval: 5s
+#     timeout: 3s
+#     healthyThreshold: 1
+#     unhealthyThreshold: 3
+#     protocol: HTTP
+#     port: 8080
+#     http:
+#       path: /healthz
+#       match:
+#         statusCodes: 
+#         - start: 200
+#           end: 299
+# {{- end }}
