@@ -44,6 +44,7 @@ app.get('/ping', function(req, res) {
     console.log(pong);
     res.status(200).send(pong);
 });
+
 app.get('/healthz', function(req, res) {
     const data = {
         uptime: process.uptime(),
